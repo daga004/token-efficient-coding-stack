@@ -1,7 +1,7 @@
 """Integration tests for the Python parser."""
 
 import pytest
-from auzoom.parser import PythonParser
+from auzoom import PythonParser
 from auzoom.models import FetchLevel, NodeType
 
 

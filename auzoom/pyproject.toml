@@ -1,0 +1,27 @@
+[project]
+name = "auzoom"
+version = "0.2.0"
+description = "AuZoom (AutoContextZoom) - Multi-resolution code navigation for AI agents"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+dependencies = [
+    "tree-sitter>=0.21.0",
+    "tree-sitter-python>=0.21.0",
+    "watchdog>=3.0.0",
+    "click>=8.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "mypy"]
+
+[project.scripts]
+auzoom = "auzoom.cli:main"
+auzoom-mcp = "auzoom.mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 100

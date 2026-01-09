@@ -40,19 +40,19 @@ Plans:
 - [ ] 01-04: Validation & GSD skill (auzoom_validate tool, expertise skill for structural constraints)
 
 ### Phase 2: Orchestrator Implementation
-**Goal**: Build and deploy Orchestrator MCP server that routes tasks to appropriate models (local/Haiku/Sonnet) based on complexity
+**Goal**: Build and deploy Orchestrator MCP server that routes tasks to appropriate models (local/Gemini/Haiku/Sonnet) based on complexity
 
 **Depends on**: Nothing (parallel with Phase 1)
 
 **Research**: Likely (multiple model APIs)
 
-**Research topics**: Ollama API integration, LM Studio on dhiraj@dhirajs-mac-min, Cerebras API, complexity scoring heuristics, validation checkpoint patterns
+**Research topics**: Ollama API integration, Gemini CLI integration, LM Studio on dhiraj@dhirajs-mac-min, Cerebras API, complexity scoring heuristics, validation checkpoint patterns
 
 **Plans**: 3 plans
 
 Plans:
 - [ ] 02-01: Complexity scoring function (rule-based 0-10 scale)
-- [ ] 02-02: Model dispatch layer (Ollama, Anthropic Haiku/Sonnet APIs)
+- [ ] 02-02: Model dispatch layer (Ollama local, Gemini CLI, Anthropic Haiku/Sonnet APIs)
 - [ ] 02-03: MCP server with tools (orchestrator_route, orchestrator_execute, orchestrator_validate)
 
 ### Phase 3: Integration & Validation

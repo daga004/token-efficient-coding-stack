@@ -1,0 +1,9 @@
+pyproject.toml
+auzoom/__init__.py
+auzoom/models.py
+auzoom/parser.py
+auzoom.egg-info/PKG-INFO
+auzoom.egg-info/SOURCES.txt
+auzoom.egg-info/dependency_links.txt
+auzoom.egg-info/requires.txt
+auzoom.egg-info/top_level.txt
