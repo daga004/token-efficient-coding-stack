@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "auzoom": {
+      "command": "python3",
+      "args": [
+        "-m",
+        "auzoom.mcp_server"
+      ],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      }
+    }
+  }
+}

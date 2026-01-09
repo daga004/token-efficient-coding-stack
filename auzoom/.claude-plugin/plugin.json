@@ -1,0 +1,17 @@
+{
+  "name": "auzoom",
+  "version": "0.3.0",
+  "description": "Multi-resolution code navigation with hierarchical file reading for AI agents",
+  "author": {
+    "name": "AuZoom Team"
+  },
+  "license": "MIT",
+  "mcp_servers": [
+    {
+      "name": "auzoom",
+      "command": "auzoom-mcp",
+      "args": [],
+      "env": {}
+    }
+  ]
+}

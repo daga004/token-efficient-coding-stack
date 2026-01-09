@@ -65,7 +65,7 @@ AuZoom working end-to-end: code compression via skeleton/summary/full views inte
 
 - **Environment**: Mac M4 mini, 64GB RAM
 - **Local models**: LM Studio available on dhiraj@dhirajs-mac-min, Qwen3-30B-A3B and Qwen2.5-Coder-32B via Ollama
-- **API access**: Anthropic (Haiku/Sonnet/Opus), Cerebras (GLM 4.7)
+- **API access**: Anthropic (Haiku/Sonnet/Opus), Google (Gemini Flash/Pro via CLI), Cerebras (GLM 4.7)
 - **Framework**: MCP (Model Context Protocol) for tool integration
 - **Workflow**: GSD methodology — atomic plans (2-3 tasks each), fresh subagent contexts
 - **Language focus**: Python-only for V1

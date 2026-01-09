@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: auzoom
+Version: 0.1.0
+Summary: Multi-resolution code navigation for token-efficient AI coding
+Requires-Python: >=3.10
+Requires-Dist: tree-sitter>=0.20.0
+Requires-Dist: tree-sitter-python>=0.20.0
+Requires-Dist: pydantic>=2.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"

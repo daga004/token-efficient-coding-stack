@@ -5,7 +5,8 @@ from typing import Optional
 from tree_sitter import Language, Parser, Node as TSNode, Tree
 import tree_sitter_python as tspython
 
-from .models import CodeNode, NodeType
+from ...models import CodeNode, NodeType
+from .node_factory import NodeFactory
 
 
 class PythonParser:
@@ -15,6 +16,7 @@ class PythonParser:
         """Initialize tree-sitter with Python grammar."""
         PY_LANGUAGE = Language(tspython.language())
         self.parser = Parser(PY_LANGUAGE)
+        self.factory = NodeFactory(self._get_node_text)
 
     def parse_file(self, file_path: str) -> list[CodeNode]:
         """Parse a Python file and extract all code nodes.
@@ -65,7 +67,7 @@ class PythonParser:
             if node.type == 'function_definition':
                 # Check if it's a top-level function (not a method)
                 if not self._is_inside_class(node):
-                    func_node = self._create_function_node(node, file_path, NodeType.FUNCTION)
+                    func_node = self.factory.create_function_node(node, file_path, NodeType.FUNCTION)
                     if func_node:
                         functions.append(func_node)
 
@@ -86,7 +88,7 @@ class PythonParser:
 
         for node in self._walk_tree(root):
             if node.type == 'class_definition':
-                class_node = self._create_class_node(node, file_path)
+                class_node = self.factory.create_class_node(node, file_path)
                 if class_node:
                     classes.append(class_node)
 
@@ -122,7 +124,7 @@ class PythonParser:
         # Look for function definitions in the class body
         for node in body.children:
             if node.type == 'function_definition':
-                method_node = self._create_function_node(
+                method_node = self.factory.create_function_node(
                     node, file_path, NodeType.METHOD, class_name
                 )
                 if method_node:
@@ -145,176 +147,11 @@ class PythonParser:
 
         for node in self._walk_tree(root):
             if node.type in ('import_statement', 'import_from_statement'):
-                import_node = self._create_import_node(node, file_path)
+                import_node = self.factory.create_import_node(node, file_path)
                 if import_node:
                     imports.append(import_node)
 
         return imports
-
-    def _create_function_node(
-        self,
-        node: TSNode,
-        file_path: str,
-        node_type: NodeType,
-        class_name: Optional[str] = None
-    ) -> Optional[CodeNode]:
-        """Create a CodeNode from a function definition node.
-
-        Args:
-            node: Tree-sitter function node
-            file_path: Path to the source file
-            node_type: FUNCTION or METHOD
-            class_name: Name of containing class if this is a method
-
-        Returns:
-            CodeNode object or None if parsing fails
-        """
-        # Extract function name
-        name = None
-        params = None
-        body = None
-
-        for child in node.children:
-            if child.type == 'identifier':
-                name = self._get_node_text(child)
-            elif child.type == 'parameters':
-                params = child
-            elif child.type == 'block':
-                body = child
-
-        if not name:
-            return None
-
-        # Build qualified name
-        if class_name:
-            qualified_name = f"{class_name}.{name}"
-        else:
-            qualified_name = name
-
-        # Create node ID
-        node_id = f"{file_path}::{qualified_name}"
-
-        # Extract signature
-        signature = None
-        if params:
-            signature = f"{name}{self._get_node_text(params)}"
-
-        # Extract docstring
-        docstring = self._extract_docstring(body)
-
-        # Get line range
-        line_start = node.start_point[0] + 1  # Convert to 1-indexed
-        line_end = node.end_point[0] + 1
-
-        # Get source code
-        source = self._get_node_text(node)
-
-        return CodeNode(
-            id=node_id,
-            name=name,
-            node_type=node_type,
-            file_path=file_path,
-            line_start=line_start,
-            line_end=line_end,
-            dependencies=[],
-            children=[],
-            docstring=docstring,
-            signature=signature,
-            source=source
-        )
-
-    def _create_class_node(self, node: TSNode, file_path: str) -> Optional[CodeNode]:
-        """Create a CodeNode from a class definition node.
-
-        Args:
-            node: Tree-sitter class node
-            file_path: Path to the source file
-
-        Returns:
-            CodeNode object or None if parsing fails
-        """
-        # Extract class name
-        name = None
-        body = None
-
-        for child in node.children:
-            if child.type == 'identifier':
-                name = self._get_node_text(child)
-            elif child.type == 'block':
-                body = child
-
-        if not name:
-            return None
-
-        # Create node ID
-        node_id = f"{file_path}::{name}"
-
-        # Extract docstring
-        docstring = self._extract_docstring(body)
-
-        # Get line range
-        line_start = node.start_point[0] + 1
-        line_end = node.end_point[0] + 1
-
-        # Get source code
-        source = self._get_node_text(node)
-
-        # Collect method names as children
-        children = []
-        if body:
-            for child in body.children:
-                if child.type == 'function_definition':
-                    for subchild in child.children:
-                        if subchild.type == 'identifier':
-                            method_name = self._get_node_text(subchild)
-                            children.append(f"{file_path}::{name}.{method_name}")
-                            break
-
-        return CodeNode(
-            id=node_id,
-            name=name,
-            node_type=NodeType.CLASS,
-            file_path=file_path,
-            line_start=line_start,
-            line_end=line_end,
-            dependencies=[],
-            children=children,
-            docstring=docstring,
-            signature=None,
-            source=source
-        )
-
-    def _create_import_node(self, node: TSNode, file_path: str) -> Optional[CodeNode]:
-        """Create a CodeNode from an import statement node.
-
-        Args:
-            node: Tree-sitter import node
-            file_path: Path to the source file
-
-        Returns:
-            CodeNode object or None if parsing fails
-        """
-        import_text = self._get_node_text(node)
-
-        # Create a simple identifier for the import
-        import_id = f"{file_path}::import_{node.start_point[0]}"
-
-        line_start = node.start_point[0] + 1
-        line_end = node.end_point[0] + 1
-
-        return CodeNode(
-            id=import_id,
-            name=import_text,
-            node_type=NodeType.IMPORT,
-            file_path=file_path,
-            line_start=line_start,
-            line_end=line_end,
-            dependencies=[],
-            children=[],
-            docstring=None,
-            signature=None,
-            source=import_text
-        )
 
     def _extract_docstring(self, body: Optional[TSNode]) -> Optional[str]:
         """Extract docstring from a function or class body.

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp list:*)",
+      "Bash(/opt/homebrew/bin/python3.11:*)",
+      "Bash(curl:*)",
+      "Bash(timeout 5 curl:*)",
+      "Bash(timeout 10 /opt/homebrew/bin/python3.11:*)",
+      "Bash(nc:*)",
+      "Bash(lsof:*)",
+      "Bash(tailscale status:*)",
+      "Bash(ssh:*)",
+      "Bash(chmod:*)",
+      "Bash(/Users/dhirajd/Documents/claude/evolving-memory-mcp/check_and_start_lmstudio.sh:*)"
+    ]
+  }
+}

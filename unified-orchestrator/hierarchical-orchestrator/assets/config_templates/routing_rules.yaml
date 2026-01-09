@@ -1,0 +1,180 @@
+# Hierarchical Model Orchestrator - Routing Configuration
+# Copy to ~/.claude-orchestrator/config/routing_rules.yaml
+
+version: "1.0"
+default_model: "local/qwen3-30b-a3b"
+
+# Complexity thresholds
+complexity_thresholds:
+  simple: 2.0
+  medium: 4.0
+  complex: 7.0
+
+# Model tier definitions
+models:
+  local/qwen3-30b-a3b:
+    type: generator
+    max_complexity: 2.0
+    cost_per_1m_tokens: 0
+    speed_tokens_per_sec: 18
+    strengths: ["simple tasks", "quick iterations", "formatting"]
+    
+  cerebras/glm-4.7:
+    type: generator
+    max_complexity: 4.0
+    cost_per_1m_tokens: 0.60
+    speed_tokens_per_sec: 1000
+    strengths: ["code generation", "tool use", "fast iteration"]
+    task_types: ["code_generation", "debugging"]
+    
+  haiku:
+    type: generator
+    max_complexity: 4.0
+    cost_per_1m_tokens: 0.25
+    speed_tokens_per_sec: 80
+    strengths: ["documentation", "simple code", "cost-effective"]
+    
+  sonnet:
+    type: generator
+    max_complexity: 7.0
+    cost_per_1m_tokens: 3.00
+    speed_tokens_per_sec: 40
+    strengths: ["complex reasoning", "code review", "validation"]
+    primary_use: validation
+    
+  opus:
+    type: director
+    max_complexity: 10.0
+    cost_per_1m_tokens: 15.00
+    speed_tokens_per_sec: 20
+    strengths: ["architecture", "strategic decisions", "complex judgment"]
+    primary_use: redirect
+
+# Routing rules (evaluated in order)
+rules:
+  # Priority 1: Checkpoint overrides
+  - name: validation_checkpoint
+    condition:
+      checkpoint: validation
+    route:
+      model: sonnet
+      output_limit: 100
+      reason: "Input-heavy validation checkpoint"
+  
+  - name: major_checkpoint_redirect
+    condition:
+      checkpoint: major
+      needs_redirect: true
+    route:
+      model: opus
+      output_limit: 50
+      reason: "Strategic redirect at major checkpoint"
+  
+  # Priority 2: Complexity-based routing
+  - name: simple_tasks
+    condition:
+      complexity_lte: 2.0
+    route:
+      model: local/qwen3-30b-a3b
+      validation_required: false
+      reason: "Simple task - use free local model"
+  
+  - name: medium_code_tasks
+    condition:
+      complexity_lte: 4.0
+      task_type: code_generation
+    route:
+      model: cerebras/glm-4.7
+      validation_required: true
+      reason: "Medium code task - fast API"
+  
+  - name: medium_other_tasks
+    condition:
+      complexity_lte: 4.0
+    route:
+      model: haiku
+      validation_required: true
+      reason: "Medium non-code task"
+  
+  - name: complex_tasks
+    condition:
+      complexity_lte: 7.0
+    route:
+      model: sonnet
+      validation_required: true
+      reason: "Complex task - strong reasoning"
+  
+  - name: highly_complex_tasks
+    condition:
+      complexity_gt: 7.0
+    route:
+      model: opus
+      validation_required: false
+      reason: "Highly complex - best reasoning"
+
+# Escalation triggers
+escalation:
+  - trigger: validation_confidence_lt
+    threshold: 0.7
+    action: escalate_to_opus
+    
+  - trigger: consecutive_failures_gte
+    threshold: 2
+    action: escalate_to_next_tier
+    
+  - trigger: task_type
+    value: security_critical
+    action: force_sonnet_validation
+
+# Task type patterns
+task_types:
+  code_generation:
+    patterns:
+      - "write.*function"
+      - "implement"
+      - "create.*class"
+      - "build"
+      - "generate code"
+    
+  code_review:
+    patterns:
+      - "review"
+      - "check.*code"
+      - "validate"
+      - "analyze"
+    
+  refactoring:
+    patterns:
+      - "refactor"
+      - "restructure"
+      - "clean up"
+      - "improve"
+    complexity_boost: 2.0
+    
+  debugging:
+    patterns:
+      - "fix"
+      - "debug"
+      - "error"
+      - "bug"
+    
+  documentation:
+    patterns:
+      - "document"
+      - "explain"
+      - "readme"
+      - "describe"
+    
+  architecture:
+    patterns:
+      - "architect"
+      - "design system"
+      - "plan"
+      - "migrate"
+    complexity_boost: 3.0
+
+# Budget controls
+budget:
+  daily_limit_usd: 50.0
+  warning_threshold: 0.8  # Warn at 80% of daily limit
+  aggressive_mode_threshold: 0.9  # Switch to cheaper models at 90%
