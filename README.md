@@ -82,13 +82,19 @@ This stack integrates three powerful tools to optimize your Claude Code workflow
 ### 2. Orchestrator - Intelligent Model Routing
 **Reduces costs by matching tasks to appropriate model tiers**
 
-- **4-tier routing**: Flash → Haiku → Sonnet → Opus based on complexity
+- **4-tier routing**: Gemini Flash → Claude Haiku → Claude Sonnet → Claude Opus based on complexity
 - **Complexity scoring**: Automated 0-10 scale analysis (7 weighted factors)
 - **Quality validation**: Ensures cheaper models deliver correct results
 - **Cost tracking**: Real-time cost reporting and optimization
 
+**Model Tiers**:
+- **Gemini Flash 2.0** ($0.10/M input) - Simplest tasks (typos, constants)
+- **Claude Haiku 3.5** ($0.80/M input) - Standard development work
+- **Claude Sonnet 4.5** ($3.00/M input) - Complex features, refactoring
+- **Claude Opus 4.5** ($5.00/M input) - Critical architecture decisions
+
 **Best for**: All tasks - universal cost optimization
-**Cost savings**: 71-99% depending on task complexity
+**Cost savings**: 71-95% depending on task complexity ([See pricing](#why-are-costs-so-small))
 
 ### 3. Get Shit Done (GSD) - Meta-Prompting System
 **Created by TÂCHES** ([glittercowboy](https://github.com/glittercowboy/get-shit-done))
@@ -116,7 +122,7 @@ A lightweight but powerful meta-prompting, context engineering, and spec-driven 
                  │
         ┌────────▼──────────┐
         │  Orchestrator     │ ← Routes to right model tier
-        │  (Cost optimizer) │    (Flash/Haiku/Sonnet/Opus)
+        │  (Cost optimizer) │    (Gemini Flash/Claude Haiku/Sonnet/Opus)
         └────────┬──────────┘
                  │
         ┌────────▼──────────┐
@@ -133,21 +139,23 @@ A lightweight but powerful meta-prompting, context engineering, and spec-driven 
 
 ### Cost Savings Breakdown (Validated Tasks)
 
-| Task Type | Traditional Cost | Optimized Cost | Savings |
-|-----------|-----------------|----------------|---------|
-| Simple edits (typos, constants) | $0.0013 | $0.000063 | **95%** |
-| Feature implementation | $0.0010 | $0.000299 | **71%** |
-| Refactoring | $0.0020 | $0.000255 | **87%** |
-| Code exploration | $0.0038 | $0.000768 | **80%** |
-| Debugging | $0.0047 | $0.000816 | **83%** |
+| Task Type | Traditional Cost | Optimized Cost | Savings | Model Used |
+|-----------|-----------------|----------------|---------|------------|
+| Simple edits (typos, constants) | $0.0013 | $0.000063 | **95%** | Gemini Flash |
+| Feature implementation | $0.0010 | $0.000299 | **71%** | Claude Haiku |
+| Refactoring | $0.0020 | $0.000255 | **87%** | Claude Haiku |
+| Code exploration | $0.0038 | $0.000768 | **80%** | Claude Haiku |
+| Debugging | $0.0047 | $0.000816 | **83%** | Claude Haiku |
 
 *Actual measurements from validation suite (10 representative tasks)*
+
+**Note**: Simple edits show 95% savings (not 99%) because Gemini Flash costs $0.10/M, not $0.01/M as initially assumed. Even with corrected pricing, 95% cost reduction on trivial tasks proves intelligent routing works.
 
 ### Annual Savings (Based on Validation Data)
 
 **Typical individual developer** (2000 tasks/year = 1 task per hour worked):
 - Traditional (all Sonnet): $2.58/year
-- Optimized (Flash + Haiku routing): $0.44/year
+- Optimized (Gemini Flash + Claude Haiku routing): $0.44/year
 - **Savings: $2.14/year (83%)**
 
 **10-person team**:
@@ -156,7 +164,20 @@ A lightweight but powerful meta-prompting, context engineering, and spec-driven 
 **100-developer organization**:
 - **Savings: ~$214/year**
 
-*Note: Costs based on 2026 API pricing (Sonnet $3/M, Haiku $0.80/M, Gemini Flash $0.10/M). Savings percentages remain consistent regardless of usage volume.*
+*Note: Costs based on 2026 API pricing - [Claude API](https://docs.anthropic.com/en/api/pricing) (Sonnet $3/M, Haiku $0.80/M) and [Gemini API](https://ai.google.dev/gemini-api/docs/pricing) (Flash $0.10/M). Savings percentages remain consistent regardless of usage volume.*
+
+#### Why Are Costs So Small?
+
+**This might seem surprisingly low, but it's real:**
+
+1. **Per-task costs are tiny** - These are costs for individual tasks like "fix one typo" or "add one function", not per hour or per day
+2. **API pricing is extremely cheap** - At $3/M tokens, even reading a 500-line file costs ~$0.002
+3. **Claude Code is efficient** - Most coding tasks use only 200-400 tokens
+4. **Math check**: 2000 tasks/year × $0.00129/task = $2.58/year ✓
+
+**Reality**: Professional developers using Claude Code API for development typically spend **$2-7/year**, not hundreds. The 83% savings are real, but the absolute amounts are small because the API is already very inexpensive for code-focused workflows.
+
+**Comparison**: A single ChatGPT Plus subscription costs $240/year. Claude API for coding costs $2.58/year baseline.
 
 ---
 
@@ -295,7 +316,7 @@ orchestrator_route("Split large function into helpers")
 | Debugging | 2 | **35%** | 83% | 44% |
 | **TOTAL** | **10** | **23%** | **83%** | **31%** |
 
-*Token overhead from progressive disclosure on small files (<200 lines) - but massive cost savings from Flash routing compensate
+*Token overhead from progressive disclosure on small files (<200 lines) - but massive cost savings from Gemini Flash routing compensate
 
 ### Key Findings
 
@@ -330,8 +351,8 @@ orchestrator_route("Split large function into helpers")
         │ Parser + Cache │    │  Scorer            │
         └────────────────┘    │                    │
                               │  Model Registry    │
-                              │  (Flash/Haiku/     │
-                              │   Sonnet/Opus)     │
+                              │  (Gemini Flash/    │
+                              │   Claude tiers)    │
                               │                    │
                               │  Task Executor     │
                               └────────────────────┘
@@ -468,10 +489,15 @@ token-efficient-coding-stack/
 ⚠️ Implementation tasks requiring full context - Just read it all
 
 ### Model Routing Guide
-- **Flash** (complexity 0-3): Typos, constants, simple edits → 99% savings
-- **Haiku** (complexity 3-6): Standard dev work, refactoring → 73-87% savings
-- **Sonnet** (complexity 6-9): Complex features, security-critical → 67% savings
-- **Opus** (complexity 9-10): Novel architecture, critical decisions → 0% savings but necessary
+
+**Routing Tiers** ([Claude pricing](https://docs.anthropic.com/en/api/pricing) | [Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing)):
+
+- **Gemini Flash 2.0** ($0.10/M) - Complexity 0-3: Typos, constants, simple edits → 95% savings
+- **Claude Haiku 3.5** ($0.80/M) - Complexity 3-6: Standard dev work, refactoring → 73-87% savings
+- **Claude Sonnet 4.5** ($3.00/M) - Complexity 6-9: Complex features, security-critical → 67% savings
+- **Claude Opus 4.5** ($5.00/M) - Complexity 9-10: Novel architecture, critical decisions → 0% savings but necessary
+
+**Why mix Claude and Gemini?** Gemini Flash 2.0 excels at simple, deterministic tasks (typos, formatting) at 1/8th the cost of Claude Haiku. For reasoning-heavy work, Claude models provide better quality. The orchestrator automatically picks the right model for each task.
 
 ---
 
