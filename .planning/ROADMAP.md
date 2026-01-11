@@ -16,7 +16,7 @@ None
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: AuZoom Implementation** - Build parser foundation + MCP server for hierarchical code navigation
+- [x] **Phase 1: AuZoom Implementation** - Build parser foundation + MCP server for hierarchical code navigation
 - [ ] **Phase 2: Orchestrator Implementation** - Build routing core + MCP server for intelligent model selection
 - [ ] **Phase 3: Integration & Validation** - Wire both into GSD and measure token/cost savings
 
@@ -34,10 +34,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: Tree-sitter parser foundation (CodeNode model, extract functions/classes/imports)
-- [ ] 01-02: Three fetch levels (skeleton <50 tokens, summary <200 tokens, full source)
-- [ ] 01-03: MCP server with tools (auzoom_get_graph, auzoom_find, auzoom_get_dependencies)
-- [ ] 01-04: Validation & GSD skill (auzoom_validate tool, expertise skill for structural constraints)
+- [x] 01-01: Tree-sitter parser foundation (CodeNode model, extract functions/classes/imports)
+- [x] 01-02: Lazy graph navigation with persistent caching (skeleton/summary/full, <100ms startup)
+- [x] 01-03: MCP server with tools (auzoom_read, auzoom_find, auzoom_get_dependencies, auzoom_stats, auzoom_validate)
+- [x] 01-04: Validation & GSD skill (auzoom_validate tool, expertise skill for structural constraints)
 
 ### Phase 2: Orchestrator Implementation
 **Goal**: Build and deploy Orchestrator MCP server that routes tasks to appropriate models (local/Gemini/Haiku/Sonnet) based on complexity
@@ -75,6 +75,6 @@ Phases 1 and 2 can run in parallel, then Phase 3 integrates both.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. AuZoom Implementation | 0/4 | Not started | - |
+| 1. AuZoom Implementation | 4/4 | **COMPLETE** | 2026-01-11 |
 | 2. Orchestrator Implementation | 0/3 | Not started | - |
 | 3. Integration & Validation | 0/2 | Not started | - |
