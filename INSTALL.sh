@@ -47,6 +47,44 @@ if ! command -v claude &> /dev/null; then
 fi
 echo -e "${GREEN}✓ Claude Code found${NC}"
 
+# Check for Gemini CLI
+echo "Checking Gemini CLI installation..."
+if ! command -v gemini &> /dev/null; then
+    echo -e "${YELLOW}Gemini CLI not found. Installing via Homebrew...${NC}"
+
+    # Check if Homebrew is installed
+    if ! command -v brew &> /dev/null; then
+        echo -e "${RED}Error: Homebrew not found. Install from https://brew.sh${NC}"
+        echo "Then run: brew install gemini-cli"
+        exit 1
+    fi
+
+    # Install Gemini CLI via Homebrew
+    brew install gemini-cli
+
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✓ Gemini CLI installed${NC}"
+    else
+        echo -e "${RED}✗ Gemini CLI installation failed${NC}"
+        echo "You can install manually: npm install -g @google/gemini-cli"
+        exit 1
+    fi
+else
+    GEMINI_VERSION=$(gemini --version)
+    echo -e "${GREEN}✓ Gemini CLI found (version $GEMINI_VERSION)${NC}"
+fi
+
+# Check for Gemini API key
+if [ -z "$GEMINI_API_KEY" ]; then
+    echo -e "${YELLOW}⚠ GEMINI_API_KEY not set${NC}"
+    echo "  Get your API key from: https://aistudio.google.com/apikey"
+    echo "  Add to your shell profile (~/.zshrc or ~/.bashrc):"
+    echo "    export GEMINI_API_KEY='your-api-key-here'"
+    echo ""
+else
+    echo -e "${GREEN}✓ GEMINI_API_KEY is set${NC}"
+fi
+
 # Get installation directory (script location)
 INSTALL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "Installation directory: $INSTALL_DIR"

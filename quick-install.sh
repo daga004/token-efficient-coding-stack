@@ -8,7 +8,7 @@ set -e
 echo "╔════════════════════════════════════════════════════════════════╗"
 echo "║     Token-Efficient Coding Stack - Quick Installer             ║"
 echo "║                                                                 ║"
-echo "║     Reduce Claude Code costs by 83% while maintaining          ║"
+echo "║     Reduce Claude Code costs by 81% while maintaining          ║"
 echo "║     100% quality through intelligent routing and caching       ║"
 echo "╚════════════════════════════════════════════════════════════════╝"
 echo ""
@@ -49,6 +49,16 @@ if ! command -v claude &> /dev/null; then
 fi
 
 echo "✅ Claude Code CLI found"
+
+# Check for Gemini CLI
+if ! command -v gemini &> /dev/null; then
+    echo "⚠️  Gemini CLI not found"
+    echo "The INSTALL.sh script will attempt to install it automatically"
+    echo "Or install manually: npm install -g @google/gemini-cli"
+    echo ""
+else
+    echo "✅ Gemini CLI found"
+fi
 echo ""
 
 # Determine installation directory
@@ -111,7 +121,7 @@ if [ $? -eq 0 ]; then
     echo "   4. See /skills token-efficient-coding for guidance"
     echo ""
     echo "💡 Expected savings (validated):"
-    echo "   - Cost reduction: 83%"
+    echo "   - Cost reduction: 81%"
     echo "   - Time savings: 31% faster"
     echo "   - Quality: 100% maintained"
     echo ""
