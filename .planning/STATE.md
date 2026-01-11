@@ -6,14 +6,14 @@ See: .planning/PROJECT.md (updated 2026-01-08)
 
 **Core value:** AuZoom working end-to-end: code compression via skeleton/summary/full views integrated with GSD's execution flow.
 
-**Current focus:** Phase 1 — AuZoom Implementation
+**Current focus:** Phase 2 — Orchestrator Implementation
 
 ## Current Position
 
 Phase: 2 of 3 (Orchestrator Implementation)
-Plan: 0 of ? (Phase needs planning)
-Status: Phase 1 complete, ready to plan Phase 2
-Last activity: 2026-01-10 — Phase 1 fully implemented (AuZoom MCP server deployed, 30/30 tests passing)
+Plan: 1 of 3 (Ready to execute)
+Status: Phase 2 planned, ready to execute 02-01-PLAN.md
+Last activity: 2026-01-10 — Phase 2 planning complete (3 plans, 7 tasks, Gemini CLI integration)
 
 Progress: ████░░░░░░ 44% (Phase 1 complete: 4/4 plans)
 
@@ -47,7 +47,10 @@ Recent decisions affecting current work:
 - Added CodeNode as simplified parser output model
 - Used string matching for dependency resolution
 - Implemented full refactoring to meet AuZoom's own validation rules (≤250 lines/module, ≤50 lines/function)
-- **NEW**: Include Gemini CLI as additional cost-efficient model tier between local and Haiku
+- Include Gemini CLI as cost-efficient model tier (Tier 0: $0.01/1M tokens)
+- No local models in Phase 2 (simplified for V1)
+- Rule-based complexity scoring (0-10 scale) - no LLM overhead for routing
+- 4-tier model hierarchy: Gemini Flash → Haiku → Sonnet → Opus
 
 ### Deferred Issues
 
