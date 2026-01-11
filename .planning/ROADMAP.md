@@ -17,7 +17,7 @@ None
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: AuZoom Implementation** - Build parser foundation + MCP server for hierarchical code navigation
-- [ ] **Phase 2: Orchestrator Implementation** - Build routing core + MCP server for intelligent model selection
+- [x] **Phase 2: Orchestrator Implementation** - Build routing core + MCP server for intelligent model selection
 - [ ] **Phase 3: Integration & Validation** - Wire both into GSD and measure token/cost savings
 
 ## Phase Details
@@ -51,9 +51,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Complexity scoring function (rule-based 0-10 scale)
-- [ ] 02-02: Model dispatch layer (Ollama local, Gemini CLI, Anthropic Haiku/Sonnet APIs)
-- [ ] 02-03: MCP server with tools (orchestrator_route, orchestrator_execute, orchestrator_validate)
+- [x] 02-01: Complexity scoring function (rule-based 0-10 scale)
+- [x] 02-02-v2: Task tool routing (corrected architecture - Task tool instead of direct API)
+- [x] 02-03: MCP server with tools (orchestrator_route, orchestrator_execute, orchestrator_validate)
 
 ### Phase 3: Integration & Validation
 **Goal**: Integrate AuZoom and Orchestrator into GSD execution flow and validate ≥50% token reduction, ≥70% cost reduction
@@ -76,5 +76,5 @@ Phases 1 and 2 can run in parallel, then Phase 3 integrates both.
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. AuZoom Implementation | 4/4 | **COMPLETE** | 2026-01-11 |
-| 2. Orchestrator Implementation | 0/3 | Not started | - |
-| 3. Integration & Validation | 0/2 | Not started | - |
+| 2. Orchestrator Implementation | 3/3 | **COMPLETE** | 2026-01-11 |
+| 3. Integration & Validation | 0/2 | In Progress | - |
