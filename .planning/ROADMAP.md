@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: AuZoom Implementation** - Build parser foundation + MCP server for hierarchical code navigation
 - [x] **Phase 2: Orchestrator Implementation** - Build routing core + MCP server for intelligent model selection
-- [ ] **Phase 3: Integration & Validation** - Wire both into GSD and measure token/cost savings
+- [x] **Phase 3: Integration & Validation** - Wire both into GSD and measure token/cost savings
 
 ## Phase Details
 
@@ -65,8 +65,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: GSD integration (modify /run-plan, @file routing, context budgeting)
-- [ ] 03-02: Testing & measurement (10 representative tasks, before/after metrics, threshold tuning)
+- [x] 03-01: Usage examples & workflows (10 scenarios, 5 templates, demonstrations, README integration)
+- [x] 03-02: Formal validation testing (10 tasks, baseline vs optimized, validation report, V1 certification)
 
 ## Progress
 
@@ -77,4 +77,4 @@ Phases 1 and 2 can run in parallel, then Phase 3 integrates both.
 |-------|----------------|--------|-----------|
 | 1. AuZoom Implementation | 4/4 | **COMPLETE** | 2026-01-11 |
 | 2. Orchestrator Implementation | 3/3 | **COMPLETE** | 2026-01-11 |
-| 3. Integration & Validation | 0/2 | In Progress | - |
+| 3. Integration & Validation | 2/2 | **COMPLETE** | 2026-01-12 |
