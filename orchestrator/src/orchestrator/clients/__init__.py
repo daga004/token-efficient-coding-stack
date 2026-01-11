@@ -1,12 +1,12 @@
-"""Client implementations for model dispatch layer."""
+"""Model clients for orchestrator."""
 
 from .base import ExecutionResult, ModelClient
 from .gemini import GeminiClient
-from .anthropic_client import AnthropicClient
+from .claude_task import ClaudeTaskClient
 
 __all__ = [
     "ExecutionResult",
     "ModelClient",
     "GeminiClient",
-    "AnthropicClient",
+    "ClaudeTaskClient",
 ]
