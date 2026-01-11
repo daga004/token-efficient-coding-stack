@@ -21,10 +21,10 @@ class ModelProfile(BaseModel):
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "name": "Gemini Flash",
+                "name": "Gemini Flash 3",
                 "tier": 0,
-                "cost_per_1m_input": 0.01,
-                "cost_per_1m_output": 0.04,
+                "cost_per_1m_input": 0.50,
+                "cost_per_1m_output": 2.00,
                 "max_tokens": 8192,
                 "best_for": ["simple_code", "tests", "docs"],
             }
@@ -49,10 +49,10 @@ class ModelRegistry:
         """Initialize model registry with predefined model profiles."""
         self.models: Dict[ModelTier, ModelProfile] = {
             ModelTier.FLASH: ModelProfile(
-                name="Gemini Flash",
+                name="Gemini Flash 3",
                 tier=0,
-                cost_per_1m_input=0.01,
-                cost_per_1m_output=0.04,
+                cost_per_1m_input=0.50,
+                cost_per_1m_output=2.00,
                 max_tokens=8192,
                 best_for=["simple_code", "tests", "docs", "comments"],
             ),

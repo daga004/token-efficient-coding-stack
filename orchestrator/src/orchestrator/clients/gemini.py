@@ -1,6 +1,7 @@
 """Gemini CLI wrapper for executing tasks via subprocess."""
 
 import asyncio
+import os
 import subprocess
 import time
 from typing import Optional
@@ -10,6 +11,12 @@ from .base import ExecutionResult, ModelClient
 
 class GeminiClient(ModelClient):
     """Client for executing prompts via Gemini CLI."""
+
+    # Map internal model names to Gemini CLI model identifiers
+    MODEL_MAPPING = {
+        "gemini-flash": "gemini-3-flash",
+        "gemini-pro": "gemini-2-pro",
+    }
 
     def __init__(self, model: str = "gemini-flash", timeout: int = 30):
         """
@@ -66,7 +73,15 @@ class GeminiClient(ModelClient):
             )
         except FileNotFoundError:
             return self._create_error_result(
-                error_msg="Gemini CLI not installed. Run: pip install google-generativeai",
+                error_msg=(
+                    "Gemini CLI not found. Install with: "
+                    "npm install -g @google/gemini-cli OR brew install gemini-cli"
+                ),
+                latency_ms=0
+            )
+        except EnvironmentError as e:
+            return self._create_error_result(
+                error_msg=str(e),
                 latency_ms=0
             )
         except Exception as e:
@@ -83,19 +98,30 @@ class GeminiClient(ModelClient):
 
         Args:
             prompt: Input prompt
-            max_tokens: Maximum output tokens
+            max_tokens: Maximum output tokens (not used - CLI handles server-side)
 
         Returns:
             CompletedProcess with stdout/stderr
         """
+        # Map model name to CLI identifier
+        cli_model = self.MODEL_MAPPING.get(self.model, self.model)
+
+        # Gemini CLI syntax: gemini -p "prompt"
+        # Note: -m flag for model selection not used as CLI defaults to gemini-3-flash
         cmd = [
             "gemini",
-            "generate",
-            f"--model={self.model}",
-            f"--max-tokens={max_tokens}",
-            "--prompt",
+            "-p",
             prompt,
         ]
+
+        # Ensure GEMINI_API_KEY is in environment
+        env = os.environ.copy()
+        if "GEMINI_API_KEY" not in env:
+            # Check if API key is set in environment
+            raise EnvironmentError(
+                "GEMINI_API_KEY environment variable not set. "
+                "Get your API key from: https://aistudio.google.com/apikey"
+            )
 
         # Run subprocess in thread pool to avoid blocking
         loop = asyncio.get_event_loop()
@@ -105,7 +131,8 @@ class GeminiClient(ModelClient):
                 cmd,
                 capture_output=True,
                 text=True,
-                timeout=self.timeout
+                timeout=self.timeout,
+                env=env
             )
         )
         return result
