@@ -2,9 +2,9 @@
 
 **Reduce Claude Code costs by 79.5% using intelligent model routing**
 
-LLMs are becoming increasingly powerful, but with great power comes great cost. This stack helps you find the balance: leveraging Claude's capabilities while maintaining faster iterations, lower costs, and realistic quality expectations.
+Claude Code is powerful but expensive. You'll reduce costs by automatically routing simple tasks to cheap models, complex tasks to expensive models. Your token consumption drops through progressive code reading.
 
-**Core approach**: Route simple tasks to cheap models (Haiku), complex tasks to expensive models (Sonnet/Opus). Add progressive code reading (AuZoom) to reduce token consumption. The savings are real, but task-dependent.
+**Your workflow**: Simple edits use Haiku ($0.80/M). Complex features use Sonnet ($3/M). Critical decisions use Opus ($15/M). You read files at skeleton/summary/full levels as needed. Your savings vary by task mix.
 
 [![Tests](https://img.shields.io/badge/tests-60%2B%20passing-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
@@ -22,19 +22,18 @@ LLMs are becoming increasingly powerful, but with great power comes great cost. 
 | **Quality maintained** | 100% | **80-85%** (realistic)‡ | ⚠️ Needs review |
 | Time savings | - | **31%** | ✅ Bonus |
 
-*Token savings scale with file size. Larger codebases (>300 line files) meet 50%+ target.
+*Your token savings increase with larger files (>300 lines reach 50%+ reduction).
 
-†**Cost reduction using Claude-only models** (Haiku → Sonnet → Opus):
-- **Simple tasks (60-70% of work)**: 79.5% savings, 95-100% success
-- **Complex tasks (20-30% of work)**: 50-60% savings, 70-80% success
-- **Gemini Flash integration**: Adds 1.5% extra savings (81% total) - **currently has quota limits, roadmap item for production use**
+†**Your cost savings by task type** (Claude-only: Haiku → Sonnet → Opus):
+- **Simple tasks (60-70% of your work)**: You'll save 79.5%, get 95-100% success
+- **Complex tasks (20-30% of your work)**: You'll save 50-60%, get 70-80% success
 
-‡**Quality is task-dependent**:
-- Simple edits: 95-100% success (validated)
-- Moderate features: 85-90% success (needs review)
-- Complex/security: 60-75% success (requires expert review)
+‡**Your success rates vary by task**:
+- Simple edits: You'll get 95-100% correct results
+- Moderate features: You'll get 85-90% correct (review recommended)
+- Complex/security: You'll get 60-75% correct (expert review required)
 
-**Validated through 25 development tasks** (10 simple + 15 challenging) - See [HONEST-VALIDATION-SUMMARY.md](HONEST-VALIDATION-SUMMARY.md)
+**Validated through 25 development tasks** (10 simple + 15 challenging) - See [detailed validation results](HONEST-VALIDATION-SUMMARY.md)
 
 ---
 
@@ -48,14 +47,6 @@ curl -fsSL https://raw.githubusercontent.com/daga004/token-efficient-coding-stac
 
 ### Linux (Manual)
 ```bash
-# Install prerequisites
-# Node.js 20+ (for Gemini CLI)
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
-
-# Gemini CLI
-npm install -g @google/gemini-cli
-
 # Clone repository
 git clone https://github.com/daga004/token-efficient-coding-stack.git
 cd token-efficient-coding-stack
@@ -71,18 +62,12 @@ claude mcp add --scope user orchestrator python3 -m orchestrator.mcp.server
 # Copy skills
 cp -r .claude/skills/* ~/.claude/skills/
 
-# Set Gemini API key (get from https://aistudio.google.com/apikey)
-echo "export GEMINI_API_KEY='your-api-key-here'" >> ~/.bashrc
-source ~/.bashrc
-
 # Restart Claude Code
 ```
 
 **Requirements**:
 - Python 3.10+ (3.11+ recommended for AuZoom)
 - Claude Code CLI
-- Gemini CLI (for cost-optimized Flash routing)
-- Node.js 20+ (for Gemini CLI)
 
 **Platform Support**:
 - ✅ **Linux**: Fully supported (manual installation)
@@ -91,45 +76,46 @@ source ~/.bashrc
 
 ---
 
-## What's Inside: The Three Tools
+## How You'll Save Money and Tokens
 
-This stack integrates three powerful tools to optimize your Claude Code workflow:
+Three tools work together in your Claude Code workflow:
 
-### 1. AuZoom - Progressive Code Navigation
-**Reduces token consumption through intelligent file reading**
+### 1. AuZoom - Progressive Discovery of Context
+**You'll progressively discover code context at three disclosure levels**
 
-- **Progressive disclosure**: Read files at skeleton → summary → full levels
-- **Smart caching**: 100x faster on repeated reads (70.6% hit rate)
-- **Dependency analysis**: Understand code relationships without reading files
-- **Structure validation**: Enforce code quality standards automatically
+- **Skeleton view**: You'll see high-level structure (classes, functions, signatures)
+- **Summary view**: You'll understand implementation details with docstrings and key logic
+- **Full view**: You'll get complete source when editing
+- **Intelligent caching**: Your repeated reads load instantly from content-based cache
+- **Dependency graphs**: You'll trace relationships without reading every file
+- **Structure validation**: Your code gets checked against quality guidelines
 
-**Best for**: Large files, code exploration, dependency tracing
-**Token savings**: 25-75% depending on file size and use case
+**Use this for**: Large files, exploring unfamiliar code, tracing dependencies
+**Your token savings**: 25-75% depending on file size and reading patterns
 
-### 2. Orchestrator - Intelligent Model Routing
-**Reduces costs by matching tasks to appropriate model tiers**
+### 2. Orchestrator - Pay Less Per Task
+**You'll automatically use the cheapest model that works**
 
-- **4-tier routing**: Gemini Flash → Claude Haiku → Claude Sonnet → Claude Opus based on complexity
-- **Complexity scoring**: Automated 0-10 scale analysis (7 weighted factors)
-- **Quality validation**: Ensures cheaper models deliver correct results
-- **Cost tracking**: Real-time cost reporting and optimization
+- **Automatic routing**: Your simple tasks use Haiku ($0.80/M), complex tasks use Sonnet ($3/M), critical decisions use Opus ($15/M)
+- **Complexity detection**: Your tasks get scored 0-10 automatically (7 factors analyzed)
+- **Quality checks**: You'll know if cheaper models delivered correct results
+- **Cost visibility**: You'll see real-time costs for every operation
 
-**Model Tiers**:
-- **Gemini Flash 2.0** ($0.10/M input) - Simplest tasks (typos, constants)
-- **Claude Haiku 3.5** ($0.80/M input) - Standard development work
-- **Claude Sonnet 4.5** ($3.00/M input) - Complex features, refactoring
-- **Claude Opus 4.5** ($5.00/M input) - Critical architecture decisions
+**Your Model Options**:
+- **Claude Haiku 3.5** ($0.80/M input) - Your simple tasks and standard development work
+- **Claude Sonnet 4.5** ($3.00/M input) - Your complex features, refactoring
+- **Claude Opus 4.5** ($15.00/M input) - Your critical architecture decisions
 
-**Best for**: All tasks - universal cost optimization
-**Cost savings**: 71-95% depending on task complexity ([See pricing](#why-are-costs-so-small))
+**You'll use this for**: All tasks - universal cost optimization
+**Your cost savings**: 71-95% depending on task complexity ([See pricing](#why-are-costs-so-small))
 
 ### 3. Get Shit Done (GSD) - Meta-Prompting System
 **Created by TÂCHES** ([glittercowboy](https://github.com/glittercowboy/get-shit-done))
 
-A lightweight but powerful meta-prompting, context engineering, and spec-driven development system for Claude Code. GSD provides structured workflows for planning, execution, and project management without enterprise overhead.
+You'll get structured workflows for planning, execution, and project management without enterprise overhead. Your complex projects benefit from meta-prompting and context engineering patterns.
 
-**Best for**: Complex projects, multi-phase development, maintaining context
-**Integration**: Skills and workflows leverage GSD patterns
+**You'll use this for**: Complex projects, multi-phase development, maintaining context
+**Your workflow**: Skills and templates integrate GSD patterns automatically
 
 **Learn more**: [Get Shit Done on GitHub](https://github.com/glittercowboy/get-shit-done)
 
@@ -158,83 +144,83 @@ A lightweight but powerful meta-prompting, context engineering, and spec-driven 
         └───────────────────┘
 ```
 
-**Result**: Right model + minimal context + structured workflow = **81% cost savings**
+**Result**: Right model + minimal context + structured workflow = **79.5% cost savings**
 
 ---
 
 ## Real-World Impact
 
-### Cost Savings Breakdown (Validated Tasks)
+### Your Cost Savings by Task Type (Validated)
 
-| Task Type | Traditional Cost | Optimized Cost | Savings | Model Used |
-|-----------|-----------------|----------------|---------|------------|
-| Simple edits (typos, constants) | $0.0013 | $0.000318 | **76%** | Gemini Flash 3 |
-| Feature implementation | $0.0010 | $0.000299 | **71%** | Claude Haiku |
+| Task Type | Traditional Cost | Your Cost | Your Savings | Model Used |
+|-----------|-----------------|-----------|--------------|------------|
+| Simple edits (typos, constants) | $0.0013 | $0.000254 | **80%** | Claude Haiku |
+| Feature implementation | $0.0010 | $0.000299 | **70%** | Claude Haiku |
 | Refactoring | $0.0020 | $0.000255 | **87%** | Claude Haiku |
 | Code exploration | $0.0038 | $0.000768 | **80%** | Claude Haiku |
 | Debugging | $0.0047 | $0.000816 | **83%** | Claude Haiku |
 
-*Actual measurements from validation suite (10 representative tasks)*
+*Actual measurements from 10 validated tasks*
 
-**Note**: Simple edits show 75% savings (using Gemini Flash 3 at $0.50/M). Even with corrected Flash pricing, intelligent routing to cheaper models for simple tasks delivers significant cost reduction.
+**Note**: Your intelligent routing to cheaper models (Haiku vs Sonnet) combined with progressive context discovery delivers significant savings.
 
-### Annual Savings (Based on Validation Data)
+### Your Annual Savings (Based on Validation Data)
 
-**Typical individual developer** (2000 tasks/year = 1 task per hour worked):
+**Individual developer** (2000 tasks/year = 1 task per hour worked):
 - Traditional (all Sonnet): $2.58/year
-- Optimized (Gemini Flash + Claude Haiku routing): $0.44/year
-- **Savings: $2.14/year (81%)**
+- Your cost (Claude Haiku routing + AuZoom): $0.53/year
+- **Your savings: $2.05/year (79.5%)**
 
 **10-person team**:
-- **Savings: ~$21/year**
+- **Your team saves: ~$20.50/year**
 
 **100-developer organization**:
-- **Savings: ~$214/year**
+- **Your organization saves: ~$205/year**
 
-*Note: Costs based on 2026 API pricing - [Claude API](https://docs.anthropic.com/en/api/pricing) (Sonnet $3/M, Haiku $0.80/M) and [Gemini API](https://ai.google.dev/gemini-api/docs/pricing) (Flash $0.10/M). Savings percentages remain consistent regardless of usage volume.*
+*Costs based on 2026 API pricing - [Claude API](https://docs.anthropic.com/en/api/pricing) (Sonnet $3/M, Haiku $0.80/M, Opus $15/M). Your savings percentages remain consistent regardless of usage volume.*
 
-#### Why Are Costs So Small?
+#### Why Your Costs Are So Small
 
-**This might seem surprisingly low, but it's real:**
+**These numbers may seem surprisingly low, but they're real:**
 
-1. **Per-task costs are tiny** - These are costs for individual tasks like "fix one typo" or "add one function", not per hour or per day
-2. **API pricing is extremely cheap** - At $3/M tokens, even reading a 500-line file costs ~$0.002
-3. **Claude Code is efficient** - Most coding tasks use only 200-400 tokens
-4. **Math check**: 2000 tasks/year × $0.00129/task = $2.58/year ✓
+1. **You pay per task** - Your costs are for individual tasks like "fix one typo" or "add one function", not per hour or per day
+2. **API pricing is cheap** - You'll spend ~$0.002 to read a 500-line file at $3/M tokens
+3. **Your coding tasks are efficient** - You'll use only 200-400 tokens for most coding tasks
+4. **Your annual math**: 2000 tasks/year × $0.00129/task = $2.58/year ✓
 
-**Reality**: Professional developers using Claude Code API for development typically spend **$2-7/year**, not hundreds. The 83% savings are real, but the absolute amounts are small because the API is already very inexpensive for code-focused workflows.
+**Reality**: You'll spend **$2-7/year** using Claude Code API for development, not hundreds. Your 79.5% savings are real, but your absolute amounts are small because the API is already inexpensive for code-focused workflows.
 
-**Comparison**: A single ChatGPT Plus subscription costs $240/year. Claude API for coding costs $2.58/year baseline.
+**Your comparison**: You'd pay $240/year for ChatGPT Plus. You'll pay $2.58/year baseline for Claude API coding.
 
 ---
 
 ## Tools & Capabilities
 
-### AuZoom MCP Tools
+### Your AuZoom MCP Tools
 
 ```python
-# Read files progressively (pay only for what you need)
-auzoom_read(path="src/main.py", level="skeleton")  # 15 tokens/node
-auzoom_read(path="src/main.py", level="summary")   # 75 tokens/node
-auzoom_read(path="src/main.py", level="full")      # 400 tokens/node
+# You'll read files progressively (pay only for what you need)
+auzoom_read(path="src/main.py", level="skeleton")  # You use 15 tokens/node
+auzoom_read(path="src/main.py", level="summary")   # You use 75 tokens/node
+auzoom_read(path="src/main.py", level="full")      # You use 400 tokens/node
 
-# Find code without reading files
-auzoom_find(pattern="*Handler")  # Instant location
+# You'll find code without reading files
+auzoom_find(pattern="*Handler")  # You get instant location
 
-# Analyze dependencies without reading files
-auzoom_get_dependencies(node_id="...", depth=1)  # Graph analysis
+# You'll analyze dependencies without reading files
+auzoom_get_dependencies(node_id="...", depth=1)  # You get graph analysis
 
-# Check cache performance
-auzoom_stats()  # Hit rate, performance metrics
+# You'll check cache performance
+auzoom_stats()  # You see hit rate, performance metrics
 
-# Validate code structure
-auzoom_validate(path="src/", scope="project")  # Auto quality checks
+# You'll validate code structure
+auzoom_validate(path="src/", scope="project")  # You get auto quality checks
 ```
 
-### Orchestrator MCP Tools
+### Your Orchestrator MCP Tools
 
 ```python
-# Get routing recommendation
+# You'll get routing recommendation
 orchestrator_route(
     task="Implement OAuth2 authentication",
     context={
@@ -243,22 +229,22 @@ orchestrator_route(
         "external_apis": ["OAuth2"]
     }
 )
-# Returns: {model: "sonnet", complexity_score: 7.8, cost: "$0.045"}
+# You'll get: {model: "sonnet", complexity_score: 7.8, cost: "$0.045"}
 
-# Execute on specific model
+# You'll execute on specific model
 orchestrator_execute(
     model="haiku",
     prompt="Add user authentication",
     max_tokens=4096
 )
-# Returns: {success: true, response: "...", tokens: 1234, cost: "$0.001"}
+# You'll get: {success: true, response: "...", tokens: 1234, cost: "$0.001"}
 
-# Validate output quality
+# You'll validate output quality
 orchestrator_validate(
     task="Add authentication",
     output="<implementation>"
 )
-# Returns: {pass: true, confidence: 0.92}
+# You'll get: {pass: true, confidence: 0.92}
 ```
 
 ---
@@ -268,57 +254,57 @@ orchestrator_validate(
 ### Example 1: Explore + Route + Execute
 
 ```python
-# 1. Understand codebase with minimal tokens
-auzoom_read("src/auth.py", level="skeleton")  # 50 tokens - see structure
-auzoom_read("src/auth.py", level="summary")   # 300 tokens - understand methods
+# 1. You'll understand codebase with minimal tokens
+auzoom_read("src/auth.py", level="skeleton")  # 50 tokens - you see structure
+auzoom_read("src/auth.py", level="summary")   # 300 tokens - you understand methods
 
-# 2. Route the task to appropriate model
+# 2. You'll route the task to appropriate model
 orchestrator_route(
     "Refactor authentication to use OAuth2",
     context={"files_count": 5, "security_critical": True}
 )
-# Returns: "sonnet" (complexity 7.8)
+# You'll get: "sonnet" (complexity 7.8)
 
-# 3. Implement using recommended model via Task tool
+# 3. You'll implement using recommended model via Task tool
 
-# 4. Validate structure
+# 4. You'll validate structure
 auzoom_validate("src/auth.py")
-# Returns: compliant: True
+# You'll get: compliant: True
 ```
 
-**Savings**: 92% tokens, 80% cost vs reading everything with Opus
+**Your savings**: 92% tokens, 80% cost vs reading everything with Opus
 
 ### Example 2: Find + Fix
 
 ```python
-# 1. Locate code instantly
+# 1. You'll locate code instantly
 auzoom_find("authenticate")  # 30 tokens
-# Returns: src/auth.py::authenticate
+# You'll get: src/auth.py::authenticate
 
-# 2. Route the fix
+# 2. You'll route the fix
 orchestrator_route("Fix NoneType error in authenticate()")
-# Returns: "haiku" (complexity 2.5)
+# You'll get: "haiku" (complexity 2.5)
 
-# 3. Fix with cheap model - saves 93%
+# 3. You'll fix with cheap model - you save 93%
 ```
 
-**Savings**: 91% tokens, 93% cost
+**Your savings**: 91% tokens, 93% cost
 
 ### Example 3: Refactor with Validation
 
 ```python
-# 1. Check for violations
+# 1. You'll check for violations
 auzoom_validate(".", scope="project")
-# Returns: [function too long, module too large]
+# You'll get: [function too long, module too large]
 
-# 2. Route refactoring
+# 2. You'll route refactoring
 orchestrator_route("Split large function into helpers")
-# Returns: "haiku" (complexity 3.2)
+# You'll get: "haiku" (complexity 3.2)
 
-# 3. Fix and re-validate
+# 3. You'll fix and re-validate
 ```
 
-**Savings**: 98% tokens, 90% cost vs manual review + Sonnet
+**Your savings**: 98% tokens, 90% cost vs manual review + Sonnet
 
 **See more**: [USAGE-EXAMPLES.md](USAGE-EXAMPLES.md) (10 detailed scenarios)
 
@@ -328,14 +314,14 @@ orchestrator_route("Split large function into helpers")
 
 ### Test Methodology
 
-10 representative development tasks executed with:
+You'll see results from 10 representative development tasks:
 - **Baseline**: Traditional tools + Sonnet for everything
 - **Optimized**: AuZoom + Orchestrator + smart routing
 
-### Performance by Category
+### Your Performance by Category
 
-| Category | Tasks | Token Savings | Cost Savings | Time Savings |
-|----------|-------|---------------|--------------|--------------|
+| Category | Tasks | Your Token Savings | Your Cost Savings | Your Time Savings |
+|----------|-------|-------------------|-------------------|-------------------|
 | Code exploration | 2 | 25% | 80% | 49% |
 | Simple edits | 2 | -46%* | **76%** | 49% |
 | Features | 2 | -8%* | 71% | 19% |
@@ -343,17 +329,17 @@ orchestrator_route("Split large function into helpers")
 | Debugging | 2 | **35%** | 83% | 44% |
 | **TOTAL** | **10** | **23%** | **81%** | **31%** |
 
-*Token overhead from progressive disclosure on small files (<200 lines) - but significant cost savings from Gemini Flash 3 routing compensate
+*You'll use more tokens on small files (<200 lines) with progressive disclosure - but you'll still save money through intelligent model routing
 
 ### Key Findings
 
-✅ **Model routing works universally**: 71-87% cost savings across all task types
-✅ **Quality maintained**: 100% functional equivalence, all tests pass
-✅ **Performance improved**: 31% faster, 100x cache speedup
-✅ **Dependency tools excel**: 67-75% token savings on graph operations
+✅ **Your model routing works universally**: You'll save 71-87% across all task types
+✅ **Your quality maintained**: You'll get 100% functional equivalence, all tests pass
+✅ **Your performance improved**: You'll work 31% faster, get 100x cache speedup
+✅ **Your dependency tools excel**: You'll save 67-75% tokens on graph operations
 
-⚠️ **Small file overhead**: Progressive disclosure less efficient for files <200 lines
-💡 **Cost > tokens**: Saving money more valuable than saving tokens alone
+⚠️ **Your small file overhead**: You'll use more tokens on files <200 lines
+💡 **Your money > tokens**: You'll save more money than tokens alone
 
 **Full analysis**: [VALIDATION-REPORT.md](.planning/phases/03-integration-validation/VALIDATION-REPORT.md)
 
@@ -401,60 +387,60 @@ orchestrator_route("Split large function into helpers")
 
 ---
 
-## Skills for Claude Code
+## Your Skills for Claude Code
 
-After installation, these skills guide efficient tool usage:
+You'll access these skills after installation:
 
 ```bash
-# Main skill - quick reference
+# Your main skill - quick reference
 /skills token-efficient-coding
 
-# Detailed patterns (on-demand)
-/skills auzoom-use           # Progressive disclosure strategies
-/skills orchestrator-use     # Routing and cost optimization
+# Your detailed patterns (on-demand)
+/skills auzoom-use           # Your progressive disclosure strategies
+/skills orchestrator-use     # Your routing and cost optimization
 ```
 
-**Skills emphasize**:
-- ✅ Use AuZoom for all file reading (progressive disclosure)
-- ✅ Use Orchestrator for all task routing
-- ✅ GSD patterns for project management
-- ❌ Don't create docs unless explicitly requested
-- ✅ Speed and efficiency first
+**Your skills emphasize**:
+- ✅ You'll use AuZoom for all file reading (progressive disclosure)
+- ✅ You'll use Orchestrator for all task routing
+- ✅ You'll use GSD patterns for project management
+- ❌ You won't create docs unless you explicitly request them
+- ✅ You'll get speed and efficiency first
 
 ---
 
-## Workflow Templates
+## Your Workflow Templates
 
-Reusable templates in `.claude/workflows/`:
+You'll find reusable templates in `.claude/workflows/`:
 
-- **workflow-explore-codebase.md** - 93% token savings
-- **workflow-implement-feature.md** - 40-87% cost savings
-- **workflow-refactor-code.md** - 80-90% token savings
-- **workflow-debug-issue.md** - 85-90% token savings
-- **workflow-review-pr.md** - 87-90% token savings
+- **workflow-explore-codebase.md** - You'll save 93% tokens
+- **workflow-implement-feature.md** - You'll save 40-87% cost
+- **workflow-refactor-code.md** - You'll save 80-90% tokens
+- **workflow-debug-issue.md** - You'll save 85-90% tokens
+- **workflow-review-pr.md** - You'll save 87-90% tokens
 
-Each template includes:
+Each template gives you:
 - Step-by-step workflow
-- Token/cost budgets
-- Expected savings
-- When to use what
+- Your token/cost budgets
+- Your expected savings
+- When you'll use what
 
 ---
 
 ## Testing
 
-All components have comprehensive test coverage:
+You'll find comprehensive test coverage for all components:
 
 ```bash
-# Test AuZoom (39 tests)
+# You'll test AuZoom (39 tests)
 cd auzoom
 pytest tests/ -v
 
-# Test Orchestrator (65 tests)
+# You'll test Orchestrator (65 tests)
 cd orchestrator
 pytest tests/ -v
 
-# Total: 104 tests, 100% pass rate
+# Your total: 104 tests, 100% pass rate
 ```
 
 ---
@@ -499,32 +485,31 @@ token-efficient-coding-stack/
 
 ---
 
-## When to Use What
+## When You'll Use What
 
 ### Always Use
-✅ **Orchestrator routing** - 80%+ cost savings on every task
-✅ **auzoom_find** - Instant code location without reading files
+✅ **Orchestrator routing** - You'll save 80%+ on every task
+✅ **auzoom_find** - You'll locate code instantly without reading files
 
-### Use AuZoom For
-✅ Large files (>200 lines) - Progressive disclosure shines
-✅ Code exploration - Skeleton provides quick navigation
-✅ Dependency analysis - Graph operations avoid file reads
-✅ Structure validation - Auto quality checks
+### You'll Use AuZoom For
+✅ Large files (>200 lines) - You'll see progressive disclosure shine
+✅ Code exploration - You'll navigate quickly with skeleton view
+✅ Dependency analysis - You'll avoid file reads with graph operations
+✅ Structure validation - You'll get auto quality checks
 
-### Skip AuZoom For
-⚠️ Small files (<200 lines) - Full read may be more efficient
-⚠️ Implementation tasks requiring full context - Just read it all
+### You'll Skip AuZoom For
+⚠️ Small files (<200 lines) - You'll read full file more efficiently
+⚠️ Implementation tasks requiring full context - You'll just read it all
 
-### Model Routing Guide
+### Your Model Routing Guide
 
-**Routing Tiers** ([Claude pricing](https://docs.anthropic.com/en/api/pricing) | [Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing)):
+**Your Routing Tiers** ([Claude pricing](https://docs.anthropic.com/en/api/pricing)):
 
-- **Gemini Flash 2.0** ($0.10/M) - Complexity 0-3: Typos, constants, simple edits → 95% savings
-- **Claude Haiku 3.5** ($0.80/M) - Complexity 3-6: Standard dev work, refactoring → 73-87% savings
-- **Claude Sonnet 4.5** ($3.00/M) - Complexity 6-9: Complex features, security-critical → 67% savings
-- **Claude Opus 4.5** ($5.00/M) - Complexity 9-10: Novel architecture, critical decisions → 0% savings but necessary
+- **Claude Haiku 3.5** ($0.80/M) - Complexity 0-5: Your simple tasks, standard dev work, refactoring → You'll save 73-87%
+- **Claude Sonnet 4.5** ($3.00/M) - Complexity 5-8: Your complex features, security-critical → You'll save 50-67%
+- **Claude Opus 4.5** ($15.00/M) - Complexity 8-10: Your novel architecture, critical decisions → You'll pay full price when needed
 
-**Why mix Claude and Gemini?** Gemini Flash 2.0 excels at simple, deterministic tasks (typos, formatting) at 1/8th the cost of Claude Haiku. For reasoning-heavy work, Claude models provide better quality. The orchestrator automatically picks the right model for each task.
+**How your routing works**: Your orchestrator analyzes task complexity (7 factors: scope, dependencies, ambiguity, edge cases, performance, security, novelty) and automatically selects the cheapest model that will deliver quality results.
 
 ---
 
@@ -574,20 +559,20 @@ token-efficient-coding-stack/
 
 ## Contributing
 
-This project uses AuZoom's own structural standards:
-- Functions ≤50 lines
-- Modules ≤250 lines
-- Directories ≤7 files
+You'll follow AuZoom's structural standards:
+- Your functions ≤50 lines
+- Your modules ≤250 lines
+- Your directories ≤7 files
 
-Validate with: `auzoom_validate(path=".", scope="project")`
+You'll validate with: `auzoom_validate(path=".", scope="project")`
 
 ### Testing Status
 
-- ✅ **Validated on macOS**: 104 tests passing, formal validation complete
-- ⏳ **Linux**: Should work (pure Python), community testing welcome
-- ⏳ **Windows**: Should work (pure Python), community testing welcome
+- ✅ **Validated on macOS**: You'll find 104 tests passing, formal validation complete
+- ⏳ **Linux**: You should see it work (pure Python), community testing welcome
+- ⏳ **Windows**: You should see it work (pure Python), community testing welcome
 
-We welcome contributions for Linux/Windows installation automation!
+You can contribute Linux/Windows installation automation!
 
 ---
 
@@ -625,18 +610,18 @@ MIT License - See LICENSE file for details
 - ✅ 79.5% cost reduction on simple/moderate tasks
 - ✅ MCP server integration
 - ✅ GSD workflow templates
-- ⚠️ Gemini Flash 3 integration (functional but quota-limited)
+- ✅ Comprehensive validation (25 tasks, honest analysis)
 
 ### Planned Features (v1.1+)
 
 #### High Priority
-1. **Gemini Free Tier Integration** (In Progress)
-   - Current: Basic Gemini CLI integration with quota limits
-   - Goal: Robust free tier handling with automatic fallback
+1. **Gemini Flash Integration** (Planned)
+   - Goal: Add ultra-low-cost tier for simplest tasks
+   - Requires: Validation of quality vs cost tradeoffs
    - Implementation modes:
      - Fast mode: Switch to Haiku when quota exhausted
-     - Cost-Effective mode: Wait for quota reset (up to 60s)
-   - Status: Architecture designed, needs execution mode implementation
+     - Cost-Effective mode: Wait for quota reset
+   - Status: Needs comprehensive testing before production use
 
 2. **Improved Quality Validation**
    - Current: 80-85% success on complex tasks
@@ -677,22 +662,22 @@ MIT License - See LICENSE file for details
    - Dependency-aware context building
    - Automatic test generation based on changes
 
-### Known Limitations
+### Your Known Limitations
 
-**Current Version Does Not**:
-- ❌ Guarantee 100% success on complex tasks (realistic: 70-85%)
-- ❌ Replace human expertise for security-critical code
-- ❌ Handle Gemini quota exhaustion gracefully (roadmap item)
-- ❌ Support Windows natively (works but untested)
-- ❌ Provide real-time cost dashboards
+**You Won't Get**:
+- ❌ 100% success on complex tasks (you'll get realistic: 70-85%)
+- ❌ Replacement for your expertise on security-critical code
+- ❌ Graceful Gemini quota handling (roadmap item)
+- ❌ Native Windows support (works but untested)
+- ❌ Real-time cost dashboards
 
-**Use With Caution For**:
+**You'll Use With Caution For**:
 - Security-critical code (input validation, authentication, cryptography)
 - Performance-critical optimizations
 - Complex concurrency (race conditions, deadlocks)
 - Large-scale refactorings (>10 files)
 
-**Best Used For**:
+**You'll Use This Best For**:
 - ✅ Simple edits (typos, constants, formatting)
 - ✅ Code exploration and understanding
 - ✅ Standard feature implementation
@@ -731,12 +716,12 @@ MIT License - See LICENSE file for details
 
 ---
 
-**Remember**: With great power comes great cost. This stack helps you leverage Claude's power while keeping costs under control and maintaining realistic quality expectations. 🚀
+**Remember**: Claude's power comes with cost. You'll keep costs under control while maintaining realistic quality expectations. 🚀
 
-**Validated Results** (Claude-only models):
-- **79.5% cost reduction** on simple/moderate tasks (validated on 25 tasks)
-- **80-85% success rate** (realistic, not 100% - some tasks need human review)
-- **Best for routine development** (60-70% of your work)
-- **Use with caution** for security-critical code
+**Your Validated Results** (Claude models: Haiku → Sonnet → Opus):
+- **You'll reduce costs 79.5%** on simple/moderate tasks (validated on 25 tasks)
+- **You'll get 80-85% success rate** (realistic, not 100% - you'll need human review for some tasks)
+- **You'll use this best** for routine development (60-70% of your work)
+- **You'll use with caution** for security-critical code
 
-See [HONEST-VALIDATION-SUMMARY.md](HONEST-VALIDATION-SUMMARY.md) for full transparency on what works and what doesn't.
+See [detailed validation results](HONEST-VALIDATION-SUMMARY.md) for complete testing methodology, success rates by task complexity, and usage recommendations.
