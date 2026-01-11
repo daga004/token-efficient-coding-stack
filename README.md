@@ -1,8 +1,10 @@
 # Token-Efficient Coding Stack
 
-**Reduce Claude Code costs by 81% while maintaining 100% quality**
+**Reduce Claude Code costs by 79.5% using intelligent model routing**
 
-LLMs are becoming increasingly powerful, but with great power comes great cost. This stack helps you find the balance: leveraging Claude's capabilities while maintaining faster iterations, lower costs, and high quality.
+LLMs are becoming increasingly powerful, but with great power comes great cost. This stack helps you find the balance: leveraging Claude's capabilities while maintaining faster iterations, lower costs, and realistic quality expectations.
+
+**Core approach**: Route simple tasks to cheap models (Haiku), complex tasks to expensive models (Sonnet/Opus). Add progressive code reading (AuZoom) to reduce token consumption. The savings are real, but task-dependent.
 
 [![Tests](https://img.shields.io/badge/tests-60%2B%20passing-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
@@ -15,15 +17,24 @@ LLMs are becoming increasingly powerful, but with great power comes great cost. 
 
 | Metric | Target | Achieved | Status |
 |--------|--------|----------|--------|
-| **Cost reduction** | ≥70% | **81%*** | ✅ **Exceeds target** |
+| **Cost reduction** | ≥70% | **79.5%** (Claude-only)† | ✅ **Exceeds target** |
 | Token reduction | ≥50% | 23%* | ⚠️ Small file bias |
-| **Quality maintained** | 100% | **100%** | ✅ **Perfect** |
+| **Quality maintained** | 100% | **80-85%** (realistic)‡ | ⚠️ Needs review |
 | Time savings | - | **31%** | ✅ Bonus |
 
 *Token savings scale with file size. Larger codebases (>300 line files) meet 50%+ target.
-†Cost reduction corrected from 83.4% to 82.9% using verified 2026 API pricing.
 
-**Validated through 10 representative development tasks** - See [VALIDATION-REPORT.md](.planning/phases/03-integration-validation/VALIDATION-REPORT.md)
+†**Cost reduction using Claude-only models** (Haiku → Sonnet → Opus):
+- **Simple tasks (60-70% of work)**: 79.5% savings, 95-100% success
+- **Complex tasks (20-30% of work)**: 50-60% savings, 70-80% success
+- **Gemini Flash integration**: Adds 1.5% extra savings (81% total) - **currently has quota limits, roadmap item for production use**
+
+‡**Quality is task-dependent**:
+- Simple edits: 95-100% success (validated)
+- Moderate features: 85-90% success (needs review)
+- Complex/security: 60-75% success (requires expert review)
+
+**Validated through 25 development tasks** (10 simple + 15 challenging) - See [HONEST-VALIDATION-SUMMARY.md](HONEST-VALIDATION-SUMMARY.md)
 
 ---
 
@@ -606,6 +617,90 @@ MIT License - See LICENSE file for details
 
 ---
 
+## Roadmap
+
+### Current Status (v1.0)
+- ✅ AuZoom progressive code navigation
+- ✅ Claude-only model routing (Haiku → Sonnet → Opus)
+- ✅ 79.5% cost reduction on simple/moderate tasks
+- ✅ MCP server integration
+- ✅ GSD workflow templates
+- ⚠️ Gemini Flash 3 integration (functional but quota-limited)
+
+### Planned Features (v1.1+)
+
+#### High Priority
+1. **Gemini Free Tier Integration** (In Progress)
+   - Current: Basic Gemini CLI integration with quota limits
+   - Goal: Robust free tier handling with automatic fallback
+   - Implementation modes:
+     - Fast mode: Switch to Haiku when quota exhausted
+     - Cost-Effective mode: Wait for quota reset (up to 60s)
+   - Status: Architecture designed, needs execution mode implementation
+
+2. **Improved Quality Validation**
+   - Current: 80-85% success on complex tasks
+   - Goal: Automated quality checks before committing changes
+   - Validation hooks for security-critical code
+   - Test coverage requirements for complex features
+
+3. **Extended Complexity Range**
+   - Current: Tasks up to complexity 8.5 tested
+   - Goal: Validate on 9-10 complexity (critical architecture decisions)
+   - More Opus tier validation
+   - Real-world large refactoring scenarios
+
+#### Medium Priority
+4. **Performance Optimization**
+   - Parallel task execution for independent operations
+   - Improved cache hit rates (current: 70.6%)
+   - Streaming responses for large file operations
+
+5. **Security Enhancements**
+   - Automated security scanning for generated code
+   - Input sanitization validation
+   - Rate limiting for MCP servers
+
+6. **Better Cost Tracking**
+   - Real-time cost dashboards
+   - Budget enforcement
+   - Cost attribution per project/feature
+
+#### Research Items
+7. **Multi-Provider Support**
+   - Google Gemini API (not just CLI)
+   - OpenAI integration
+   - Local model support (Ollama)
+
+8. **Smart Context Selection**
+   - ML-based relevance scoring for which files to read
+   - Dependency-aware context building
+   - Automatic test generation based on changes
+
+### Known Limitations
+
+**Current Version Does Not**:
+- ❌ Guarantee 100% success on complex tasks (realistic: 70-85%)
+- ❌ Replace human expertise for security-critical code
+- ❌ Handle Gemini quota exhaustion gracefully (roadmap item)
+- ❌ Support Windows natively (works but untested)
+- ❌ Provide real-time cost dashboards
+
+**Use With Caution For**:
+- Security-critical code (input validation, authentication, cryptography)
+- Performance-critical optimizations
+- Complex concurrency (race conditions, deadlocks)
+- Large-scale refactorings (>10 files)
+
+**Best Used For**:
+- ✅ Simple edits (typos, constants, formatting)
+- ✅ Code exploration and understanding
+- ✅ Standard feature implementation
+- ✅ Test writing (with review)
+- ✅ Documentation updates
+
+---
+
 ## Support & Credits
 
 ### Support
@@ -636,6 +731,12 @@ MIT License - See LICENSE file for details
 
 ---
 
-**Remember**: With great power comes great cost. This stack helps you leverage Claude's power while keeping costs under control and maintaining quality. 🚀
+**Remember**: With great power comes great cost. This stack helps you leverage Claude's power while keeping costs under control and maintaining realistic quality expectations. 🚀
 
-**Validated Result**: **81% cost reduction, 100% quality maintained**
+**Validated Results** (Claude-only models):
+- **79.5% cost reduction** on simple/moderate tasks (validated on 25 tasks)
+- **80-85% success rate** (realistic, not 100% - some tasks need human review)
+- **Best for routine development** (60-70% of your work)
+- **Use with caution** for security-critical code
+
+See [HONEST-VALIDATION-SUMMARY.md](HONEST-VALIDATION-SUMMARY.md) for full transparency on what works and what doesn't.
