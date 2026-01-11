@@ -4,7 +4,7 @@
 
 LLMs are becoming increasingly powerful, but with great power comes great cost. This stack helps you find the balance: leveraging Claude's capabilities while maintaining faster iterations, lower costs, and high quality.
 
-[![Tests](https://img.shields.io/badge/tests-104%20passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-60%2B%20passing-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
 [![V1](https://img.shields.io/badge/status-V1%20Certified-success)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
