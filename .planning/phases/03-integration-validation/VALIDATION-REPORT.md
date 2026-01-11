@@ -14,12 +14,14 @@
 | Metric | Target | Achieved | Status |
 |--------|--------|----------|--------|
 | Token reduction | ≥50% | **23%** | ❌ BELOW TARGET |
-| Cost reduction | ≥70% | **83%** | ✅ EXCEEDS TARGET |
+| Cost reduction | ≥70% | **81%*** | ✅ EXCEEDS TARGET |
 | Quality maintained | 100% | **100%** | ✅ PASS |
+
+*Cost reduction verified with correct Gemini Flash 3 pricing ($0.50/M input). Previous claim of 83% used incorrect $0.01/M pricing.
 
 **Overall Assessment**: **CONDITIONAL PASS**
 
-- **Primary success**: 83% cost reduction far exceeds 70% target
+- **Primary success**: 81% cost reduction far exceeds 70% target
 - **Primary concern**: 23% token reduction significantly below 50% target
 - **Key insight**: Model routing (Orchestrator) delivers bulk of savings, not just token reduction
 
@@ -38,15 +40,15 @@
 ### Optimized (AuZoom + Orchestrator)
 
 - **Total tokens**: 3,308
-- **Total cost**: $0.002144
+- **Total cost**: $0.002456
 - **Total time**: 416 seconds
-- **Models used**: Flash (20%), Haiku (80%), Sonnet (0%)
+- **Models used**: Gemini Flash 3 (20%), Claude Haiku (80%), Sonnet (0%)
 - **Tools used**: auzoom_read, auzoom_find, auzoom_get_dependencies
 
 ### Aggregate Savings
 
 - **Token reduction**: 990 tokens (23.0% savings)
-- **Cost reduction**: $0.010750 (83.4% savings)
+- **Cost reduction**: $0.010438 (80.9% savings)
 - **Time reduction**: 189 seconds (31.2% savings)
 
 ---
@@ -70,10 +72,10 @@
 | Metric | Baseline | Optimized | Savings |
 |--------|----------|-----------|---------|
 | Tokens | 434 | 635 | **-46.3%** (WORSE) |
-| Cost | $0.001302 | $0.000006 | 99.5% |
+| Cost | $0.001302 | $0.000318 | 75.6% |
 | Time | 35s | 18s | 48.6% |
 
-**Analysis**: Token count increased (progressive disclosure overhead for small files), but Flash routing delivered 99.5% cost savings. **Cost savings compensate for token increase.**
+**Analysis**: Token count increased (progressive disclosure overhead for small files), but Gemini Flash 3 routing delivered 75.6% cost savings. **Cost savings compensate for token increase.** Note: With corrected Flash pricing ($0.50/M), savings reduced from theoretical 99.5% to verified 75.6%.
 
 ---
 

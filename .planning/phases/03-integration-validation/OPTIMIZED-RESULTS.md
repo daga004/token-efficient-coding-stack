@@ -98,15 +98,15 @@
 
 **Total**:
 - Tokens: 390 tokens (315 skeleton + 75 targeted summary)
-- Model: Flash
-- Cost: $0.000004 (390 × $0.01/1M)
+- Model: Gemini Flash 3
+- Cost: $0.000195 (390 × $0.50/1M)
 - Time: ~10 seconds
 - Quality: Typo fixed correctly
 
 **vs Baseline**:
 - Token savings: **-71%** (228 → 390 worse)
-- Cost savings: **99.4%** ($0.000684 → $0.000004)
-- **Net**: Token increase but massive cost savings from Flash routing
+- Cost savings: **71.5%** ($0.000684 → $0.000195)
+- **Net**: Token increase but significant cost savings from Flash routing
 
 ---
 
@@ -123,15 +123,15 @@
 
 **Total**:
 - Tokens: 245 tokens (20 find + 225 skeleton)
-- Model: Flash
-- Cost: $0.000002 (245 × $0.01/1M)
+- Model: Gemini Flash 3
+- Cost: $0.000123 (245 × $0.50/1M)
 - Time: ~8 seconds
 - Quality: Constant updated correctly
 
 **vs Baseline**:
 - Token savings: **-19%** worse (206 → 245)
-- Cost savings: **99.7%** ($0.000618 → $0.000002)
-- **Net**: Slight token increase but massive cost savings
+- Cost savings: **80.1%** ($0.000618 → $0.000123)
+- **Net**: Slight token increase but significant cost savings
 
 ---
 
