@@ -23,7 +23,7 @@ A unified system for Claude Code that dramatically reduces token consumption and
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/dhirajdaga/token-efficient-coding-stack.git
+git clone https://github.com/daga004/token-efficient-coding-stack.git
 cd token-efficient-coding-stack
 
 # 2. Run installer
@@ -390,7 +390,7 @@ MIT License - See LICENSE file for details
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/dhirajdaga/token-efficient-coding-stack/issues)
+- **Issues**: [GitHub Issues](https://github.com/daga004/token-efficient-coding-stack/issues)
 - **Documentation**: See `.planning/` directory for detailed design docs
 - **Contact**: dhiraj.daga@indraastra.in
 
