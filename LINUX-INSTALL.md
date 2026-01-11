@@ -55,7 +55,49 @@ Verify installation:
 claude --version
 ```
 
-### 4. Build Tools (for tree-sitter compilation)
+### 4. Gemini CLI (for Flash routing)
+
+Requires Node.js 20+ first:
+
+**Ubuntu/Debian**:
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+**Fedora/RHEL**:
+```bash
+sudo dnf install nodejs
+```
+
+**Arch Linux**:
+```bash
+sudo pacman -S nodejs npm
+```
+
+Install Gemini CLI:
+```bash
+npm install -g @google/gemini-cli
+```
+
+Verify installation:
+```bash
+gemini --version
+```
+
+Get API key from: https://aistudio.google.com/apikey
+
+Add to your shell profile (~/.bashrc or ~/.zshrc):
+```bash
+export GEMINI_API_KEY='your-api-key-here'
+```
+
+Then reload:
+```bash
+source ~/.bashrc  # or ~/.zshrc
+```
+
+### 5. Build Tools (for tree-sitter compilation)
 
 **Ubuntu/Debian**:
 ```bash

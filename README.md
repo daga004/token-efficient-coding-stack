@@ -1,6 +1,6 @@
 # Token-Efficient Coding Stack
 
-**Reduce Claude Code costs by 83% while maintaining 100% quality**
+**Reduce Claude Code costs by 81% while maintaining 100% quality**
 
 LLMs are becoming increasingly powerful, but with great power comes great cost. This stack helps you find the balance: leveraging Claude's capabilities while maintaining faster iterations, lower costs, and high quality.
 
@@ -15,7 +15,7 @@ LLMs are becoming increasingly powerful, but with great power comes great cost. 
 
 | Metric | Target | Achieved | Status |
 |--------|--------|----------|--------|
-| **Cost reduction** | ≥70% | **83%*** | ✅ **Exceeds target** |
+| **Cost reduction** | ≥70% | **81%*** | ✅ **Exceeds target** |
 | Token reduction | ≥50% | 23%* | ⚠️ Small file bias |
 | **Quality maintained** | 100% | **100%** | ✅ **Perfect** |
 | Time savings | - | **31%** | ✅ Bonus |
@@ -37,6 +37,14 @@ curl -fsSL https://raw.githubusercontent.com/daga004/token-efficient-coding-stac
 
 ### Linux (Manual)
 ```bash
+# Install prerequisites
+# Node.js 20+ (for Gemini CLI)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Gemini CLI
+npm install -g @google/gemini-cli
+
 # Clone repository
 git clone https://github.com/daga004/token-efficient-coding-stack.git
 cd token-efficient-coding-stack
@@ -52,10 +60,18 @@ claude mcp add --scope user orchestrator python3 -m orchestrator.mcp.server
 # Copy skills
 cp -r .claude/skills/* ~/.claude/skills/
 
+# Set Gemini API key (get from https://aistudio.google.com/apikey)
+echo "export GEMINI_API_KEY='your-api-key-here'" >> ~/.bashrc
+source ~/.bashrc
+
 # Restart Claude Code
 ```
 
-**Requirements**: Python 3.10+ (3.11+ for AuZoom), Claude Code CLI
+**Requirements**:
+- Python 3.10+ (3.11+ recommended for AuZoom)
+- Claude Code CLI
+- Gemini CLI (for cost-optimized Flash routing)
+- Node.js 20+ (for Gemini CLI)
 
 **Platform Support**:
 - ✅ **Linux**: Fully supported (manual installation)
@@ -131,7 +147,7 @@ A lightweight but powerful meta-prompting, context engineering, and spec-driven 
         └───────────────────┘
 ```
 
-**Result**: Right model + minimal context + structured workflow = **83% cost savings**
+**Result**: Right model + minimal context + structured workflow = **81% cost savings**
 
 ---
 
@@ -141,7 +157,7 @@ A lightweight but powerful meta-prompting, context engineering, and spec-driven 
 
 | Task Type | Traditional Cost | Optimized Cost | Savings | Model Used |
 |-----------|-----------------|----------------|---------|------------|
-| Simple edits (typos, constants) | $0.0013 | $0.000063 | **95%** | Gemini Flash |
+| Simple edits (typos, constants) | $0.0013 | $0.000318 | **76%** | Gemini Flash 3 |
 | Feature implementation | $0.0010 | $0.000299 | **71%** | Claude Haiku |
 | Refactoring | $0.0020 | $0.000255 | **87%** | Claude Haiku |
 | Code exploration | $0.0038 | $0.000768 | **80%** | Claude Haiku |
@@ -149,14 +165,14 @@ A lightweight but powerful meta-prompting, context engineering, and spec-driven 
 
 *Actual measurements from validation suite (10 representative tasks)*
 
-**Note**: Simple edits show 95% savings (not 99%) because Gemini Flash costs $0.10/M, not $0.01/M as initially assumed. Even with corrected pricing, 95% cost reduction on trivial tasks proves intelligent routing works.
+**Note**: Simple edits show 75% savings (using Gemini Flash 3 at $0.50/M). Even with corrected Flash pricing, intelligent routing to cheaper models for simple tasks delivers significant cost reduction.
 
 ### Annual Savings (Based on Validation Data)
 
 **Typical individual developer** (2000 tasks/year = 1 task per hour worked):
 - Traditional (all Sonnet): $2.58/year
 - Optimized (Gemini Flash + Claude Haiku routing): $0.44/year
-- **Savings: $2.14/year (83%)**
+- **Savings: $2.14/year (81%)**
 
 **10-person team**:
 - **Savings: ~$21/year**
@@ -310,17 +326,17 @@ orchestrator_route("Split large function into helpers")
 | Category | Tasks | Token Savings | Cost Savings | Time Savings |
 |----------|-------|---------------|--------------|--------------|
 | Code exploration | 2 | 25% | 80% | 49% |
-| Simple edits | 2 | -46%* | **99%** | 49% |
+| Simple edits | 2 | -46%* | **76%** | 49% |
 | Features | 2 | -8%* | 71% | 19% |
 | Refactoring | 2 | **52%** | 87% | 35% |
 | Debugging | 2 | **35%** | 83% | 44% |
-| **TOTAL** | **10** | **23%** | **83%** | **31%** |
+| **TOTAL** | **10** | **23%** | **81%** | **31%** |
 
-*Token overhead from progressive disclosure on small files (<200 lines) - but massive cost savings from Gemini Flash routing compensate
+*Token overhead from progressive disclosure on small files (<200 lines) - but significant cost savings from Gemini Flash 3 routing compensate
 
 ### Key Findings
 
-✅ **Model routing works universally**: 71-99% cost savings across all task types
+✅ **Model routing works universally**: 71-87% cost savings across all task types
 ✅ **Quality maintained**: 100% functional equivalence, all tests pass
 ✅ **Performance improved**: 31% faster, 100x cache speedup
 ✅ **Dependency tools excel**: 67-75% token savings on graph operations
@@ -622,4 +638,4 @@ MIT License - See LICENSE file for details
 
 **Remember**: With great power comes great cost. This stack helps you leverage Claude's power while keeping costs under control and maintaining quality. 🚀
 
-**Validated Result**: **83% cost reduction, 100% quality maintained**
+**Validated Result**: **81% cost reduction, 100% quality maintained**
