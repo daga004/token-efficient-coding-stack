@@ -80,7 +80,7 @@ class RealCodebaseSavingsTest(AuditTest):
                     "/Users/dhirajd/Documents/claude/auzoom/src/auzoom/core/parsing/parser.py",
                     "/Users/dhirajd/Documents/claude/auzoom/src/auzoom/mcp/server.py",
                     "/Users/dhirajd/Documents/claude/auzoom/src/auzoom/tools.py",
-                    "/Users/dhirajd/Documents/claude/auzoom/src/auzoom/core/caching/cache.py",
+                    "/Users/dhirajd/Documents/claude/auzoom/src/auzoom/core/caching/cache_manager.py",
                 ],
                 "task": "Find LazyCodeGraph.get_file and understand cross-file dependencies",
                 "target_function": "get_file",
@@ -323,7 +323,7 @@ class RealCodebaseSavingsTest(AuditTest):
 
         # Log summary evidence
         self.evidence.log(
-            EvidenceType.ANALYSIS,
+            EvidenceType.MEASUREMENT,
             summary,
             metadata={
                 "test": "real_codebase_savings_summary",
