@@ -24,6 +24,7 @@
 - ✅ Removed Flash-based claims (moved to roadmap)
 - ✅ Restored AuZoom description as "progressive discovery of context"
 - ✅ Updated all cost savings to Claude-only (79.5%)
+- ✅ Removed unvalidated annual projections (needs proper subscription cost analysis)
 
 **Files Transformed**:
 1. ✅ README.md (complete - reader-focused style)
