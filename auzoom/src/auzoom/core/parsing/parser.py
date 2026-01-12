@@ -50,16 +50,9 @@ class PythonParser:
             file_path: Path to the source file
 
         Returns:
-            List of CodeNode objects for functions
+            List of CodeNode objects for functions with TSNode attached
         """
         functions = []
-        query = """
-        (function_definition
-            name: (identifier) @name
-            parameters: (parameters) @params
-            body: (block) @body) @function
-        """
-
         root = tree.root_node
 
         # Find all function definitions at module level (not inside classes)
@@ -69,6 +62,8 @@ class PythonParser:
                 if not self._is_inside_class(node):
                     func_node = self.factory.create_function_node(node, file_path, NodeType.FUNCTION)
                     if func_node:
+                        # Attach the TSNode for later dependency extraction
+                        func_node.ts_node = node
                         functions.append(func_node)
 
         return functions
@@ -107,7 +102,7 @@ class PythonParser:
             class_name: Name of the containing class
 
         Returns:
-            List of CodeNode objects for methods
+            List of CodeNode objects for methods with TSNode attached
         """
         methods = []
 
@@ -128,6 +123,8 @@ class PythonParser:
                     node, file_path, NodeType.METHOD, class_name
                 )
                 if method_node:
+                    # Attach the TSNode for later dependency extraction
+                    method_node.ts_node = node
                     methods.append(method_node)
 
         return methods
@@ -183,8 +180,11 @@ class PythonParser:
     def _resolve_dependencies(self, nodes: list[CodeNode]):
         """Analyze function/method bodies for function calls and populate dependencies.
 
+        Uses tree-sitter AST nodes (attached during parsing) to accurately extract
+        function calls.
+
         Args:
-            nodes: List of CodeNode objects to analyze
+            nodes: List of CodeNode objects with ts_node attributes
         """
         # Create a mapping of function/method names to node IDs
         name_to_id = {}
@@ -192,14 +192,60 @@ class PythonParser:
             if node.node_type in (NodeType.FUNCTION, NodeType.METHOD):
                 name_to_id[node.name] = node.id
 
-        # Analyze each function/method for calls
+        # Analyze each function/method for calls using their TSNode
         for node in nodes:
-            if node.node_type in (NodeType.FUNCTION, NodeType.METHOD) and node.source:
-                # Look for function calls in the source
-                for name, node_id in name_to_id.items():
-                    if node_id != node.id and f"{name}(" in node.source:
-                        if node_id not in node.dependencies:
-                            node.dependencies.append(node_id)
+            if node.node_type in (NodeType.FUNCTION, NodeType.METHOD):
+                # Extract function calls from the TSNode
+                if hasattr(node, 'ts_node') and node.ts_node:
+                    calls = self._extract_function_calls_from_node(node.ts_node)
+
+                    # Map calls to node IDs
+                    for call_name in calls:
+                        if call_name in name_to_id and name_to_id[call_name] != node.id:
+                            node_id = name_to_id[call_name]
+                            if node_id not in node.dependencies:
+                                node.dependencies.append(node_id)
+
+                # Clean up: remove ts_node to avoid serialization issues
+                if hasattr(node, 'ts_node'):
+                    delattr(node, 'ts_node')
+
+    def _extract_function_calls_from_node(self, ts_node: TSNode) -> set[str]:
+        """Extract function calls from a tree-sitter node.
+
+        Args:
+            ts_node: Tree-sitter node (function/method definition)
+
+        Returns:
+            Set of function names called within this node
+        """
+        calls = set()
+        self._extract_calls_recursive(ts_node, calls)
+        return calls
+
+    def _extract_calls_recursive(self, node: TSNode, calls: set[str]) -> None:
+        """Recursively extract function call names from an AST node.
+
+        Args:
+            node: Tree-sitter node to analyze
+            calls: Set to populate with function names
+        """
+        if node.type == 'call':
+            # Get the function being called
+            function_node = node.child_by_field_name('function')
+            if function_node:
+                # Handle simple function calls: func()
+                if function_node.type == 'identifier':
+                    calls.add(self._get_node_text(function_node))
+                # Handle method calls: self.method() or obj.method()
+                elif function_node.type == 'attribute':
+                    attr_node = function_node.child_by_field_name('attribute')
+                    if attr_node:
+                        calls.add(self._get_node_text(attr_node))
+
+        # Recurse into children
+        for child in node.children:
+            self._extract_calls_recursive(child, calls)
 
     def _is_inside_class(self, node: TSNode) -> bool:
         """Check if a node is inside a class definition.
