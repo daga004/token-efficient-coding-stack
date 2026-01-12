@@ -188,22 +188,26 @@ class DependencyTrackingTest(AuditTest):
             from auzoom.core.graph.lazy_graph import LazyCodeGraph
 
             # Create graph and ensure file is loaded
-            graph = LazyCodeGraph(project_root="/Users/dhirajd/Documents/claude")
+            graph = LazyCodeGraph(project_root="/Users/dhirajd/Documents/claude", auto_warm=False)
 
-            # Extract file path from node_id
+            # Extract file path from node_id (will be absolute path)
             file_path = node_id.split("::")[0]
 
-            # Load the file to ensure graph has the nodes
-            graph.get_file(file_path, "skeleton")
+            # Convert to absolute path if needed
+            abs_file_path = str(Path(file_path).resolve())
 
-            # Get dependencies
-            dep_chains = graph.get_dependencies(node_id, depth=1)
+            # Load the file to ensure graph has the nodes
+            graph.get_file(abs_file_path, "skeleton")
+
+            # Get dependencies - returns list of serialized node dicts
+            dep_nodes = graph.get_dependencies(node_id, depth=1)
 
             # Extract function names from dependency node IDs
             deps = set()
-            for chain in dep_chains:
-                for dep_id in chain["dependencies"]:
-                    # Extract function name from node_id (format: file::Class.method or file::function)
+            for node_dict in dep_nodes:
+                # Each node_dict has an 'id' field with format: file::Class.method or file::function
+                dep_id = node_dict.get("id", "")
+                if "::" in dep_id:
                     parts = dep_id.split("::")
                     if len(parts) >= 2:
                         name_part = parts[-1]
@@ -224,11 +228,17 @@ class DependencyTrackingTest(AuditTest):
             return set()
 
     def _build_node_id(self, file_path: str, class_name: Optional[str], function_name: str) -> str:
-        """Build the node_id format expected by auzoom."""
+        """Build the node_id format expected by auzoom.
+
+        Note: AuZoom uses absolute paths in node IDs.
+        """
+        # Convert to absolute path
+        abs_path = str(Path(file_path).resolve())
+
         if class_name:
-            return f"{file_path}::{class_name}.{function_name}"
+            return f"{abs_path}::{class_name}.{function_name}"
         else:
-            return f"{file_path}::{function_name}"
+            return f"{abs_path}::{function_name}"
 
     def _calculate_precision_recall(
         self, expected: set[str], actual: set[str]
