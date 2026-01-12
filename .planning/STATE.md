@@ -26,8 +26,8 @@
 - ✅ Updated all cost savings to Claude-only (79.5%)
 
 **Files Transformed**:
-1. ✅ README.md (complete)
-2. ✅ VALIDATION-SUMMARY.md (renamed from HONEST-VALIDATION-SUMMARY.md)
+1. ✅ README.md (complete - reader-focused style)
+2. ✅ VALIDATION-SUMMARY.md (complete - task-by-task results with clear attribution)
 3. ⏳ CLAUDE-ONLY-COMPARISON.md (pending)
 
 **Next**: Transform remaining documentation files if requested
