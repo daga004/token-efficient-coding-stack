@@ -17,7 +17,7 @@ Systematic verification that the Token-Efficient AI Coding Stack implementation 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Audit Foundation & Traceability** - Reconstruct missing documentation and set up audit infrastructure (Complete: 2026-01-12)
-- [ ] **Phase 2: AuZoom Core Verification** - Verify progressive disclosure and dependency tracking
+- [ ] **Phase 2: AuZoom Core Verification** - Verify progressive disclosure and dependency tracking (In progress: 1/4 plans complete)
 - [ ] **Phase 3: AuZoom Structural Compliance** - Verify code follows structural constraints
 - [ ] **Phase 4: Orchestrator Core Verification** - Test complexity scoring and model routing
 - [ ] **Phase 5: Validation Metrics Re-execution** - Re-run 25 tasks with real APIs
@@ -55,7 +55,7 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 02-01: Test progressive disclosure (skeleton → summary → full) token reduction
+- [x] 02-01: Test progressive disclosure (skeleton → summary → full) token reduction (2 min - a96adbb, b13d505)
 - [ ] 02-02: Verify dependency tracking accuracy (auzoom_get_dependencies correctness)
 - [ ] 02-03: Test for bypass behavior (are full reads used when not needed?)
 - [ ] 02-04: Measure actual token savings vs claims on real codebases
@@ -206,8 +206,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Audit Foundation & Traceability | 0/3 | Not started | - |
-| 2. AuZoom Core Verification | 0/4 | Not started | - |
+| 1. Audit Foundation & Traceability | 3/3 | Complete | 2026-01-12 |
+| 2. AuZoom Core Verification | 1/4 | In progress | - |
 | 3. AuZoom Structural Compliance | 0/2 | Not started | - |
 | 4. Orchestrator Core Verification | 0/3 | Not started | - |
 | 5. Validation Metrics Re-execution | 0/4 | Not started | - |
