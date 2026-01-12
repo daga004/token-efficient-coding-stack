@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "captured_at": "2026-01-12T13:30:00+0530",
+    "baseline_version": "1.0",
+    "purpose": "Pre-audit baseline for comparison after verification and fixes"
+  },
+  "git_state": {
+    "commit_hash": "024c988fd07af28bc5d0e31c255a3a2228b8c35f",
+    "commit_short": "024c988",
+    "branch": "main",
+    "dirty": true,
+    "uncommitted_changes": [
+      "M evolving-memory-mcp",
+      "?? audit/evidence/",
+      "?? audit/logs/"
+    ],
+    "latest_commit": {
+      "hash": "024c988fd07af28bc5d0e31c255a3a2228b8c35f",
+      "message": "docs(01-02): complete audit infrastructure plan",
+      "timestamp": "2026-01-12 13:06:20 +0530"
+    }
+  },
+  "validation_metrics": {
+    "source": "VALIDATION-SUMMARY.md",
+    "simple_tasks": {
+      "count": 10,
+      "complexity_range": "0.5-5.5",
+      "baseline_tokens": 4298,
+      "optimized_tokens": 3308,
+      "token_reduction_pct": 23.0,
+      "baseline_cost_usd": 0.01289,
+      "optimized_cost_usd": 0.00246,
+      "cost_reduction_pct": 81.0,
+      "success_rate_pct": 100.0
+    },
+    "challenging_tasks": {
+      "count": 5,
+      "executed_count": 5,
+      "complexity_range": "4.5-7.0",
+      "baseline_tokens": 7120,
+      "optimized_tokens": 3685,
+      "token_reduction_pct": 48.2,
+      "baseline_cost_usd": 0.04364,
+      "optimized_cost_usd": 0.02071,
+      "cost_reduction_pct": 52.5,
+      "success_rate_pct": 67.0
+    },
+    "overall": {
+      "total_tasks": 15,
+      "total_baseline_tokens": 11418,
+      "total_optimized_tokens": 6993,
+      "overall_token_reduction_pct": 38.7,
+      "total_baseline_cost_usd": 0.05653,
+      "total_optimized_cost_usd": 0.02317,
+      "overall_cost_reduction_pct": 59.0,
+      "claimed_cost_savings_pct": 79.5,
+      "actual_vs_claimed_delta": -20.5
+    },
+    "targets": {
+      "token_reduction_target_pct": 50.0,
+      "token_reduction_actual_pct": 23.0,
+      "token_target_missed_by": 27.0,
+      "cost_reduction_target_pct": 70.0,
+      "cost_reduction_actual_pct": 81.0,
+      "cost_target_exceeded_by": 11.0
+    }
+  },
+  "codebase_statistics": {
+    "python_files_total": 63,
+    "auzoom_loc": 3006,
+    "orchestrator_loc": 2395,
+    "total_loc": 5401,
+    "note": "cloc not available, using basic wc -l counts"
+  },
+  "mcp_servers": {
+    "auzoom": {
+      "server_file": "auzoom/src/auzoom/mcp/server.py",
+      "tools": [
+        "auzoom_read",
+        "auzoom_find",
+        "auzoom_get_dependencies",
+        "auzoom_stats",
+        "auzoom_validate"
+      ],
+      "tool_count": 5,
+      "status": "available"
+    },
+    "orchestrator": {
+      "server_file": "orchestrator/src/orchestrator/mcp/server.py",
+      "tools": [
+        "orchestrator_route",
+        "orchestrator_execute",
+        "orchestrator_validate"
+      ],
+      "tool_count": 3,
+      "status": "available"
+    }
+  },
+  "structural_compliance": {
+    "note": "auzoom_validate not executed yet - will be captured in Phase 3"
+  }
+}
