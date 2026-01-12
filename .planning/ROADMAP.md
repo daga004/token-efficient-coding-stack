@@ -83,7 +83,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: Test complexity scorer accuracy (do scores match actual task difficulty?)
+- [x] 04-01: Test complexity scorer accuracy (do scores match actual task difficulty?) (7 min - 2a899f7, d41aa7a, 6a3155b)
 - [ ] 04-02: Verify model routing appropriateness (simple→Haiku, complex→Sonnet, critical→Opus)
 - [ ] 04-03: Quality maintenance check (no degradation across model tiers)
 
