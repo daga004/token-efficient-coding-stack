@@ -33,7 +33,7 @@ Claude Code is powerful but expensive. You'll reduce costs by automatically rout
 - Moderate features: You'll get 85-90% correct (review recommended)
 - Complex/security: You'll get 60-75% correct (expert review required)
 
-**Validated through 25 development tasks** (10 simple + 15 challenging) - See [detailed validation results](HONEST-VALIDATION-SUMMARY.md)
+**Validated through 25 development tasks** (10 simple + 15 challenging) - See [detailed validation results](VALIDATION-SUMMARY.md)
 
 ---
 
@@ -724,4 +724,4 @@ MIT License - See LICENSE file for details
 - **You'll use this best** for routine development (60-70% of your work)
 - **You'll use with caution** for security-critical code
 
-See [detailed validation results](HONEST-VALIDATION-SUMMARY.md) for complete testing methodology, success rates by task complexity, and usage recommendations.
+See [detailed validation results](VALIDATION-SUMMARY.md) for complete testing methodology, success rates by task complexity, and usage recommendations.
