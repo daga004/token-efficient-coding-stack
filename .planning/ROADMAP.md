@@ -16,7 +16,7 @@ Systematic verification that the Token-Efficient AI Coding Stack implementation 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Audit Foundation & Traceability** - Reconstruct missing documentation and set up audit infrastructure
+- [x] **Phase 1: Audit Foundation & Traceability** - Reconstruct missing documentation and set up audit infrastructure (Complete: 2026-01-12)
 - [ ] **Phase 2: AuZoom Core Verification** - Verify progressive disclosure and dependency tracking
 - [ ] **Phase 3: AuZoom Structural Compliance** - Verify code follows structural constraints
 - [ ] **Phase 4: Orchestrator Core Verification** - Test complexity scoring and model routing
@@ -43,7 +43,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01: Reconstruct WISHLIST-COMPLIANCE.md from phase plans and PROJECT.md references (2 min - ea70f96)
 - [x] 01-02: Create audit test infrastructure (harness, logging, evidence collection) (4.5 min - 69cf1b6)
-- [ ] 01-03: Baseline metrics capture (current state before any changes)
+- [x] 01-03: Baseline metrics capture (current state before any changes) (8 min - 1a2ecd5, 0cf4baa)
 
 ### Phase 2: AuZoom Core Verification
 **Goal**: Verify Assumption 1 - local code indexing with function-level dependency tracking reduces full-file reads
