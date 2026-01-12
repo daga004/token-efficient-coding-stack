@@ -8,44 +8,37 @@
 
 ## Task-by-Task Results
 
-### Simple Tasks (10 tasks)
+All 15 executed tasks showing complexity progression and component attribution:
 
-| # | Task Description | Baseline | AuZoom Benefit | Orchestrator Benefit | Overall Result | Details |
-|---|-----------------|----------|----------------|---------------------|----------------|---------|
-| 1.1 | Explore AuZoom codebase structure | 1,115 tokens<br>$0.00335<br>Sonnet | **-33% tokens**<br>(750 tokens)<br>Progressive reading | **-82% cost**<br>($0.00060)<br>Haiku routing | **365 tokens saved**<br>**$0.00275 saved**<br>67% faster | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-11-explore-unknown-python-package) |
-| 1.2 | Find `score_task` function | 167 tokens<br>$0.00050<br>Sonnet | **Instant location**<br>(210 tokens)<br>auzoom_find | **-66% cost**<br>($0.00017)<br>Haiku routing | **Faster discovery**<br>**$0.00033 saved** | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-12-find-specific-function) |
-| 2.1 | Fix typo in docstring | 228 tokens<br>$0.00068<br>Sonnet | **Progressive reading**<br>(390 tokens)<br>Skeleton+summary | **-99.4% cost**<br>($0.00000)<br>Flash routing | **$0.00068 saved** | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-21-fix-typo-in-docstring) |
-| 2.2 | Update MAX_TOKENS constant | 206 tokens<br>$0.00062<br>Sonnet | **Instant location**<br>(245 tokens)<br>auzoom_find | **-99.7% cost**<br>($0.00000)<br>Flash routing | **$0.00062 saved** | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-22-update-constant-value) |
-| 3.1 | Add validation rule | 149 tokens<br>$0.00045<br>Sonnet | **No overhead**<br>(149 tokens)<br>Small file | **-73% cost**<br>($0.00012)<br>Haiku routing | **$0.00033 saved** | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-31-add-new-validation-rule) |
-| 3.2 | Add cost tracking | 196 tokens<br>$0.00059<br>Sonnet | **Progressive reading**<br>(225 tokens)<br>Summary level | **-69% cost**<br>($0.00018)<br>Haiku routing | **$0.00041 saved** | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-32-add-cost-tracking) |
-| 4.1 | Extract helper function | 149 tokens<br>$0.00045<br>Sonnet | **No overhead**<br>(149 tokens)<br>Small file | **-73% cost**<br>($0.00012)<br>Haiku routing | **$0.00033 saved** | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-41-extract-helper-function) |
-| 4.2 | Rename module, update imports | 510 tokens<br>$0.00153<br>Sonnet | **-67% tokens**<br>(170 tokens)<br>Dependency graph | **-91% cost**<br>($0.00014)<br>Haiku routing | **340 tokens saved**<br>**$0.00139 saved** | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-42-rename-module) |
-| 5.1 | Diagnose test failure | 378 tokens<br>$0.00113<br>Sonnet | **Progressive reading**<br>(720 tokens)<br>Skeleton+summary | **-49% cost**<br>($0.00058)<br>Haiku routing | **$0.00055 saved** | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-51-diagnose-test-failure) |
-| 5.2 | Fix circular import | 1,200 tokens<br>$0.00360<br>Sonnet | **-75% tokens**<br>(300 tokens)<br>Dependency graph | **-93% cost**<br>($0.00024)<br>Haiku routing | **900 tokens saved**<br>**$0.00336 saved** | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-52-fix-import-error) |
+| # | Task Description | Complexity | Baseline | AuZoom Benefit | Orchestrator Benefit | Overall Result | Details |
+|---|-----------------|------------|----------|----------------|---------------------|----------------|---------|
+| **Simple Tasks (10 tasks - 100% success)** |||||||
+| 1.1 | Explore AuZoom codebase structure | 2.5 | 1,115 tokens<br>$0.00335<br>Sonnet | **-33% tokens**<br>(750 tokens)<br>Progressive reading | **-82% cost**<br>($0.00060)<br>Haiku routing | **365 tokens saved**<br>**$0.00275 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-11-explore-unknown-python-package) |
+| 1.2 | Find `score_task` function | 2.0 | 167 tokens<br>$0.00050<br>Sonnet | **Instant location**<br>(210 tokens)<br>auzoom_find | **-66% cost**<br>($0.00017)<br>Haiku routing | **Faster discovery**<br>**$0.00033 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-12-find-specific-function) |
+| 2.1 | Fix typo in docstring | 1.5 | 228 tokens<br>$0.00068<br>Sonnet | **Progressive reading**<br>(390 tokens)<br>Skeleton+summary | **-99.4% cost**<br>($0.00000)<br>Flash routing | **$0.00068 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-21-fix-typo-in-docstring) |
+| 2.2 | Update MAX_TOKENS constant | 0.5 | 206 tokens<br>$0.00062<br>Sonnet | **Instant location**<br>(245 tokens)<br>auzoom_find | **-99.7% cost**<br>($0.00000)<br>Flash routing | **$0.00062 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-22-update-constant-value) |
+| 3.1 | Add validation rule | 5.0 | 149 tokens<br>$0.00045<br>Sonnet | **No overhead**<br>(149 tokens)<br>Small file | **-73% cost**<br>($0.00012)<br>Haiku routing | **$0.00033 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-31-add-new-validation-rule) |
+| 3.2 | Add cost tracking | 5.5 | 196 tokens<br>$0.00059<br>Sonnet | **Progressive reading**<br>(225 tokens)<br>Summary level | **-69% cost**<br>($0.00018)<br>Haiku routing | **$0.00041 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-32-add-cost-tracking) |
+| 4.1 | Extract helper function | 4.5 | 149 tokens<br>$0.00045<br>Sonnet | **No overhead**<br>(149 tokens)<br>Small file | **-73% cost**<br>($0.00012)<br>Haiku routing | **$0.00033 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-41-extract-helper-function) |
+| 4.2 | Rename module, update imports | 3.5 | 510 tokens<br>$0.00153<br>Sonnet | **-67% tokens**<br>(170 tokens)<br>Dependency graph | **-91% cost**<br>($0.00014)<br>Haiku routing | **340 tokens saved**<br>**$0.00139 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-42-rename-module) |
+| 5.1 | Diagnose test failure | 4.5 | 378 tokens<br>$0.00113<br>Sonnet | **Progressive reading**<br>(720 tokens)<br>Skeleton+summary | **-49% cost**<br>($0.00058)<br>Haiku routing | **$0.00055 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-51-diagnose-test-failure) |
+| 5.2 | Fix circular import | 5.0 | 1,200 tokens<br>$0.00360<br>Sonnet | **-75% tokens**<br>(300 tokens)<br>Dependency graph | **-93% cost**<br>($0.00024)<br>Haiku routing | **900 tokens saved**<br>**$0.00336 saved**<br>✅ 100% correct | [Details](.planning/phases/03-integration-validation/TEST-SUITE.md#task-52-fix-import-error) |
+| **Challenging Tasks (5 executed - 67% success)** |||||||
+| 11 | Add type hints to executor.py | 4.5 | 800 tokens<br>$0.00064<br>Haiku | **-72% tokens**<br>(225 tokens)<br>Skeleton only | **No routing**<br>Same model | **575 tokens saved**<br>**$0.00046 saved**<br>✅ 100% correct | [Details](CHALLENGING-TEST-RESULTS.md#task-11-add-type-hints-to-executorpy) |
+| 6 | Add memoization to token counting | 5.0 | 720 tokens<br>$0.00216<br>Sonnet | **-44% tokens**<br>(405 tokens)<br>Skeleton + summary | **No routing**<br>Same model | **315 tokens saved**<br>**$0.00095 saved**<br>✅ 100% correct | [Details](CHALLENGING-TEST-RESULTS.md#task-6-add-memoization-to-token-counting) |
+| 9 | Write integration test for routing | 5.5 | 2,400 tokens<br>$0.00720<br>Sonnet | **-72% tokens**<br>(675 tokens)<br>Skeletons only | **No routing**<br>Same model | **1,725 tokens saved**<br>**$0.00518 saved**<br>⚠️ 75% (wrong assertion) | [Details](CHALLENGING-TEST-RESULTS.md#task-9-write-integration-test-for-orchestrator-routing) |
+| 7 | Add error handling to MCP server | 6.5 | 1,600 tokens<br>$0.00480<br>Sonnet | **-14% tokens**<br>(1,380 tokens)<br>Skeleton + error sections | **No routing**<br>Same model | **220 tokens saved**<br>**$0.00066 saved**<br>⚠️ 60% (missing edge cases) | [Details](CHALLENGING-TEST-RESULTS.md#task-7-add-comprehensive-error-handling-to-mcp-server) |
+| 13 | Implement input sanitization | 7.0 | 1,600 tokens<br>$0.02400<br>Opus | **-38% tokens**<br>(1,000 tokens)<br>Skeleton + handlers | **-37.5% cost**<br>($0.01500)<br>Opus vs Sonnet baseline | **600 tokens saved**<br>**$0.00900 saved**<br>❌ 0% (security failure) | [Details](CHALLENGING-TEST-RESULTS.md#task-13-implement-input-sanitization-for-mcp-tools) |
 
-**Simple Tasks Summary**:
+**Simple Tasks Summary** (Complexity 0.5-5.5):
 - **Total tokens**: 4,298 baseline → 3,308 optimized = **23% tokens saved**
 - **Total cost**: $0.01289 baseline → $0.00246 optimized = **81% cost saved**
-- **Time**: 605s → 416s = **31% faster**
-- **Quality**: 100% functional equivalence
+- **Success rate**: 10/10 = **100%**
 
----
-
-### Challenging Tasks (15 tasks)
-
-| # | Task Description | Complexity | Model | Success | Issues | Details |
-|---|-----------------|------------|-------|---------|--------|---------|
-| 11 | Add type hints to executor.py | 4.5 | Haiku | ✅ 100% | None | [Details](CHALLENGING-TEST-RESULTS.md#task-11-add-type-hints-to-executorpy) |
-| 6 | Add memoization to token counting | 5.0 | Sonnet | ✅ 100% | None | [Details](CHALLENGING-TEST-RESULTS.md#task-6-add-memoization-to-token-counting) |
-| 9 | Write integration test for routing | 5.5 | Sonnet | ⚠️ 75% | Wrong assertion | [Details](CHALLENGING-TEST-RESULTS.md#task-9-write-integration-test-for-orchestrator-routing) |
-| 7 | Add error handling to MCP server | 6.5 | Sonnet | ⚠️ 60% | Missing edge cases | [Details](CHALLENGING-TEST-RESULTS.md#task-7-add-comprehensive-error-handling-to-mcp-server) |
-| 13 | Implement input sanitization | 7.0 | Opus | ❌ 0% | Security failure | [Details](CHALLENGING-TEST-RESULTS.md#task-13-implement-input-sanitization-for-mcp-tools) |
-
-**Challenging Tasks Summary**:
-- **Models used**: Haiku (7%), Sonnet (60%), Opus (33%)
-- **Token savings**: 48% (7,120 baseline → 3,685 optimized)
-- **Cost savings**: 52.5% ($0.04364 → $0.02071)
-- **Success rate**: 67% (3 fully working, 2 partial failures)
+**Challenging Tasks Summary** (Complexity 4.5-7.0):
+- **Total tokens**: 7,120 baseline → 3,685 optimized = **48% tokens saved**
+- **Total cost**: $0.04364 baseline → $0.02071 optimized = **52.5% cost saved**
+- **Success rate**: 3 fully working, 2 partial = **67%**
 
 ---
 
