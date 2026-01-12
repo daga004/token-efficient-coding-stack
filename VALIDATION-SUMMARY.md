@@ -96,18 +96,6 @@
 | Refactoring | $0.0020 | $0.00026 | **87%** |
 | Debugging | $0.0047 | $0.00082 | **83%** |
 
-### Annual Projections
-
-**Individual developer** (2000 tasks/year = 1 task per working hour):
-- Traditional (all Sonnet): $2.58/year
-- Your cost (intelligent routing): $0.53/year
-- **Your savings: $2.05/year (79.5%)**
-
-**10-person team**: Your team saves ~$20.50/year
-
-**100-developer organization**: Your organization saves ~$205/year
-
----
 
 ## Success Rates by Complexity
 

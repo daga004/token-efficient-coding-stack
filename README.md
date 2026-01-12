@@ -164,34 +164,6 @@ You'll get structured workflows for planning, execution, and project management 
 
 **Note**: Your intelligent routing to cheaper models (Haiku vs Sonnet) combined with progressive context discovery delivers significant savings.
 
-### Your Annual Savings (Based on Validation Data)
-
-**Individual developer** (2000 tasks/year = 1 task per hour worked):
-- Traditional (all Sonnet): $2.58/year
-- Your cost (Claude Haiku routing + AuZoom): $0.53/year
-- **Your savings: $2.05/year (79.5%)**
-
-**10-person team**:
-- **Your team saves: ~$20.50/year**
-
-**100-developer organization**:
-- **Your organization saves: ~$205/year**
-
-*Costs based on 2026 API pricing - [Claude API](https://docs.anthropic.com/en/api/pricing) (Sonnet $3/M, Haiku $0.80/M, Opus $15/M). Your savings percentages remain consistent regardless of usage volume.*
-
-#### Why Your Costs Are So Small
-
-**These numbers may seem surprisingly low, but they're real:**
-
-1. **You pay per task** - Your costs are for individual tasks like "fix one typo" or "add one function", not per hour or per day
-2. **API pricing is cheap** - You'll spend ~$0.002 to read a 500-line file at $3/M tokens
-3. **Your coding tasks are efficient** - You'll use only 200-400 tokens for most coding tasks
-4. **Your annual math**: 2000 tasks/year × $0.00129/task = $2.58/year ✓
-
-**Reality**: You'll spend **$2-7/year** using Claude Code API for development, not hundreds. Your 79.5% savings are real, but your absolute amounts are small because the API is already inexpensive for code-focused workflows.
-
-**Your comparison**: You'd pay $240/year for ChatGPT Plus. You'll pay $2.58/year baseline for Claude API coding.
-
 ---
 
 ## Tools & Capabilities
