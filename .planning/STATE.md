@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-01-12)
 ## Current Position
 
 Phase: 2 of 12 (AuZoom Core Verification)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-01-12 — Completed 02-01-PLAN.md (Progressive Disclosure Token Reduction)
+Last activity: 2026-01-12 — Completed 02-02-PLAN.md (Dependency Tracking Accuracy)
 
-Progress: ████░░░░░░ 12% (4/34 plans complete)
+Progress: █████░░░░░ 15% (5/34 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 4.12 min
-- Total execution time: 0.27 hours
+- Total plans completed: 5
+- Average duration: 4.5 min
+- Total execution time: 0.375 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | Phase 1 | 3 | 14.5 min | 4.83 min |
-| Phase 2 | 1 | 2 min | 2 min |
+| Phase 2 | 2 | 9 min | 4.5 min |
 
 **Recent Trend:**
-- Last plan: 2 min (02-01)
-- Trend: Accelerating (faster execution)
+- Last plan: 7 min (02-02)
+- Trend: Steady progress
 
 ## Accumulated Context
 
@@ -61,6 +61,9 @@ Recent decisions affecting current work:
 - No small file overhead detected - all file sizes benefit (90-99% reduction)
 - Baseline reconciliation: 23% was summary-level, not skeleton-level
 - Parser anomaly identified in tools.py (zero tokens at skeleton level)
+- **CRITICAL:** Dependency tracking accuracy severely inadequate: 6.25% precision/recall (83.75 points below 90% threshold)
+- Root cause: Naive string matching in parser.py:200 misses `self.method()` patterns (93.75% false negative rate)
+- Impact: Invalidates "targeted context loading" claim - current implementation provides negative value vs loading entire files
 
 ### Deferred Issues
 
@@ -76,9 +79,10 @@ None yet.
 - ~~Token increases on small files (tasks 2.1, 3.1, 4.1)~~ ✅ **RESOLVED** (02-01: no small file overhead)
 - Non-Python files use metadata summaries (V2 semantic summaries deferred) - Phase 8
 - Parser anomaly in tools.py (zero tokens extracted) - requires investigation
+- **CRITICAL:** Dependency tracking accuracy 6.25% (fails 90% threshold) - invalidates "targeted context loading" - requires AST-based fix or pivot to file-level only
 
 ## Session Continuity
 
-Last session: 2026-01-12T08:02:40Z
-Stopped at: Completed 02-01-PLAN.md (Progressive Disclosure Token Reduction) - Phase 2 in progress (1/4 plans)
+Last session: 2026-01-12T08:12:00Z
+Stopped at: Completed 02-02-PLAN.md (Dependency Tracking Accuracy) - Phase 2 in progress (2/4 plans)
 Resume file: None
