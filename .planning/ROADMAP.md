@@ -41,7 +41,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Reconstruct WISHLIST-COMPLIANCE.md from phase plans and PROJECT.md references
+- [x] 01-01: Reconstruct WISHLIST-COMPLIANCE.md from phase plans and PROJECT.md references (2 min - ea70f96)
 - [ ] 01-02: Create audit test infrastructure (harness, logging, evidence collection)
 - [ ] 01-03: Baseline metrics capture (current state before any changes)
 
