@@ -77,14 +77,15 @@ None yet.
 - ~~Missing WISHLIST-COMPLIANCE.md~~ ✅ **RESOLVED** (created in 01-01)
 - ~~Token reduction target (≥50%) missed - actual 23%~~ ✅ **RESOLVED** (02-01: baseline was summary-level, skeleton is 95.32%)
 - ~~Small file overhead not handled (auto-detect threshold missing)~~ ✅ **RESOLVED** (02-01: no overhead detected, all sizes benefit)
-- Gemini Flash integration theoretical (not actual API execution) - Phase 6
 - ~~Token increases on small files (tasks 2.1, 3.1, 4.1)~~ ✅ **RESOLVED** (02-01: no small file overhead)
+- ~~**CRITICAL:** Dependency tracking accuracy 6.25%~~ ✅ **RESOLVED** (2026-01-12: AST-based extraction, now 100% precision/recall - commits eb9311f, a1bde04)
+- **NEW CRITICAL:** ASG visualization missing - core requirement for user insight into dependency graph (defer to V1.1)
+- Gemini Flash integration theoretical (not actual API execution) - Phase 6
 - Non-Python files use metadata summaries (V2 semantic summaries deferred) - Phase 8
 - Parser anomaly in tools.py (zero tokens extracted) - requires investigation
-- **CRITICAL:** Dependency tracking accuracy 6.25% (fails 90% threshold) - invalidates "targeted context loading" - requires AST-based fix or pivot to file-level only
 
 ## Session Continuity
 
-Last session: 2026-01-12T09:40:00Z
-Stopped at: Completed 02-04-PLAN.md (Real Codebase Token Savings) - **Phase 2 Complete (4/4 plans)**
+Last session: 2026-01-12T10:08:00Z
+Stopped at: Fixed dependency tracking (100% accuracy), identified missing ASG visualization - ready for Phase 3 planning
 Resume file: None
