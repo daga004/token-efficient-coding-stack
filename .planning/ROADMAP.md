@@ -1,12 +1,12 @@
-# Roadmap: Token-Efficient AI Coding Stack
+# Roadmap: Token-Efficient AI Coding Stack - V1 Comprehensive Audit
 
 ## Overview
 
-Build a unified system that reduces Claude Code token costs through three integrated layers: AuZoom (context compression via hierarchical code navigation), Hierarchical Orchestrator (intelligent model routing), and GSD integration. The journey starts with AuZoom's parser and MCP server, adds the orchestrator for smart routing, then integrates both into GSD's execution flow with measurable validation.
+Systematic verification that the Token-Efficient AI Coding Stack implementation aligns with core assumptions (local code indexing with dependency tracking + dynamic model routing), validate all published metrics with real API execution, assess legitimacy of deferred work, and produce actionable gap analysis. The journey progresses from foundational traceability through component-level verification to integration testing and comprehensive reporting.
 
 ## Domain Expertise
 
-None
+- ~/.claude/skills/expertise/auzoom-structured-code/SKILL.md
 
 ## Phases
 
@@ -16,65 +16,205 @@ None
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: AuZoom Implementation** - Build parser foundation + MCP server for hierarchical code navigation
-- [x] **Phase 2: Orchestrator Implementation** - Build routing core + MCP server for intelligent model selection
-- [x] **Phase 3: Integration & Validation** - Wire both into GSD and measure token/cost savings
+- [ ] **Phase 1: Audit Foundation & Traceability** - Reconstruct missing documentation and set up audit infrastructure
+- [ ] **Phase 2: AuZoom Core Verification** - Verify progressive disclosure and dependency tracking
+- [ ] **Phase 3: AuZoom Structural Compliance** - Verify code follows structural constraints
+- [ ] **Phase 4: Orchestrator Core Verification** - Test complexity scoring and model routing
+- [ ] **Phase 5: Validation Metrics Re-execution** - Re-run 25 tasks with real APIs
+- [ ] **Phase 6: Gemini Flash Real Integration** - Fix CLI and verify actual execution
+- [ ] **Phase 7: Small File Overhead Assessment** - Test auto-detect threshold necessity
+- [ ] **Phase 8: Non-Python File Handling Audit** - Verify metadata summaries adequacy
+- [ ] **Phase 9: Deferred Work Legitimacy Assessment** - Evaluate V2 deferrals
+- [ ] **Phase 10: Integration Testing** - End-to-end AuZoom + Orchestrator + GSD
+- [ ] **Phase 11: Gap Analysis & Reporting** - Comprehensive findings with severity
+- [ ] **Phase 12: Critical Fixes & V1.1 Roadmap** - Address critical gaps and plan next milestone
 
 ## Phase Details
 
-### Phase 1: AuZoom Implementation
-**Goal**: Build and deploy AuZoom MCP server with tree-sitter parser that provides skeleton/summary/full views of Python code files
+### Phase 1: Audit Foundation & Traceability
+**Goal**: Reconstruct WISHLIST-COMPLIANCE.md mapping promises to delivery, set up audit infrastructure, establish baseline for verification
 
 **Depends on**: Nothing (first phase)
 
-**Research**: Likely (new technology integration)
-
-**Research topics**: Tree-sitter Python bindings setup, MCP server implementation patterns, AST caching strategies, file read interception
-
-**Plans**: 4 plans
-
-Plans:
-- [x] 01-01: Tree-sitter parser foundation (CodeNode model, extract functions/classes/imports)
-- [x] 01-02: Lazy graph navigation with persistent caching (skeleton/summary/full, <100ms startup)
-- [x] 01-03: MCP server with tools (auzoom_read, auzoom_find, auzoom_get_dependencies, auzoom_stats, auzoom_validate)
-- [x] 01-04: Validation & GSD skill (auzoom_validate tool, expertise skill for structural constraints)
-
-### Phase 2: Orchestrator Implementation
-**Goal**: Build and deploy Orchestrator MCP server that routes tasks to appropriate models (local/Gemini/Haiku/Sonnet) based on complexity
-
-**Depends on**: Nothing (parallel with Phase 1)
-
-**Research**: Likely (multiple model APIs)
-
-**Research topics**: Ollama API integration, Gemini CLI integration, LM Studio on dhiraj@dhirajs-mac-min, Cerebras API, complexity scoring heuristics, validation checkpoint patterns
+**Research**: Unlikely (document reconstruction from existing planning files)
 
 **Plans**: 3 plans
 
 Plans:
-- [x] 02-01: Complexity scoring function (rule-based 0-10 scale)
-- [x] 02-02-v2: Task tool routing (corrected architecture - Task tool instead of direct API)
-- [x] 02-03: MCP server with tools (orchestrator_route, orchestrator_execute, orchestrator_validate)
+- [ ] 01-01: Reconstruct WISHLIST-COMPLIANCE.md from phase plans and PROJECT.md references
+- [ ] 01-02: Create audit test infrastructure (harness, logging, evidence collection)
+- [ ] 01-03: Baseline metrics capture (current state before any changes)
 
-### Phase 3: Integration & Validation
-**Goal**: Integrate AuZoom and Orchestrator into GSD execution flow and validate ≥50% token reduction, ≥70% cost reduction
+### Phase 2: AuZoom Core Verification
+**Goal**: Verify Assumption 1 - local code indexing with function-level dependency tracking reduces full-file reads
 
-**Depends on**: Phase 1, Phase 2
+**Depends on**: Phase 1
 
-**Research**: Unlikely (combining existing components)
+**Research**: Unlikely (testing existing implementation)
+
+**Plans**: 4 plans
+
+Plans:
+- [ ] 02-01: Test progressive disclosure (skeleton → summary → full) token reduction
+- [ ] 02-02: Verify dependency tracking accuracy (auzoom_get_dependencies correctness)
+- [ ] 02-03: Test for bypass behavior (are full reads used when not needed?)
+- [ ] 02-04: Measure actual token savings vs claims on real codebases
+
+### Phase 3: AuZoom Structural Compliance
+**Goal**: Verify implementation follows AuZoom structural constraints (≤50 lines functions, ≤250 lines modules, ≤7 files per directory)
+
+**Depends on**: Phase 2
+
+**Research**: Unlikely (auditing existing code structure)
 
 **Plans**: 2 plans
 
 Plans:
-- [x] 03-01: Usage examples & workflows (10 scenarios, 5 templates, demonstrations, README integration)
-- [x] 03-02: Formal validation testing (10 tasks, baseline vs optimized, validation report, V1 certification)
+- [ ] 03-01: Run auzoom_validate on entire codebase, document violations
+- [ ] 03-02: Assess if violations impact claimed benefits (does non-compliance hurt token savings?)
+
+### Phase 4: Orchestrator Core Verification
+**Goal**: Verify Assumption 2 - dynamic model routing based on task difficulty uses appropriate models
+
+**Depends on**: Phase 1
+
+**Research**: Unlikely (testing existing complexity scorer)
+
+**Plans**: 3 plans
+
+Plans:
+- [ ] 04-01: Test complexity scorer accuracy (do scores match actual task difficulty?)
+- [ ] 04-02: Verify model routing appropriateness (simple→Haiku, complex→Sonnet, critical→Opus)
+- [ ] 04-03: Quality maintenance check (no degradation across model tiers)
+
+### Phase 5: Validation Metrics Re-execution
+**Goal**: Re-run all 25 validation tasks with real API calls to verify 79.5% savings and 100% quality claims
+
+**Depends on**: Phase 2, Phase 4
+
+**Research**: Unlikely (executing existing test suite)
+
+**Plans**: 4 plans
+
+Plans:
+- [ ] 05-01: Re-execute 10 simple tasks (complexity 0.5-5.5) with actual Claude API
+- [ ] 05-02: Re-execute 15 challenging tasks (complexity 4.5-8.5) with actual Claude API
+- [ ] 05-03: Compare results to claimed metrics (79.5% cost savings, 100%/67% quality)
+- [ ] 05-04: Identify measurement methodology errors or biases
+
+### Phase 6: Gemini Flash Real Integration
+**Goal**: Replace theoretical Gemini costs with actual CLI execution and recalculate savings
+
+**Depends on**: Phase 5
+
+**Research**: Likely (Gemini CLI integration patterns, current API)
+
+**Research topics**: Gemini CLI command structure, model names (gemini-2.5-flash vs gemini-flash), authentication flow, token counting in CLI output
+
+**Plans**: 3 plans
+
+Plans:
+- [ ] 06-01: Fix GeminiClient CLI command structure (replace non-existent "generate" subcommand)
+- [ ] 06-02: Test actual Gemini execution with token/cost measurement
+- [ ] 06-03: Recalculate validation savings with real Gemini data (update from theoretical)
+
+### Phase 7: Small File Overhead Assessment
+**Goal**: Verify if auto-detect file size threshold is critical for V1 or legitimately V2
+
+**Depends on**: Phase 2, Phase 5
+
+**Research**: Unlikely (analyzing existing validation results)
+
+**Plans**: 2 plans
+
+Plans:
+- [ ] 07-01: Analyze tasks 2.1, 3.1, 4.1 where token increases occurred
+- [ ] 07-02: Determine if file size heuristics are Critical (breaks assumptions) or Enhancement (optimization)
+
+### Phase 8: Non-Python File Handling Audit
+**Goal**: Verify metadata approach for non-Python files meets "progressive discovery of context" claim
+
+**Depends on**: Phase 2
+
+**Research**: Unlikely (testing existing FileSummarizer implementation)
+
+**Plans**: 2 plans
+
+Plans:
+- [ ] 08-01: Test metadata summaries on real non-Python files (markdown, JSON, config)
+- [ ] 08-02: Assess if metadata provides sufficient context reduction vs full reads
+
+### Phase 9: Deferred Work Legitimacy Assessment
+**Goal**: Evaluate all deferred V2 items to determine proper deferral vs missing critical functionality
+
+**Depends on**: Phase 1
+
+**Research**: Unlikely (analyzing planning decisions and rationale)
+
+**Plans**: 3 plans
+
+Plans:
+- [ ] 09-01: Assess local LLM integration (Qwen3), escalation matrix, file watching
+- [ ] 09-02: Assess multi-language support, cross-project learning, test generation
+- [ ] 09-03: Categorize each: V1-Critical / V1.1-Important / V2-Enhancement
+
+### Phase 10: Integration Testing
+**Goal**: End-to-end testing of AuZoom + Orchestrator + GSD workflow for conflicts and correctness
+
+**Depends on**: Phase 2, Phase 4
+
+**Research**: Unlikely (testing existing integration)
+
+**Plans**: 3 plans
+
+Plans:
+- [ ] 10-01: Test full workflow (GSD plan → AuZoom file read → Orchestrator route → execution)
+- [ ] 10-02: Test for conflicts (caching, model selection, file access coordination)
+- [ ] 10-03: Verify MCP protocol compliance (v2024-11-05) and error handling
+
+### Phase 11: Gap Analysis & Reporting
+**Goal**: Comprehensive findings report with evidence, severity classification, and proposed fixes
+
+**Depends on**: All verification phases (2-10)
+
+**Research**: Unlikely (synthesizing audit findings)
+
+**Plans**: 2 plans
+
+Plans:
+- [ ] 11-01: Create gap report (Expected vs Actual, evidence, file/line references)
+- [ ] 11-02: Classify gaps (Critical/Important/Enhancement) with proposed fixes
+
+### Phase 12: Critical Fixes & V1.1 Roadmap
+**Goal**: Address gaps classified as Critical and define V1.1 milestone based on Important gaps
+
+**Depends on**: Phase 11
+
+**Research**: Unlikely (implementing fixes for identified gaps)
+
+**Plans**: 3 plans
+
+Plans:
+- [ ] 12-01: Implement Critical fixes (breaks core assumptions, must fix for V1)
+- [ ] 12-02: Test fixes verify assumptions now hold
+- [ ] 12-03: Define V1.1 roadmap with Important gaps and properly-deferred V2 items
 
 ## Progress
 
 **Execution Order:**
-Phases 1 and 2 can run in parallel, then Phase 3 integrates both.
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. AuZoom Implementation | 4/4 | **COMPLETE** | 2026-01-11 |
-| 2. Orchestrator Implementation | 3/3 | **COMPLETE** | 2026-01-11 |
-| 3. Integration & Validation | 2/2 | **COMPLETE** | 2026-01-12 |
+| 1. Audit Foundation & Traceability | 0/3 | Not started | - |
+| 2. AuZoom Core Verification | 0/4 | Not started | - |
+| 3. AuZoom Structural Compliance | 0/2 | Not started | - |
+| 4. Orchestrator Core Verification | 0/3 | Not started | - |
+| 5. Validation Metrics Re-execution | 0/4 | Not started | - |
+| 6. Gemini Flash Real Integration | 0/3 | Not started | - |
+| 7. Small File Overhead Assessment | 0/2 | Not started | - |
+| 8. Non-Python File Handling Audit | 0/2 | Not started | - |
+| 9. Deferred Work Legitimacy Assessment | 0/3 | Not started | - |
+| 10. Integration Testing | 0/3 | Not started | - |
+| 11. Gap Analysis & Reporting | 0/2 | Not started | - |
+| 12. Critical Fixes & V1.1 Roadmap | 0/3 | Not started | - |
