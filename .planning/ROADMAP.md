@@ -106,9 +106,27 @@ Plans:
 - [x] 05-01: Re-execute 10 simple tasks (42 min - 1dfe139, 45ab653, 79e99d9, 7fd3c48)
 - [x] 05-02: Re-execute 15 challenging tasks (5 min - 006ac83, aaf95b3)
 - [x] 05-03: Compare results to claimed metrics (3 min - 105c0e7, ede798b, 1b4cebf)
-- [x] 05-04: Methodology assessment and Phase 5 synthesis (149 min - 1f0f26b, c43a059, pending metadata)
+- [x] 05-04: Methodology assessment and Phase 5 synthesis (149 min - 1f0f26b, c43a059, 552eda6)
 
-### Phase 6: Gemini Flash Real Integration
+### Phase 6.5: Progressive Traversal & Graph Navigation Validation ⚠️ CRITICAL GAP
+**Goal**: Validate that on-demand depth traversal and graph-based navigation deliver token savings vs upfront full reads
+
+**Depends on**: Phase 5
+
+**Research**: Unlikely (executing tasks with real Claude Code Task tool)
+
+**Priority**: CRITICAL - Core feature validation gap identified post-Phase 5 audit
+
+**Plans**: 3 plans
+
+**Why inserted**: Phase 5 validated static level selection (skeleton vs full), not progressive interactive traversal—the core innovation. User clarification (2026-01-13) confirmed progressive on-demand traversal is intended design.
+
+Plans:
+- [ ] 06.5-01: Interaction pattern analysis (10 tasks with depth progression measurement)
+- [ ] 06.5-02: Progressive vs upfront comparison (net savings accounting for conversation overhead)
+- [ ] 06.5-03: Graph navigation efficiency (dependency traversal vs blind search)
+
+### Phase 7: Gemini Flash Real Integration (formerly Phase 6)
 **Goal**: Replace theoretical Gemini costs with actual CLI execution and recalculate savings
 
 **Depends on**: Phase 5
@@ -124,20 +142,20 @@ Plans:
 - [ ] 06-02: Test actual Gemini execution with token/cost measurement
 - [ ] 06-03: Recalculate validation savings with real Gemini data (update from theoretical)
 
-### Phase 7: Small File Overhead Assessment
+### Phase 8: Small File Overhead Assessment (formerly Phase 7)
 **Goal**: Verify if auto-detect file size threshold is critical for V1 or legitimately V2
 
-**Depends on**: Phase 2, Phase 5
+**Depends on**: Phase 2, Phase 5, Phase 6.5
 
 **Research**: Unlikely (analyzing existing validation results)
 
 **Plans**: 2 plans
 
 Plans:
-- [ ] 07-01: Analyze tasks 2.1, 3.1, 4.1 where token increases occurred
-- [ ] 07-02: Determine if file size heuristics are Critical (breaks assumptions) or Enhancement (optimization)
+- [ ] 09-01: Analyze tasks 2.1, 3.1, 4.1 where token increases occurred
+- [ ] 09-02: Determine if file size heuristics are Critical (breaks assumptions) or Enhancement (optimization)
 
-### Phase 8: Non-Python File Handling Audit
+### Phase 9: Non-Python File Handling Audit (formerly Phase 8)
 **Goal**: Verify metadata approach for non-Python files meets "progressive discovery of context" claim
 
 **Depends on**: Phase 2
@@ -147,10 +165,10 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 08-01: Test metadata summaries on real non-Python files (markdown, JSON, config)
-- [ ] 08-02: Assess if metadata provides sufficient context reduction vs full reads
+- [ ] 09-01: Test metadata summaries on real non-Python files (markdown, JSON, config)
+- [ ] 09-02: Assess if metadata provides sufficient context reduction vs full reads
 
-### Phase 9: Deferred Work Legitimacy Assessment
+### Phase 10: Deferred Work Legitimacy Assessment (formerly Phase 9)
 **Goal**: Evaluate all deferred V2 items to determine proper deferral vs missing critical functionality
 
 **Depends on**: Phase 1
@@ -160,11 +178,11 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 09-01: Assess local LLM integration (Qwen3), escalation matrix, file watching
-- [ ] 09-02: Assess multi-language support, cross-project learning, test generation
-- [ ] 09-03: Categorize each: V1-Critical / V1.1-Important / V2-Enhancement
+- [ ] 10-01: Assess local LLM integration (Qwen3), escalation matrix, file watching
+- [ ] 10-02: Assess multi-language support, cross-project learning, test generation
+- [ ] 10-03: Categorize each: V1-Critical / V1.1-Important / V2-Enhancement
 
-### Phase 10: Integration Testing
+### Phase 11: Integration Testing (formerly Phase 10)
 **Goal**: End-to-end testing of AuZoom + Orchestrator + GSD workflow for conflicts and correctness
 
 **Depends on**: Phase 2, Phase 4
@@ -174,41 +192,41 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 10-01: Test full workflow (GSD plan → AuZoom file read → Orchestrator route → execution)
-- [ ] 10-02: Test for conflicts (caching, model selection, file access coordination)
-- [ ] 10-03: Verify MCP protocol compliance (v2024-11-05) and error handling
+- [ ] 11-01: Test full workflow (GSD plan → AuZoom file read → Orchestrator route → execution)
+- [ ] 11-02: Test for conflicts (caching, model selection, file access coordination)
+- [ ] 11-03: Verify MCP protocol compliance (v2024-11-05) and error handling
 
-### Phase 11: Gap Analysis & Reporting
+### Phase 12: Gap Analysis & Reporting (formerly Phase 11)
 **Goal**: Comprehensive findings report with evidence, severity classification, and proposed fixes
 
-**Depends on**: All verification phases (2-10)
+**Depends on**: All verification phases (2-11)
 
 **Research**: Unlikely (synthesizing audit findings)
 
 **Plans**: 2 plans
 
 Plans:
-- [ ] 11-01: Create gap report (Expected vs Actual, evidence, file/line references)
-- [ ] 11-02: Classify gaps (Critical/Important/Enhancement) with proposed fixes
+- [ ] 12-01: Create gap report (Expected vs Actual, evidence, file/line references)
+- [ ] 12-02: Classify gaps (Critical/Important/Enhancement) with proposed fixes
 
-### Phase 12: Critical Fixes & V1.1 Roadmap
+### Phase 13: Critical Fixes & V1.1 Roadmap (formerly Phase 12)
 **Goal**: Address gaps classified as Critical and define V1.1 milestone based on Important gaps
 
-**Depends on**: Phase 11
+**Depends on**: Phase 12
 
 **Research**: Unlikely (implementing fixes for identified gaps)
 
 **Plans**: 3 plans
 
 Plans:
-- [ ] 12-01: Implement Critical fixes (breaks core assumptions, must fix for V1)
-- [ ] 12-02: Test fixes verify assumptions now hold
-- [ ] 12-03: Define V1.1 roadmap with Important gaps and properly-deferred V2 items
+- [ ] 13-01: Implement Critical fixes (breaks core assumptions, must fix for V1)
+- [ ] 13-02: Test fixes verify assumptions now hold
+- [ ] 13-03: Define V1.1 roadmap with Important gaps and properly-deferred V2 items
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6.5 (inserted) → 7 → 8 → 9 → 10 → 11 → 12 → 13
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|

@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-12)
 
 **Core value:** Full alignment verification - Every core assumption tested against actual implementation with documented evidence
-**Current focus:** Phase 5 — Validation Metrics Re-execution
+**Current focus:** Phase 6.5 (inserted) — Progressive Traversal & Graph Navigation Validation
 
 ## Current Position
 
-Phase: 5 of 12 (Validation Metrics Re-execution)
+Phase: 5 of 13 (Validation Metrics Re-execution) — Phase complete
 Plan: 4 of 4 in current phase
-Status: Phase complete
-Last activity: 2026-01-13 — Completed 05-04-PLAN.md (Methodology Assessment & Phase 5 Synthesis)
+Next phase: 6.5 (Progressive Traversal & Graph Navigation Validation) — CRITICAL gap
+Last activity: 2026-01-13 — Phase 6.5 inserted post-audit, core feature validation gap identified
 
-Progress: ██████████ 47% (16/34 plans complete)
+Progress: ████████░░ 43% (16/37 plans complete - 3 plans added to Phase 6.5)
 
 ## Performance Metrics
 
@@ -146,6 +146,17 @@ Recent decisions affecting current work:
   - **V1 Verdict:** Can proceed with required documentation updates (revise cost to 51%, acknowledge token failure)
   - **Phase 5 Synthesis:** Overall verdict delivered, V1 requires claim revisions (no code blockers)
 - **Phase 5 Complete:** All 4 plans finished (199 min total), comprehensive validation verdict delivered
+
+**Phase 6.5 Insertion (2026-01-13):**
+- **CRITICAL validation gap identified:** Phase 5 validated static level selection, not progressive interactive traversal
+- **User clarification:** Progressive on-demand depth traversal is the intended core feature
+- **Gap description:** Phase 5 measured skeleton vs full (static), not skeleton → ask → summary → ask → full (progressive)
+- **New phase inserted:** Phase 6.5 with 3 plans to validate:
+  1. Interaction pattern analysis (depth progression, conversation overhead)
+  2. Progressive vs upfront comparison (net savings accounting for overhead)
+  3. Graph navigation efficiency (dependency traversal vs blind search)
+- **Impact:** Roadmap phases 6-12 renumbered to 7-13, total plans 34→37
+- **Priority:** CRITICAL - Core feature validation required before V1 certification
 
 ### Deferred Issues
 
