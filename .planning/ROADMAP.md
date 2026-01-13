@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: AuZoom Core Verification** - Verify progressive disclosure and dependency tracking (Complete: 2026-01-12)
 - [x] **Phase 3: AuZoom Structural Compliance** - Verify code follows structural constraints (Complete: 2026-01-12)
 - [x] **Phase 4: Orchestrator Core Verification** - Test complexity scoring and model routing (Complete: 2026-01-12)
-- [x] **Phase 5: Validation Metrics Re-execution** - Re-run 25 tasks with real APIs (Complete - 2026-01-13)
+- [ ] **Phase 5: Validation Metrics Re-execution** - Re-run 25 tasks with real APIs
 - [ ] **Phase 6: Gemini Flash Real Integration** - Fix CLI and verify actual execution
 - [ ] **Phase 7: Small File Overhead Assessment** - Test auto-detect threshold necessity
 - [ ] **Phase 8: Non-Python File Handling Audit** - Verify metadata summaries adequacy
@@ -87,21 +87,20 @@ Plans:
 - [x] 04-02: Verify model routing appropriateness (simple→Haiku, complex→Sonnet, critical→Opus) (25 min - e2254fb, fdc8be1, ef6ba0b, 79a811e)
 - [x] 04-03: Quality maintenance check (no degradation across model tiers) (10 min - 829b5a3, d130166, 5d87d39, f972fc3)
 
-### Phase 5: Validation Metrics Re-execution (Complete - 2026-01-13)
+### Phase 5: Validation Metrics Re-execution (In Progress)
 **Goal**: Re-run all 25 validation tasks with real API calls to verify 79.5% savings and 100% quality claims
 
 **Depends on**: Phase 2, Phase 4
 
 **Research**: Unlikely (executing existing test suite)
 
-**Plans**: 3 plans (all complete - 50 min total)
+**Plans**: 4 plans (3 complete, 1 remaining)
 
 Plans:
 - [x] 05-01: Re-execute 10 simple tasks (42 min - 1dfe139, 45ab653, 79e99d9, 7fd3c48)
 - [x] 05-02: Re-execute 15 challenging tasks (5 min - 006ac83, aaf95b3)
 - [x] 05-03: Compare results to claimed metrics (3 min - 105c0e7, ede798b)
-
-**Verdict**: Claims partially refuted - Cost 50.7% vs 79.5% claimed (28.8-point gap), Token -95.6% vs 23% claimed (118.6-point gap), Quality not validated
+- [ ] 05-04: Methodology assessment and Phase 5 synthesis
 
 ### Phase 6: Gemini Flash Real Integration
 **Goal**: Replace theoretical Gemini costs with actual CLI execution and recalculate savings
