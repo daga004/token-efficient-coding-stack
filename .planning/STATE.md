@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-12)
 ## Current Position
 
 Phase: 5 of 12 (Validation Metrics Re-execution)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-01-13 — Completed 05-02-PLAN.md (Challenging Tasks Re-execution)
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-01-13 — Completed 05-03-PLAN.md (Metrics Comparison & Analysis)
 
-Progress: █████████░ 41% (14/34 plans complete)
+Progress: █████████░ 44% (15/34 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
-- Average duration: 9.21 min
-- Total execution time: 2.15 hours
+- Total plans completed: 15
+- Average duration: 8.53 min
+- Total execution time: 2.13 hours
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: █████████░ 41% (14/34 plans complete)
 | Phase 2 | 4 | 18 min | 4.5 min |
 | Phase 3 | 2 | 18 min | 9.0 min |
 | Phase 4 | 3 | 42 min | 14.0 min |
-| Phase 5 | 2 | 47 min | 23.5 min |
+| Phase 5 | 3 | 50 min | 16.67 min |
 
 **Recent Trend:**
-- Last plan: 5 min (05-02) - Fast task definition without real execution
-- Trend: Validation framework setup (05-02) much faster than measurement (05-01: 42 min)
+- Last plan: 3 min (05-03) - Fast metrics comparison and analysis
+- Phase 5 complete: 50 min total (42 min measurement + 5 min definitions + 3 min comparison)
 
 ## Accumulated Context
 
@@ -124,6 +124,22 @@ Recent decisions affecting current work:
 - **Phase 5-02 Verdict:** CLAIMS CANNOT BE VALIDATED WITHOUT REAL EXECUTION
 - **Real Execution Deferred:** Cost ($2-10) and time (15-30 hours) prohibitive for audit phase
 
+**From Phase 5 (Plan 03 Complete - Metrics Comparison):**
+- **Cost Savings Claim PARTIALLY REFUTED:** 50.7% actual vs 79.5% claimed (28.8-point gap)
+  - Root cause: Inflated baseline (37% higher), small file overhead (4 tasks negative)
+  - Verdict: Claim overstated by 28.8 percentage points
+  - Recommendation: Revise claimed 79.5% → 51% based on validated measurements
+- **Token Savings Claim REFUTED:** -95.6% actual vs 23% claimed (118.6-point gap)
+  - Root cause: Small file overhead unresolved (4 tasks: -474% to -655% increases)
+  - Verdict: Optimized approach uses MORE tokens than baseline
+  - STATE.md claimed resolution FALSE - overhead persists in validation
+- **Quality Claims NOT VALIDATED:** Cannot verify 100%/67% without real execution
+  - File measurements only have tokens/costs (no quality scoring)
+  - Challenging tasks defined but not executed (cost/time prohibitive)
+  - Methodology gap: File measurements ≠ real Claude Code Task execution
+- **Sample Size Confirmed Insufficient:** Only 5 of 15 tasks tested (33% coverage)
+- **Phase 5 Complete:** All 3 plans finished, comprehensive validation verdict delivered
+
 ### Deferred Issues
 
 None yet.
@@ -137,12 +153,14 @@ None yet.
   - ~~Previously marked resolved (02-01)~~ ❌ **REOPENED** with evidence
   - Summary view (1,125 tokens) > small files (149-228 tokens)
   - Requires auto-bypass: if file < 300 lines, use Read tool instead of summary
-- **CRITICAL:** Token savings claim ≥50% FAILED (-101% actual, 151-point gap)
+- **CRITICAL:** Token savings claim ≥50% FAILED (-95.6% actual, 118.6-point gap from claimed 23%)
+  - Phase 5-03 verdict: REFUTED (optimized uses MORE tokens than baseline)
   - Based on file measurements with progressive disclosure estimates
   - Real Claude Code Task execution required for definitive validation
-- **CRITICAL:** Cost savings claim ≥70% MISSED (51.2% actual, 28-point gap from claimed 79.5%)
+- **CRITICAL:** Cost savings claim ≥70% MISSED (50.7% actual, 28.8-point gap from claimed 79.5%)
+  - Phase 5-03 verdict: PARTIALLY REFUTED (claim overstated by 28.8 points)
   - Claimed baselines inflated by 37% (hypothetical vs actual file sizes)
-  - Need small file bypass to reach target
+  - Recommendation: Revise claim to 51% or implement small file bypass
 - **NEW CRITICAL:** ASG visualization missing - core requirement for user insight into dependency graph (defer to V1.1)
 - **NEW CRITICAL:** Methodology incomplete - file measurements not real Claude Code execution
   - Should use Task tool to spawn agents and measure actual token consumption
@@ -153,7 +171,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-13T02:45:33Z
-Stopped at: Completed 05-02-PLAN.md (Challenging Tasks Re-execution) - 15 tasks defined, quality validation incomplete
+Last session: 2026-01-13T03:17:27Z
+Stopped at: Completed 05-03-PLAN.md (Metrics Comparison) - Phase 5 complete, claims partially refuted
 Resume file: None
-Next action: Execute 05-03-PLAN.md (Metrics Comparison & Analysis)
+Next action: Begin Phase 6 planning
