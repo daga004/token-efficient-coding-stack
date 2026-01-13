@@ -1,0 +1,164 @@
+{
+  "total_tasks": 10,
+  "baseline_total_tokens": 2722,
+  "optimized_total_tokens": 5325,
+  "baseline_total_cost": 0.008166,
+  "optimized_total_cost": 0.004023,
+  "token_savings_pct": -95.62821454812638,
+  "cost_savings_pct": 50.73475385745775,
+  "simple_tasks_count": 10,
+  "simple_cost_savings_pct": 50.73475385745775,
+  "simple_token_savings_pct": -95.62821454812638,
+  "challenging_tasks_count": 0,
+  "challenging_cost_savings_pct": 0.0,
+  "challenging_token_savings_pct": 0.0,
+  "simple_success_rate": 0.0,
+  "challenging_success_rate": 0.0,
+  "overall_success_rate": 0.0,
+  "tier_performance": {
+    "Flash/Haiku": {
+      "task_count": 8,
+      "tasks": [
+        "1.1",
+        "1.2",
+        "3.1",
+        "3.2",
+        "4.1",
+        "4.2",
+        "5.1",
+        "5.2"
+      ],
+      "avg_cost_savings_pct": 41.68842471714536,
+      "avg_token_savings_pct": -118.66840731070496,
+      "baseline_cost": 0.006894000000000001,
+      "optimized_cost": 0.004019999999999999,
+      "baseline_tokens": 2298,
+      "optimized_tokens": 5025
+    },
+    "Unknown": {
+      "task_count": 2,
+      "tasks": [
+        "2.1",
+        "2.2"
+      ],
+      "avg_cost_savings_pct": 99.76415094339622,
+      "avg_token_savings_pct": 29.245283018867923,
+      "baseline_cost": 0.0012720000000000001,
+      "optimized_cost": 3e-06,
+      "baseline_tokens": 424,
+      "optimized_tokens": 300
+    }
+  },
+  "task_details": [
+    {
+      "task_id": "1.1",
+      "description": "Explore AuZoom codebase structure",
+      "baseline_tokens": 235,
+      "optimized_tokens": 750,
+      "token_savings_pct": -219.14893617021275,
+      "baseline_cost": 0.000705,
+      "optimized_cost": 0.0006,
+      "cost_savings_pct": 14.893617021276603,
+      "model": "claude-3-5-haiku-20241022"
+    },
+    {
+      "task_id": "1.2",
+      "description": "Find and understand score_task function",
+      "baseline_tokens": 157,
+      "optimized_tokens": 150,
+      "token_savings_pct": 4.45859872611465,
+      "baseline_cost": 0.000471,
+      "optimized_cost": 0.00012,
+      "cost_savings_pct": 74.52229299363057,
+      "model": "claude-3-5-haiku-20241022"
+    },
+    {
+      "task_id": "2.1",
+      "description": "Fix typo in server.py docstring",
+      "baseline_tokens": 228,
+      "optimized_tokens": 150,
+      "token_savings_pct": 34.21052631578947,
+      "baseline_cost": 0.000684,
+      "optimized_cost": 1.5e-06,
+      "cost_savings_pct": 99.78070175438597,
+      "model": "claude-3-5-flash-20250107"
+    },
+    {
+      "task_id": "2.2",
+      "description": "Change MAX_TOKENS constant",
+      "baseline_tokens": 196,
+      "optimized_tokens": 150,
+      "token_savings_pct": 23.46938775510204,
+      "baseline_cost": 0.000588,
+      "optimized_cost": 1.5e-06,
+      "cost_savings_pct": 99.74489795918367,
+      "model": "claude-3-5-flash-20250107"
+    },
+    {
+      "task_id": "3.1",
+      "description": "Add directory file count validation",
+      "baseline_tokens": 149,
+      "optimized_tokens": 1125,
+      "token_savings_pct": -655.0335570469799,
+      "baseline_cost": 0.000447,
+      "optimized_cost": 0.0009,
+      "cost_savings_pct": -101.3422818791946,
+      "model": "claude-3-5-haiku-20241022"
+    },
+    {
+      "task_id": "3.2",
+      "description": "Add cumulative cost tracking",
+      "baseline_tokens": 196,
+      "optimized_tokens": 1125,
+      "token_savings_pct": -473.97959183673464,
+      "baseline_cost": 0.000588,
+      "optimized_cost": 0.0009,
+      "cost_savings_pct": -53.06122448979592,
+      "model": "claude-3-5-haiku-20241022"
+    },
+    {
+      "task_id": "4.1",
+      "description": "Extract duplicate validation logic",
+      "baseline_tokens": 149,
+      "optimized_tokens": 1125,
+      "token_savings_pct": -655.0335570469799,
+      "baseline_cost": 0.000447,
+      "optimized_cost": 0.0009,
+      "cost_savings_pct": -101.3422818791946,
+      "model": "claude-3-5-haiku-20241022"
+    },
+    {
+      "task_id": "4.2",
+      "description": "Rename models.py and update imports",
+      "baseline_tokens": 254,
+      "optimized_tokens": 150,
+      "token_savings_pct": 40.94488188976378,
+      "baseline_cost": 0.000762,
+      "optimized_cost": 0.00012,
+      "cost_savings_pct": 84.25196850393701,
+      "model": "claude-3-5-haiku-20241022"
+    },
+    {
+      "task_id": "5.1",
+      "description": "Diagnose test_mcp_server failure",
+      "baseline_tokens": 549,
+      "optimized_tokens": 300,
+      "token_savings_pct": 45.3551912568306,
+      "baseline_cost": 0.001647,
+      "optimized_cost": 0.00024,
+      "cost_savings_pct": 85.42805100182149,
+      "model": "claude-3-5-haiku-20241022"
+    },
+    {
+      "task_id": "5.2",
+      "description": "Resolve circular import",
+      "baseline_tokens": 609,
+      "optimized_tokens": 300,
+      "token_savings_pct": 50.73891625615764,
+      "baseline_cost": 0.001827,
+      "optimized_cost": 0.00024,
+      "cost_savings_pct": 86.86371100164205,
+      "model": "claude-3-5-haiku-20241022"
+    }
+  ]
+}
