@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-12)
 
 **Core value:** Full alignment verification - Every core assumption tested against actual implementation with documented evidence
-**Current focus:** Phase 3 — AuZoom Structural Compliance
+**Current focus:** Phase 5 — Validation Metrics Re-execution
 
 ## Current Position
 
-Phase: 4 of 12 (Orchestrator Core Verification)
-Plan: 3 of 3 in current phase
-Status: Complete
-Last activity: 2026-01-12 — Completed 04-03-PLAN.md (Quality Maintenance Verification)
+Phase: 5 of 12 (Validation Metrics Re-execution)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-01-13 — Completed 05-01-PLAN.md (Simple Tasks Re-execution)
 
-Progress: █████████░ 35% (12/34 plans complete)
+Progress: █████████░ 38% (13/34 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: 7.08 min
-- Total execution time: 1.42 hours
+- Total plans completed: 13
+- Average duration: 9.54 min
+- Total execution time: 2.12 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: █████████░ 35% (12/34 plans complete)
 | Phase 2 | 4 | 18 min | 4.5 min |
 | Phase 3 | 2 | 18 min | 9.0 min |
 | Phase 4 | 3 | 42 min | 14.0 min |
+| Phase 5 | 1 | 42 min | 42.0 min |
 
 **Recent Trend:**
-- Last plan: 10 min (04-03)
-- Trend: Phase 4 complete with deep analysis work
+- Last plan: 42 min (05-01)
+- Trend: Validation plans taking longer due to measurement and analysis work
 
 ## Accumulated Context
 
@@ -105,6 +106,17 @@ Recent decisions affecting current work:
 - **Cost-Quality Tradeoff:** 81% savings with 0% quality loss (win-win optimization)
 - **Phase 4-03 Verdict:** Quality maintenance VERIFIED, orchestrator production-ready
 
+**From Phase 5 (In Progress):**
+- **Metrics Re-execution (05-01):** Real file measurements vs claimed estimates
+- **Baseline Inflation:** Claimed baselines used hypothetical file sizes (374% inflation in Task 1.1)
+- **Actual Baseline:** 2,722 tokens vs claimed 4,298 tokens (37% lower)
+- **Small File Overhead CONFIRMED:** Tasks 3.1, 3.2, 4.1 show negative savings (up to -655% token increase)
+- **Token Savings:** -101% actual vs ≥50% claimed (151-point gap) ❌ FAILED
+- **Cost Savings:** 51.2% actual vs 79.5% claimed (28-point gap) ⚠️ BELOW TARGET
+- **4 of 10 tasks fail:** Progressive disclosure (summary=1,125 tokens) > small files (149-228 tokens)
+- **Methodology Gap:** File measurements used, not real Claude Code Task execution
+- **Phase 5-01 Verdict:** METRICS INFLATED - claimed baselines overstated, small file overhead persists
+
 ### Deferred Issues
 
 None yet.
@@ -113,18 +125,28 @@ None yet.
 
 **Known gaps requiring verification:**
 - ~~Missing WISHLIST-COMPLIANCE.md~~ ✅ **RESOLVED** (created in 01-01)
-- ~~Token reduction target (≥50%) missed - actual 23%~~ ✅ **RESOLVED** (02-01: baseline was summary-level, skeleton is 95.32%)
-- ~~Small file overhead not handled (auto-detect threshold missing)~~ ✅ **RESOLVED** (02-01: no overhead detected, all sizes benefit)
-- ~~Token increases on small files (tasks 2.1, 3.1, 4.1)~~ ✅ **RESOLVED** (02-01: no small file overhead)
-- ~~**CRITICAL:** Dependency tracking accuracy 6.25%~~ ✅ **RESOLVED** (2026-01-12: AST-based extraction, now 100% precision/recall - commits eb9311f, a1bde04)
+- ~~**CRITICAL:** Dependency tracking accuracy 6.25%~~ ✅ **RESOLVED** (2026-01-12: AST-based extraction, now 100% precision/recall)
+- **CRITICAL:** Small file overhead CONFIRMED (05-01: 4 of 10 tasks fail, -655% token increase)
+  - ~~Previously marked resolved (02-01)~~ ❌ **REOPENED** with evidence
+  - Summary view (1,125 tokens) > small files (149-228 tokens)
+  - Requires auto-bypass: if file < 300 lines, use Read tool instead of summary
+- **CRITICAL:** Token savings claim ≥50% FAILED (-101% actual, 151-point gap)
+  - Based on file measurements with progressive disclosure estimates
+  - Real Claude Code Task execution required for definitive validation
+- **CRITICAL:** Cost savings claim ≥70% MISSED (51.2% actual, 28-point gap from claimed 79.5%)
+  - Claimed baselines inflated by 37% (hypothetical vs actual file sizes)
+  - Need small file bypass to reach target
 - **NEW CRITICAL:** ASG visualization missing - core requirement for user insight into dependency graph (defer to V1.1)
+- **NEW CRITICAL:** Methodology incomplete - file measurements not real Claude Code execution
+  - Should use Task tool to spawn agents and measure actual token consumption
+  - Current: estimates for progressive disclosure, not real MCP responses
 - Gemini Flash integration theoretical (not actual API execution) - Phase 6
 - Non-Python files use metadata summaries (V2 semantic summaries deferred) - Phase 8
 - Parser anomaly in tools.py (zero tokens extracted) - requires investigation
 
 ## Session Continuity
 
-Last session: 2026-01-12T13:45:42Z
-Stopped at: Completed 04-03-PLAN.md (Quality Maintenance Verification) - Phase 4 complete, 100% quality verified
+Last session: 2026-01-13T01:51:29Z
+Stopped at: Completed 05-01-PLAN.md (Simple Tasks Re-execution) - Metrics inflated, small file overhead confirmed
 Resume file: None
-Next action: Plan Phase 5 (Validation Metrics Re-execution)
+Next action: Execute 05-02-PLAN.md (Challenging Tasks Re-execution)

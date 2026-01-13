@@ -87,20 +87,19 @@ Plans:
 - [x] 04-02: Verify model routing appropriateness (simple→Haiku, complex→Sonnet, critical→Opus) (25 min - e2254fb, fdc8be1, ef6ba0b, 79a811e)
 - [x] 04-03: Quality maintenance check (no degradation across model tiers) (10 min - 829b5a3, d130166, 5d87d39, f972fc3)
 
-### Phase 5: Validation Metrics Re-execution
+### Phase 5: Validation Metrics Re-execution (In Progress)
 **Goal**: Re-run all 25 validation tasks with real API calls to verify 79.5% savings and 100% quality claims
 
 **Depends on**: Phase 2, Phase 4
 
 **Research**: Unlikely (executing existing test suite)
 
-**Plans**: 4 plans
+**Plans**: 3 plans (1 complete, 2 remaining)
 
 Plans:
-- [ ] 05-01: Re-execute 10 simple tasks (complexity 0.5-5.5) with actual Claude API
+- [x] 05-01: Re-execute 10 simple tasks - COMPLETE (metrics inflated, small file overhead confirmed)
 - [ ] 05-02: Re-execute 15 challenging tasks (complexity 4.5-8.5) with actual Claude API
 - [ ] 05-03: Compare results to claimed metrics (79.5% cost savings, 100%/67% quality)
-- [ ] 05-04: Identify measurement methodology errors or biases
 
 ### Phase 6: Gemini Flash Real Integration
 **Goal**: Replace theoretical Gemini costs with actual CLI execution and recalculate savings
