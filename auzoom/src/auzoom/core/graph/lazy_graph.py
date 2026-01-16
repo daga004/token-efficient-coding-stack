@@ -37,32 +37,47 @@ class LazyCodeGraph:
                 daemon=True
             ).start()
 
-    def get_file(self, file_path: str, level: FetchLevel) -> list[dict]:
+    def get_file(
+        self,
+        file_path: str,
+        level: FetchLevel,
+        format: str = "standard",
+        fields: list[str] | None = None
+    ) -> tuple[list[str], list[dict]]:
         """Get file nodes, parsing lazily if needed.
 
         Flow:
         1. Check memory cache
         2. Check disk cache (validate hash)
         3. Parse and cache if needed
+
+        Args:
+            file_path: Path to file
+            level: Detail level (skeleton/summary/full)
+            format: Serialization format ("standard" or "compact")
+            fields: Optional list of fields to include
+
+        Returns:
+            Tuple of (import_names, serialized_nodes)
         """
         file_path = str(Path(file_path).resolve())
 
         # 1. Already in memory?
         if self._is_loaded(file_path):
             self.stats["cache_hits"] += 1
-            return self._get_serialized_nodes(file_path, level)
+            return self._get_serialized_nodes(file_path, level, format, fields)
 
         # 2. On disk with valid hash?
         cached = self._load_from_cache(file_path)
         if cached:
             self.stats["cache_hits"] += 1
             self._load_nodes_into_memory(cached)
-            return self._get_serialized_nodes(file_path, level)
+            return self._get_serialized_nodes(file_path, level, format, fields)
 
         # 3. Parse now (first access or stale)
         self.stats["cache_misses"] += 1
         self._parse_and_cache(file_path)
-        return self._get_serialized_nodes(file_path, level)
+        return self._get_serialized_nodes(file_path, level, format, fields)
 
     def _is_loaded(self, file_path: str) -> bool:
         """Check if file's nodes are in memory."""
@@ -166,11 +181,52 @@ class LazyCodeGraph:
             node_ids.append(node.id)
         self.file_index[file_path] = node_ids
 
-    def _get_serialized_nodes(self, file_path: str, level: FetchLevel) -> list[dict]:
-        """Get and serialize nodes for a file at requested level."""
+    def _get_serialized_nodes(
+        self,
+        file_path: str,
+        level: FetchLevel,
+        format: str = "standard",
+        fields: list[str] | None = None
+    ) -> tuple[list[str], list[dict]]:
+        """Get and serialize nodes for a file at requested level with optimization support.
+
+        Separates import nodes from code nodes for token efficiency (imports = 43% of skeleton).
+
+        Args:
+            file_path: Path to file
+            level: Detail level
+            format: Serialization format ("standard" or "compact")
+            fields: Optional list of fields to include
+
+        Returns:
+            Tuple of (import_names, serialized_nodes)
+            - import_names: Simple string list of imported modules
+            - serialized_nodes: Serialized non-import nodes (functions, classes, methods)
+        """
+        from ..models import NodeType
+
         node_ids = self.file_index.get(file_path, [])
-        nodes = [self.nodes[nid] for nid in node_ids]
-        return self.serializer.serialize_file(nodes, level)
+        all_nodes = [self.nodes[nid] for nid in node_ids]
+
+        # Separate imports from code nodes
+        import_nodes = [n for n in all_nodes if n.node_type == NodeType.IMPORT]
+        code_nodes = [n for n in all_nodes if n.node_type != NodeType.IMPORT]
+
+        # Extract import names (simple strings)
+        import_names = [n.name for n in import_nodes]
+
+        # Serialize code nodes (not imports)
+        if format == "compact":
+            serialized = self.serializer.serialize_file_compact(
+                code_nodes,
+                level,
+                relative_to=str(self.project_root),
+                fields=fields
+            )
+        else:
+            serialized = self.serializer.serialize_file(code_nodes, level, fields=fields)
+
+        return import_names, serialized
 
     def get_node(self, node_id: str, level: FetchLevel) -> dict:
         """Delegate to graph queries."""

@@ -1,7 +1,8 @@
 """Query operations for lazy code graph."""
 
 from typing import Optional
-from ...models import FetchLevel
+from ...models import FetchLevel, TraversalStrategy, TraversalDirection, NodeType
+from .graph_traversal import SelectiveGraphTraversal
 
 
 class GraphQueries:
@@ -9,6 +10,7 @@ class GraphQueries:
 
     def __init__(self, graph):
         self.graph = graph
+        self.traversal = SelectiveGraphTraversal(graph)
 
     def get_node(self, node_id: str, level: FetchLevel) -> dict:
         """Get single node, parsing file if needed."""
@@ -36,39 +38,64 @@ class GraphQueries:
             return []
         return [self.get_node(cid, level) for cid in node.children]
 
-    def get_dependencies(self, node_id: str, depth: int = 1) -> list[dict]:
-        """Get dependency nodes, loading files as needed."""
+    def get_dependencies(
+        self,
+        node_id: str,
+        depth: int = 1,
+        strategy: Optional[TraversalStrategy] = None,
+        direction: Optional[TraversalDirection] = None,
+        node_type_filter: Optional[list[NodeType]] = None
+    ) -> list[dict]:
+        """Get dependency nodes with advanced traversal options.
+
+        Args:
+            node_id: Starting node ID
+            depth: Maximum traversal depth (1 = immediate neighbors)
+            strategy: BFS (breadth-first) or DFS (depth-first), default: BFS
+            direction: FORWARD (calls), REVERSE (callers), or BOTH, default: REVERSE
+            node_type_filter: Optional list of NodeTypes to include
+
+        Returns:
+            List of dependency nodes with depth annotation
+
+        Examples:
+            # Impact analysis (default): Who depends on this?
+            get_dependencies("utils.py::validate_email", depth=2)
+            → Returns all callers (reverse dependencies)
+
+            # Call chain analysis: What does this call?
+            get_dependencies("api.py::create_user", depth=5, direction=FORWARD)
+            → Returns all called functions (forward dependencies, computed on-demand)
+
+            # Filter to functions only
+            get_dependencies("service.py::login", depth=3, node_type_filter=[NodeType.FUNCTION])
+        """
         if depth < 1:
             return []
 
-        visited = set()
-        result = []
+        # Default to BFS + REVERSE (80% use case: impact analysis)
+        if strategy is None:
+            strategy = TraversalStrategy.BFS
+        if direction is None:
+            direction = TraversalDirection.REVERSE
 
-        def traverse(nid, d):
-            if d > depth or nid in visited:
-                return
-            visited.add(nid)
+        # Ensure starting node is loaded
+        if node_id not in self.graph.nodes:
+            try:
+                self.get_node(node_id, FetchLevel.SKELETON)
+            except KeyError:
+                return []
 
-            # Ensure node is loaded
-            if nid not in self.graph.nodes:
-                try:
-                    self.get_node(nid, FetchLevel.SKELETON)
-                except KeyError:
-                    return
+        # Use advanced traversal
+        result = self.traversal.traverse(
+            start_node_id=node_id,
+            depth=depth,
+            strategy=strategy,
+            direction=direction,
+            node_type_filter=node_type_filter,
+            batch_load=True  # Enable BFS optimization
+        )
 
-            node = self.graph.nodes.get(nid)
-            if not node:
-                return
-
-            for dep_id in node.dependencies:
-                if dep_id not in visited:
-                    try:
-                        result.append(self.get_node(dep_id, FetchLevel.SKELETON))
-                        traverse(dep_id, d + 1)
-                    except KeyError:
-                        pass  # Dependency not found
-
-        traverse(node_id, 1)
         return result
 
     def find_by_name(self, name_pattern: str) -> list[dict]:
