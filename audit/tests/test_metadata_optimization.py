@@ -7,7 +7,7 @@ collapsed imports to verify 40-50% token reduction target.
 import json
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Union, Optional, List
 
 import pytest
 import tiktoken
@@ -48,7 +48,7 @@ class MetadataOptimizationTest(AuditTest):
             },
         ]
 
-    def _count_tokens(self, content: str | dict) -> int:
+    def _count_tokens(self, content: Union[str, dict]) -> int:
         """Count tokens using tiktoken."""
         if isinstance(content, dict):
             content = json.dumps(content)
@@ -56,15 +56,23 @@ class MetadataOptimizationTest(AuditTest):
 
     def _get_auzoom_response(
         self, file_path: str, level: str = "skeleton",
-        format: str = "standard", fields: list[str] | None = None
+        format: str = "standard", fields: Optional[List[str]] = None
     ) -> dict:
         """Simulate auzoom_read tool response.
 
         This would normally call the MCP server, but for testing we'll
         use the graph directly.
         """
-        from auzoom.src.auzoom.core.graph.lazy_graph import LazyCodeGraph
-        from auzoom.src.auzoom.models import FetchLevel
+        import sys
+        from pathlib import Path
+
+        # Add auzoom/src to path
+        auzoom_src = str(Path(__file__).parent.parent.parent / "auzoom" / "src")
+        if auzoom_src not in sys.path:
+            sys.path.insert(0, auzoom_src)
+
+        from auzoom.core.graph.lazy_graph import LazyCodeGraph
+        from auzoom.models import FetchLevel
 
         graph = LazyCodeGraph(str(Path(file_path).parent.parent.parent))
 
@@ -270,7 +278,15 @@ def add(a: int, b: int) -> int:
             os.environ["AUZOOM_SMALL_FILE_THRESHOLD"] = "300"
 
             # Try to read with AuZoom
-            from auzoom.src.auzoom.mcp.server import AuZoomMCPServer
+            import sys
+            from pathlib import Path as P
+
+            # Add auzoom/src to path
+            auzoom_src = str(P(__file__).parent.parent.parent / "auzoom" / "src")
+            if auzoom_src not in sys.path:
+                sys.path.insert(0, auzoom_src)
+
+            from auzoom.mcp.server import AuZoomMCPServer
 
             server = AuZoomMCPServer(str(test_file.parent))
             response = server._read_python_file(

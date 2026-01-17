@@ -42,7 +42,7 @@ class NodeFactory:
             file_path=file_path,
             line_start=line_start,
             line_end=line_end,
-            dependencies=[],
+            dependents=[],  # Reverse deps only
             children=[],
             docstring=docstring,
             signature=signature,
@@ -69,7 +69,7 @@ class NodeFactory:
             file_path=file_path,
             line_start=line_start,
             line_end=line_end,
-            dependencies=[],
+            dependents=[],  # Reverse deps only
             children=children,
             docstring=docstring,
             signature=None,
@@ -105,7 +105,7 @@ class NodeFactory:
             file_path=file_path,
             line_start=line_start,
             line_end=line_end,
-            dependencies=[],
+            dependents=[],  # Reverse deps only
             children=[],
             docstring=None,
             signature=None,

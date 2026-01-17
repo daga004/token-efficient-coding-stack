@@ -7,7 +7,7 @@ combined token reduction and verify backward compatibility.
 import json
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Union
 
 import pytest
 import tiktoken
@@ -51,7 +51,7 @@ class IntegrationOptimizationsTest(AuditTest):
             },
         ]
 
-    def _count_tokens(self, content: str | dict) -> int:
+    def _count_tokens(self, content: Union[str, dict]) -> int:
         """Count tokens using tiktoken."""
         if isinstance(content, dict):
             content = json.dumps(content)
