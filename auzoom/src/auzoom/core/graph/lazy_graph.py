@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-from typing import Optional, Union
+from typing import Optional, Union, List
 from ...models import CodeNode, FetchLevel, NodeType
 from ..parsing.parser import PythonParser
 from ..caching.cache_manager import CacheManager
@@ -42,7 +42,7 @@ class LazyCodeGraph:
         file_path: str,
         level: FetchLevel,
         format: str = "standard",
-        fields: list[str] | None = None
+        fields: Optional[List[str]] = None
     ) -> tuple[list[str], list[dict]]:
         """Get file nodes, parsing lazily if needed.
 
@@ -186,7 +186,7 @@ class LazyCodeGraph:
         file_path: str,
         level: FetchLevel,
         format: str = "standard",
-        fields: list[str] | None = None
+        fields: Optional[List[str]] = None
     ) -> tuple[list[str], list[dict]]:
         """Get and serialize nodes for a file at requested level with optimization support.
 

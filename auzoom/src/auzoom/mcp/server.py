@@ -3,7 +3,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 from ..core.graph.lazy_graph import LazyCodeGraph
 from ..models import FetchLevel
 from .file_summarizer import FileSummarizer
@@ -81,7 +81,7 @@ class AuZoomMCPServer:
         file_path: Path,
         level_str: str,
         format: str = "standard",
-        fields: list[str] | None = None
+        fields: Optional[List[str]] = None
     ) -> dict:
         """Read Python file using LazyCodeGraph with optimization support.
 

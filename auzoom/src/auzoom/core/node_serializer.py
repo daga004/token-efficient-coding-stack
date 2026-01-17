@@ -1,5 +1,6 @@
 """Node serialization for lazy code graph."""
 
+from typing import Optional, List
 from ..models import CodeNode, FetchLevel
 
 
@@ -58,10 +59,10 @@ class NodeSerializer:
 
     @staticmethod
     def serialize_file(
-        nodes: list[CodeNode],
+        nodes: List[CodeNode],
         level: FetchLevel,
-        fields: list[str] | None = None
-    ) -> list[dict]:
+        fields: Optional[List[str]] = None
+    ) -> List[dict]:
         """Serialize nodes at specified detail level with optional field filtering.
 
         Args:
@@ -91,11 +92,11 @@ class NodeSerializer:
 
     @staticmethod
     def serialize_file_compact(
-        nodes: list[CodeNode],
+        nodes: List[CodeNode],
         level: FetchLevel,
-        relative_to: str | None = None,
-        fields: list[str] | None = None
-    ) -> list[dict]:
+        relative_to: Optional[str] = None,
+        fields: Optional[List[str]] = None
+    ) -> List[dict]:
         """Serialize nodes in compact format with short keys for token efficiency.
 
         Optimizations:
