@@ -1,0 +1,76 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-21T13:00:06.689510Z",
+    "progressive_source": "audit/evidence/progressive_traversal_20260113_results.jsonl",
+    "baseline_source": "audit/evidence/baseline_upfront_20260121_125901.jsonl",
+    "tasks_compared": 3
+  },
+  "task_by_task": [
+    {
+      "task_id": 1,
+      "description": "List all public functions in auzoom/src/auzoom/server.py",
+      "task_type": "shallow",
+      "progressive_tokens": 150,
+      "conversation_overhead": 0,
+      "progressive_total": 150,
+      "baseline_tokens": 3935,
+      "net_savings_pct": 96.2,
+      "verdict": "WIN",
+      "overhead_impact_pct": 0.0
+    },
+    {
+      "task_id": 3,
+      "description": "What does auzoom_read function do in server.py?",
+      "task_type": "medium",
+      "progressive_tokens": 1325,
+      "conversation_overhead": 50,
+      "progressive_total": 1375,
+      "baseline_tokens": 3935,
+      "net_savings_pct": 65.1,
+      "verdict": "WIN",
+      "overhead_impact_pct": 3.6
+    },
+    {
+      "task_id": 9,
+      "description": "Find all functions that call validate_path in the auzoom codebase",
+      "task_type": "graph",
+      "progressive_tokens": 1795,
+      "conversation_overhead": 70,
+      "progressive_total": 1865,
+      "baseline_tokens": 3935,
+      "net_savings_pct": 52.6,
+      "verdict": "WIN",
+      "overhead_impact_pct": 3.8
+    }
+  ],
+  "aggregate": {
+    "overall": {
+      "tasks_analyzed": 3,
+      "total_progressive_tokens": 3390,
+      "total_baseline_tokens": 11805,
+      "average_net_savings": 71.3,
+      "win_rate": 1.0,
+      "tasks_with_savings": 3,
+      "tasks_marginal": 0,
+      "tasks_with_overhead": 0
+    },
+    "by_type": {
+      "medium": {
+        "count": 1,
+        "avg_savings": 65.1,
+        "win_rate": 1.0
+      },
+      "graph": {
+        "count": 1,
+        "avg_savings": 52.6,
+        "win_rate": 1.0
+      },
+      "shallow": {
+        "count": 1,
+        "avg_savings": 96.2,
+        "win_rate": 1.0
+      }
+    }
+  },
+  "breakeven_file_size_tokens": 0
+}
