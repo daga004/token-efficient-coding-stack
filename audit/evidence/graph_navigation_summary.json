@@ -1,0 +1,14 @@
+{
+  "total_tasks": 8,
+  "total_executions": 16,
+  "graph_files_total": 22,
+  "baseline_files_total": 76,
+  "file_reduction_pct": 71.05263157894737,
+  "graph_tokens_total": 3300,
+  "baseline_tokens_total": 135466,
+  "token_reduction_pct": 97.56396438958853,
+  "quality_parity": false,
+  "graph_quality_correct": 6,
+  "baseline_quality_correct": 5,
+  "target_met": true
+}
