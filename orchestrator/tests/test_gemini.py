@@ -80,8 +80,7 @@ async def test_gemini_client_missing_cli():
         result = await client.execute("Test prompt")
 
     assert result.success is False
-    assert "not installed" in result.error
-    assert "pip install google-generativeai" in result.error
+    assert "Gemini CLI not found" in result.error
     assert result.latency_ms == 0
 
 
@@ -190,3 +189,43 @@ async def test_execution_result_with_error():
     assert result.success is False
     assert result.error == "Some error occurred"
     assert result.response == ""
+
+
+@pytest.mark.asyncio
+async def test_cli_command_structure():
+    """Test that CLI command uses correct syntax."""
+    import os
+
+    client = GeminiClient(model="gemini-flash")
+
+    # Mock environment with API key
+    test_env = os.environ.copy()
+    test_env["GEMINI_API_KEY"] = "test-key-123"
+
+    with patch("os.environ", test_env):
+        with patch("subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(
+                returncode=0,
+                stdout="Test response",
+                stderr=""
+            )
+
+            # Execute to trigger command building
+            result = await client.execute("What is 2+2?")
+
+            # Verify subprocess.run was called with correct command structure
+            assert mock_run.called
+            call_args = mock_run.call_args
+            cmd = call_args[0][0]
+
+            # Command should be: ["gemini", "prompt", "--model", "gemini-3-flash", "-y"]
+            assert cmd[0] == "gemini"
+            assert cmd[1] == "What is 2+2?"  # Positional prompt
+            assert "--model" in cmd
+            assert "gemini-3-flash" in cmd
+            assert "-y" in cmd  # YOLO mode
+
+            # Verify environment includes GEMINI_API_KEY
+            kwargs = call_args[1]
+            assert "env" in kwargs
+            assert "GEMINI_API_KEY" in kwargs["env"]
