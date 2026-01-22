@@ -39,6 +39,11 @@ class GeminiClient(ModelClient):
 
         Returns:
             ExecutionResult with response and metadata
+
+        Note:
+            Token counts are estimated using 4-char/token approximation.
+            The Gemini CLI does not expose actual token counts, so this
+            limitation is inherent to the CLI-based approach.
         """
         start_time = time.time()
 
@@ -47,13 +52,31 @@ class GeminiClient(ModelClient):
             result = await self._run_cli_command(prompt, max_tokens)
 
             if result.returncode != 0:
+                # Check for specific error cases
+                error_msg = result.stderr
+                if "GEMINI_API_KEY" in error_msg or "environment variable not set" in error_msg:
+                    error_msg = (
+                        "GEMINI_API_KEY environment variable not set. "
+                        "Get your API key from: https://aistudio.google.com/apikey"
+                    )
                 return self._create_error_result(
-                    error_msg=result.stderr,
+                    error_msg=error_msg,
                     latency_ms=self._calculate_latency(start_time)
                 )
 
-            # Parse successful response
+            # Parse successful response (strip CLI status messages)
             response_text = result.stdout.strip()
+
+            # Remove CLI status prefixes (YOLO mode, API key messages, etc.)
+            lines = response_text.split('\n')
+            # Skip lines that start with known CLI prefixes
+            cli_prefixes = ['YOLO mode', 'When using Gemini', 'Update your environment']
+            response_lines = [
+                line for line in lines
+                if not any(line.startswith(prefix) for prefix in cli_prefixes)
+            ]
+            response_text = '\n'.join(response_lines).strip()
+
             tokens_input = self._estimate_tokens(prompt)
             tokens_output = self._estimate_tokens(response_text)
 

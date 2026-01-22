@@ -229,3 +229,46 @@ async def test_cli_command_structure():
             kwargs = call_args[1]
             assert "env" in kwargs
             assert "GEMINI_API_KEY" in kwargs["env"]
+
+
+@pytest.mark.asyncio
+async def test_cli_output_parsing():
+    """Test that CLI status messages are stripped from response."""
+    client = GeminiClient(model="gemini-flash")
+
+    # Mock result with CLI status prefixes
+    mock_result = MagicMock()
+    mock_result.returncode = 0
+    mock_result.stdout = """YOLO mode is enabled.
+When using Gemini API, you must accept the terms.
+This is the actual response from the model.
+It spans multiple lines."""
+    mock_result.stderr = ""
+
+    with patch.object(client, '_run_cli_command', return_value=mock_result):
+        result = await client.execute("Test prompt")
+
+    # Response should not contain CLI status messages
+    assert "YOLO mode" not in result.response
+    assert "When using Gemini" not in result.response
+    assert "This is the actual response from the model." in result.response
+    assert "It spans multiple lines." in result.response
+    assert result.success is True
+
+
+@pytest.mark.asyncio
+async def test_api_key_error_handling():
+    """Test specific error handling for missing API key."""
+    client = GeminiClient(model="gemini-flash")
+
+    mock_result = MagicMock()
+    mock_result.returncode = 1
+    mock_result.stdout = ""
+    mock_result.stderr = "Error: GEMINI_API_KEY environment variable not set"
+
+    with patch.object(client, '_run_cli_command', return_value=mock_result):
+        result = await client.execute("Test prompt")
+
+    assert result.success is False
+    assert "GEMINI_API_KEY environment variable not set" in result.error
+    assert "https://aistudio.google.com/apikey" in result.error
