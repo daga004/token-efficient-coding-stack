@@ -15,7 +15,7 @@ class GeminiClient(ModelClient):
     # Map internal model names to Gemini CLI model identifiers
     MODEL_MAPPING = {
         "gemini-flash": "gemini-3-flash",
-        "gemini-pro": "gemini-2-pro",
+        "gemini-pro": "gemini-2.0-pro",
     }
 
     def __init__(self, model: str = "gemini-flash", timeout: int = 30):
@@ -104,14 +104,15 @@ class GeminiClient(ModelClient):
             CompletedProcess with stdout/stderr
         """
         # Map model name to CLI identifier
-        cli_model = self.MODEL_MAPPING.get(self.model, self.model)
+        cli_model = self.MODEL_MAPPING.get(self.model, "gemini-3-flash")
 
-        # Gemini CLI syntax: gemini -p "prompt"
-        # Note: -m flag for model selection not used as CLI defaults to gemini-3-flash
+        # Gemini CLI syntax: gemini "prompt" --model <model> -y
+        # Positional argument for prompt, not -p flag
         cmd = [
             "gemini",
-            "-p",
-            prompt,
+            prompt,                  # Positional argument (not -p flag)
+            "--model", cli_model,    # Specify model
+            "-y",                    # YOLO mode (auto-approve all actions)
         ]
 
         # Ensure GEMINI_API_KEY is in environment
