@@ -14,8 +14,8 @@ class GeminiClient(ModelClient):
 
     # Map internal model names to Gemini CLI model identifiers
     MODEL_MAPPING = {
-        "gemini-flash": "gemini-3-flash",
-        "gemini-pro": "gemini-2.0-pro",
+        "gemini-flash": "gemini-3-flash-preview",
+        "gemini-pro": "gemini-3-pro-preview",
     }
 
     def __init__(self, model: str = "gemini-flash", timeout: int = 30):
