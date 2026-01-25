@@ -218,11 +218,11 @@ async def test_cli_command_structure():
             call_args = mock_run.call_args
             cmd = call_args[0][0]
 
-            # Command should be: ["gemini", "prompt", "--model", "gemini-3-flash", "-y"]
+            # Command should be: ["gemini", "prompt", "--model", "gemini-3-flash-preview", "-y"]
             assert cmd[0] == "gemini"
             assert cmd[1] == "What is 2+2?"  # Positional prompt
             assert "--model" in cmd
-            assert "gemini-3-flash" in cmd
+            assert "gemini-3-flash-preview" in cmd
             assert "-y" in cmd  # YOLO mode
 
             # Verify environment includes GEMINI_API_KEY
