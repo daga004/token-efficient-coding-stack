@@ -17,7 +17,7 @@ V1 Implementation exists with claimed capabilities:
 - ✓ LazyCodeGraph with on-demand indexing and persistent caching
 - ✓ Orchestrator with complexity scoring (0-10 scale) and model routing
 - ✓ Integration with GSD workflow
-- ✓ Validation testing showing 79.5% cost savings and 100% quality
+- ✓ Validation testing showing 50.7% cost savings (revised from 79.5% in Phase 5, confirmed in Phase 7)
 
 ### Active
 
@@ -36,7 +36,7 @@ V1 Implementation exists with claimed capabilities:
 
 **Validation Metrics Verification**:
 - [ ] Re-run all 25 validation tasks with actual API calls (not theoretical)
-- [ ] Verify 79.5% cost savings claim is reproducible
+- [x] Verify 79.5% cost savings claim is reproducible → Revised to 50.7%, confirmed in Phase 7
 - [ ] Verify 100% quality claim (no functional regressions)
 - [ ] Check measurement methodology for errors or bias
 - [ ] Test with real Gemini Flash (not placeholder/theoretical costs)
@@ -47,9 +47,12 @@ V1 Implementation exists with claimed capabilities:
   - Required: File size heuristics to skip progressive disclosure when counterproductive
   - Decision: Should this have been V1 or legitimately V2?
 
-- [ ] Real Gemini Flash integration: Are cost savings based on actual API execution?
-  - Finding: Validation references "Flash routing" but Gemini CLI not fully integrated
-  - Required: Actual gemini CLI execution with token/cost measurement
+- [x] Real Gemini Flash integration: Are cost savings based on actual API execution?
+  - Phase 7: GeminiClient CLI integration fixed and validated (13 tests pass)
+  - Real execution blocked by API quota exhaustion
+  - Cost savings confirmed at 50.7% using pricing-based Gemini calculation
+  - Confidence: MEDIUM (Claude real ✓, Gemini pricing-based ⚠️)
+  - Recommendation: V1.1 validation with fresh API quota
   - Decision: Were Flash claims verified or theoretical?
 
 - [ ] Missing WISHLIST-COMPLIANCE.md: Is there traceability between promises and delivery?
@@ -106,11 +109,11 @@ User wants verification that implementation aligns with these assumptions. Where
 - Documentation: `README.md`, `VALIDATION-SUMMARY.md`, `.planning/phases/`
 - Tests: `auzoom/tests/`, `orchestrator/tests/`
 
-**Validation Results** (from Phase 3):
+**Validation Results** (from Phase 3, revised in Phases 5 & 7):
 - 25 tasks tested (10 simple, 15 challenging)
-- Claimed: 79.5% cost savings (Claude-only routing)
-- Claimed: 100% quality on simple tasks, 67% on challenging
-- Some tasks showed token increases (not decreases) with AuZoom
+- Cost savings: 50.7% actual (revised from 79.5% claimed, confirmed Phase 7 with pricing-based Gemini)
+- Quality: 100% claim not validated (simple tasks), 67% challenging tasks not fully tested
+- Token overhead: Phase 6.5 validated 71.3% savings with progressive disclosure
 
 **Deferred Work Locations**:
 - `.planning/phases/01-auzoom-implementation/01-02-SUMMARY.md` lines 163-175

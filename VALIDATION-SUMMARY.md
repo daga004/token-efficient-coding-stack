@@ -36,7 +36,7 @@ All 15 executed tasks showing complexity progression and component attribution:
 
 **Simple Tasks Summary** (Complexity 0.5-5.5):
 - **Total tokens**: ~~4,298~~ 2,722 baseline → 5,325 optimized = **-95.6% tokens** (optimized worse) ⚠️
-- **Total cost**: ~~$0.01289~~ $0.008166 baseline → $0.004023 optimized = **50.7% cost saved** (revised from 81%)
+- **Total cost**: ~~$0.01289~~ $0.008166 baseline → $0.004023 optimized = **50.7% cost saved** (revised from 81%, confirmed in Phase 7 with pricing-based Gemini)
 - **Success rate**: 10/10 = **100%** (not validated in audit)
 
 **Challenging Tasks Summary** (Complexity 4.5-7.0):
@@ -109,7 +109,7 @@ All 15 executed tasks showing complexity progression and component attribution:
 
 **Simple Development Tasks** (60-70% of your work):
 - ✅ Typos, constants, simple features
-- ✅ **50.7% cost savings** (revised from 79.5% based on audit)
+- ✅ **50.7% cost savings** (revised from 79.5% in Phase 5, confirmed in Phase 7)
 - ⚠️ 95-100% success rate (not validated in audit)
 - ✅ Use this for routine coding (with small file caveat below)
 
@@ -246,7 +246,7 @@ All 15 executed tasks showing complexity progression and component attribution:
 - **Small file overhead** (4 tasks show negative cost savings)
   - Tasks 3.1, 3.2, 4.1: -101%, -53%, -101% cost increases
 
-**Verdict:** Claim overstated by 28.8 points. **Revised to 50.7%.**
+**Verdict:** Claim overstated by 28.8 points. **Revised to 50.7%.** Confirmed in Phase 7 with pricing-based Gemini (0% variance from Phase 5).
 
 #### 2. Token Savings Claim REFUTED
 
