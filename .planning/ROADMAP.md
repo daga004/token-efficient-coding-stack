@@ -131,16 +131,16 @@ Plans:
 
 **Depends on**: Phase 5
 
-**Research**: Likely (Gemini CLI integration patterns, current API)
+**Research**: Completed (Gemini 3 Flash model name verified as gemini-3-flash-preview)
 
-**Research topics**: Gemini CLI command structure, model names (gemini-2.5-flash vs gemini-flash), authentication flow, token counting in CLI output
+**Research topics**: Gemini CLI command structure, model names (gemini-3-flash-preview confirmed), authentication flow, token counting in CLI output
 
 **Plans**: 3 plans
 
 Plans:
-- [ ] 06-01: Fix GeminiClient CLI command structure (replace non-existent "generate" subcommand)
-- [ ] 06-02: Test actual Gemini execution with token/cost measurement
-- [ ] 06-03: Recalculate validation savings with real Gemini data (update from theoretical)
+- [x] 07-01: Fix GeminiClient CLI command structure (corrected to gemini-3-flash-preview, positional prompt, -y YOLO) - **COMPLETE** (2026-01-25, 20 min)
+- [ ] 07-02: Test actual Gemini execution with token/cost measurement
+- [ ] 07-03: Recalculate validation savings with real Gemini data (update from theoretical)
 
 ### Phase 8: Small File Overhead Assessment (formerly Phase 7)
 **Goal**: Verify if auto-detect file size threshold is critical for V1 or legitimately V2
@@ -232,14 +232,14 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6.5 (inserted) �
 |-------|----------------|--------|-----------|
 | 1. Audit Foundation & Traceability | 3/3 | Complete | 2026-01-12 |
 | 2. AuZoom Core Verification | 4/4 | Complete | 2026-01-12 |
-| 3. AuZoom Structural Compliance | 0/2 | Not started | - |
-| 4. Orchestrator Core Verification | 0/3 | Not started | - |
-| 5. Validation Metrics Re-execution | 0/4 | Not started | - |
+| 3. AuZoom Structural Compliance | 2/2 | Complete | 2026-01-12 |
+| 4. Orchestrator Core Verification | 3/3 | Complete | 2026-01-12 |
+| 5. Validation Metrics Re-execution | 4/4 | Complete | 2026-01-13 |
 | 6.5. Progressive Traversal Validation | 3/3 | Complete | 2026-01-21 |
-| 6. Gemini Flash Real Integration | 0/3 | Not started | - |
-| 7. Small File Overhead Assessment | 0/2 | Not started | - |
-| 8. Non-Python File Handling Audit | 0/2 | Not started | - |
-| 9. Deferred Work Legitimacy Assessment | 0/3 | Not started | - |
-| 10. Integration Testing | 0/3 | Not started | - |
-| 11. Gap Analysis & Reporting | 0/2 | Not started | - |
-| 12. Critical Fixes & V1.1 Roadmap | 0/3 | Not started | - |
+| 7. Gemini Flash Real Integration | 1/3 | In progress | - |
+| 8. Small File Overhead Assessment | 0/2 | Not started | - |
+| 9. Non-Python File Handling Audit | 0/2 | Not started | - |
+| 10. Deferred Work Legitimacy Assessment | 0/3 | Not started | - |
+| 11. Integration Testing | 0/3 | Not started | - |
+| 12. Gap Analysis & Reporting | 0/2 | Not started | - |
+| 13. Critical Fixes & V1.1 Roadmap | 0/3 | Not started | - |
