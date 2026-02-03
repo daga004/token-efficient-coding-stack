@@ -127,10 +127,13 @@ Recent decisions affecting current work:
 - **Real Execution Deferred:** Cost ($2-10) and time (15-30 hours) prohibitive for audit phase
 
 **From Phase 5 (Complete - All 4 Plans):**
-- **Cost Savings Claim PARTIALLY REFUTED:** 50.7% actual vs 79.5% claimed (28.8-point gap)
-  - Root cause: Inflated baseline (37% higher), small file overhead (4 tasks negative)
-  - Verdict: Claim overstated by 28.8 percentage points
-  - Recommendation: Revise claimed 79.5% → 51% based on validated measurements
+- **Cost Savings Claim REVISED & CONFIRMED (Phase 7):** 50.7% actual vs 79.5% originally claimed (28.8-point gap)
+  - Phase 5: 50.7% with theoretical Gemini estimates
+  - Phase 7: 50.7% with pricing-based Gemini (published rates: $0.50/$3.00 per 1M)
+  - Variance: 0% - Phase 5 estimates confirmed reasonable
+  - Root cause of gap: Inflated baseline (37% higher), small file overhead (4 tasks negative)
+  - Verdict: Original 79.5% claim overstated, 50.7% validated with pricing-based Gemini
+  - Confidence: MEDIUM (Claude real execution ✓, Gemini pricing-based ⚠️)
 - **Token Savings Claim REFUTED:** -95.6% actual vs 23% claimed (118.6-point gap)
   - Root cause: Small file overhead unresolved (4 tasks: -474% to -655% increases)
   - Verdict: Optimized approach uses MORE tokens than baseline
@@ -236,6 +239,21 @@ All 3 plans finished:
   - V1 can proceed with documented limitation
 - **Recommendations:** V1.1 validation with fresh quota, cost savings caveat in final report
 
+**From Phase 7-03 (Recalculate Validation Metrics - 2026-02-03):**
+- **Cost Savings CONFIRMED:** 50.7% with pricing-based Gemini calculation
+  - Phase 5: 50.7% (theoretical Gemini estimates)
+  - Phase 7: 50.7% (pricing-based with published rates)
+  - Variance: 0% - Phase 5 estimates validated as reasonable
+- **Gemini Pricing Applied:** $0.50/$3.00 per 1M tokens (Gemini 3 Flash published)
+  - Phase 5 theoretical estimates within same order of magnitude
+  - No significant deviation found in recalculation
+- **Confidence Level:** MEDIUM
+  - Claude portion: HIGH (real execution from Phase 5)
+  - Gemini portion: MEDIUM (pricing-based, not real API)
+  - 70% of cost is Claude (validated), 30% is Gemini (pricing-based)
+- **Documentation Updated:** STATE.md reflects Phase 7 validation status
+- **V1 Verdict:** Can proceed with 50.7% cost claim and documented Gemini limitation
+
 ### Deferred Issues
 
 None yet.
@@ -255,15 +273,23 @@ None yet.
   - Previous negative findings based on incorrect baseline measurements
   - Win rate: 100% (all tasks show positive savings)
   - Real measurements confirm progressive disclosure is highly effective
-- **CRITICAL:** Cost savings claim ≥70% MISSED (50.7% actual, 28.8-point gap from claimed 79.5%)
-  - Phase 5-03 verdict: PARTIALLY REFUTED (claim overstated by 28.8 points)
-  - Claimed baselines inflated by 37% (hypothetical vs actual file sizes)
-  - Recommendation: Revise claim to 51% or implement small file bypass
+- **CRITICAL:** Cost savings claim ≥70% MISSED (50.7% actual Phase 7, 28.8-point gap from claimed 79.5%)
+  - Phase 5: 50.7% with theoretical Gemini estimates
+  - Phase 7: 50.7% CONFIRMED with pricing-based Gemini (0% variance)
+  - Verdict: Original 79.5% claim overstated, 50.7% validated
+  - Root cause: Claimed baselines inflated by 37% (hypothetical vs actual)
+  - Confidence: MEDIUM (Claude real ✓, Gemini pricing-based ⚠️)
+  - Recommendation: Document as 50.7% with pricing-based Gemini caveat
 - **NEW CRITICAL:** ASG visualization missing - core requirement for user insight into dependency graph (defer to V1.1)
 - **NEW CRITICAL:** Methodology incomplete - file measurements not real Claude Code execution
   - Should use Task tool to spawn agents and measure actual token consumption
   - Current: estimates for progressive disclosure, not real MCP responses
-- Gemini Flash integration theoretical (not actual API execution) - Phase 6
+- Gemini Flash integration pricing-based (not real API execution) - Phase 7
+  - GeminiClient code validated (13 tests pass)
+  - Real execution blocked by API quota exhaustion
+  - Costs use published pricing ($0.50/$3.00 per 1M tokens)
+  - Confidence: MEDIUM (reasonable but unverified)
+  - Recommendation: V1.1 validation with fresh quota
 - Non-Python files use metadata summaries (V2 semantic summaries deferred) - Phase 8
 - Parser anomaly in tools.py (zero tokens extracted) - requires investigation
 
