@@ -74,19 +74,128 @@ class FileSummarizer:
 
     def _summarize_text_file(self, file_path: Path, lines: list) -> str:
         """Summarize text/markdown files."""
-        headers = [line.strip() for line in lines[:20] if line.strip().startswith('#')]
-        header_summary = ", ".join(headers[:3]) if headers else "No headers"
-        return f"Document: {file_path.name}\nType: {file_path.suffix}\nLines: {len(lines)}\nHeaders: {header_summary}"
+        # Extract ALL headers (not just first 3 from first 20 lines)
+        headers = []
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith('#'):
+                # Preserve indentation level (# vs ## vs ###)
+                headers.append(stripped)
+
+        if headers:
+            header_summary = "\n".join(headers)
+        else:
+            header_summary = "No headers"
+
+        return f"""Document: {file_path.name}
+Type: {file_path.suffix}
+Lines: {len(lines)}
+Headers:
+{header_summary}"""
 
     def _summarize_config_file(self, file_path: Path, lines: list, content: str) -> str:
         """Summarize configuration files."""
-        return f"Configuration: {file_path.name}\nType: {file_path.suffix}\nLines: {len(lines)}\nSize: {len(content)} bytes"
+        basic_info = f"Configuration: {file_path.name}\nType: {file_path.suffix}\nLines: {len(lines)}\nSize: {len(content)} bytes"
+
+        # Try to parse and extract structure
+        structure = self._extract_config_structure(file_path, content)
+        if structure:
+            basic_info += f"\n\nStructure:\n{structure}"
+
+        return basic_info
+
+    def _extract_config_structure(self, file_path: Path, content: str) -> str:
+        """Extract structural info from config files."""
+        import re
+
+        try:
+            if file_path.suffix == '.json':
+                data = json.loads(content)
+                if isinstance(data, dict):
+                    keys = list(data.keys())[:10]  # Limit to first 10 keys
+                    return "Top-level keys: " + ", ".join(keys)
+
+            elif file_path.suffix in ['.yaml', '.yml']:
+                # Basic regex extraction (no pyyaml dependency needed)
+                keys = re.findall(r'^(\w+):', content, re.MULTILINE)[:10]
+                if keys:
+                    return "Top-level keys: " + ", ".join(keys)
+
+            elif file_path.suffix == '.toml':
+                # Extract section headers
+                sections = re.findall(r'^\[([^\]]+)\]', content, re.MULTILINE)
+                if sections:
+                    return "Sections: " + ", ".join(sections)
+
+        except Exception:
+            pass  # Fallback to basic info if parsing fails
+
+        return ""
 
     def _summarize_code_file(self, file_path: Path, lines: list) -> str:
         """Summarize non-Python code files."""
-        lang_map = {'.js': 'JavaScript', '.ts': 'TypeScript', '.go': 'Go', '.rs': 'Rust', '.java': 'Java'}
+        lang_map = {
+            '.js': 'JavaScript',
+            '.jsx': 'JavaScript',
+            '.ts': 'TypeScript',
+            '.tsx': 'TypeScript',
+            '.go': 'Go',
+            '.rs': 'Rust',
+            '.java': 'Java'
+        }
         lang = lang_map.get(file_path.suffix, file_path.suffix)
-        return f"Code file: {file_path.name}\nLanguage: {lang}\nLines: {len(lines)}\nNote: V2 will provide parsed structure"
+
+        basic_info = f"Code file: {file_path.name}\nLanguage: {lang}\nLines: {len(lines)}"
+
+        # Extract imports/exports
+        structure = self._extract_code_structure(file_path, lines, lang)
+        if structure:
+            basic_info += f"\n\n{structure}"
+
+        return basic_info
+
+    def _extract_code_structure(self, file_path: Path, lines: list, lang: str) -> str:
+        """Extract imports/exports from code files."""
+        import re
+        content = "\n".join(lines)
+
+        imports = []
+        exports = []
+
+        if lang in ['JavaScript', 'TypeScript']:
+            # ES6 imports: import X from 'Y'
+            imports = re.findall(r'import\s+.*?\s+from\s+[\'"]([^\'"]+)[\'"]', content)
+            # ES6 exports: export function/class/const
+            exports = re.findall(r'export\s+(?:function|class|const|interface|type|enum)\s+(\w+)', content)
+            # Also: export default
+            if re.search(r'export\s+default', content):
+                exports.append('default')
+
+        elif lang == 'Go':
+            # Go imports: import "package"
+            imports = re.findall(r'import\s+[\'"]([^\'"]+)[\'"]', content)
+            # Go exports: func NameStartsWithCapital
+            exports = re.findall(r'func\s+([A-Z]\w+)', content)
+
+        elif lang == 'Rust':
+            # Rust imports: use crate::module
+            imports = re.findall(r'use\s+([^;]+);', content)
+            # Rust public items: pub fn/struct/enum
+            exports = re.findall(r'pub\s+(?:fn|struct|enum|trait)\s+(\w+)', content)
+
+        elif lang == 'Java':
+            # Java imports: import package.Class
+            imports = re.findall(r'import\s+([^;]+);', content)
+            # Java public classes/interfaces
+            exports = re.findall(r'public\s+(?:class|interface|enum)\s+(\w+)', content)
+
+        result = []
+        if imports:
+            result.append(f"Imports: {', '.join(imports[:10])}")  # Limit to 10
+        if exports:
+            result.append(f"Exports: {', '.join(exports[:10])}")
+
+        return "\n".join(result) if result else ""
 
     def _summarize_generic_file(self, file_path: Path, lines: list, content: str) -> str:
         """Summarize generic files."""
