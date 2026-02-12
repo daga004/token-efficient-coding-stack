@@ -157,18 +157,24 @@ Plans:
 - [x] 09-01: Analyze tasks 2.1, 3.1, 4.1 where token increases occurred → **SUPERSEDED** (Phase 6.5-02 identified baseline error)
 - [x] 09-02: Determine if file size heuristics are Critical or Enhancement → **SUPERSEDED** (Threshold bypass sufficient, validated)
 
-### Phase 9: Non-Python File Handling Audit (formerly Phase 8)
+### Phase 9: Non-Python File Handling Audit (formerly Phase 8) ✅ Complete (2026-02-11)
 **Goal**: Verify metadata approach for non-Python files meets "progressive discovery of context" claim
 
 **Depends on**: Phase 2
 
 **Research**: Unlikely (testing existing FileSummarizer implementation)
 
-**Plans**: 2 plans
+**Plans**: 2 plans (all complete)
+
+**Verdict**: ADEQUATE FOR V1 after Priority 1-4 enhancements
+- Token reduction: 91.7% average (excellent)
+- Usefulness: 4.0/5 (structural metadata)
+- Comparison: Outperforms Python summary (71.3%)
+- Claim validated: "Progressive discovery" VERIFIED
 
 Plans:
-- [ ] 09-01: Test metadata summaries on real non-Python files (markdown, JSON, config)
-- [ ] 09-02: Assess if metadata provides sufficient context reduction vs full reads
+- [x] 09-01: Test metadata summaries and implement Priority 1-4 enhancements (2 hours - db92b2b)
+- [x] 09-02: Assess context reduction and determine V1 adequacy (1 hour - a729eef)
 
 ### Phase 10: Deferred Work Legitimacy Assessment (formerly Phase 9)
 **Goal**: Evaluate all deferred V2 items to determine proper deferral vs missing critical functionality
@@ -240,7 +246,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6.5 (inserted) �
 | 6.5. Progressive Traversal Validation | 3/3 | Complete | 2026-01-21 |
 | 7. Gemini Flash Real Integration | 3/3 | Complete | 2026-02-03 |
 | 8. Small File Overhead Assessment | 0/2 (superseded) | Complete (superseded) | 2026-02-03 |
-| 9. Non-Python File Handling Audit | 0/2 | Not started | - |
+| 9. Non-Python File Handling Audit | 2/2 | Complete | 2026-02-11 |
 | 10. Deferred Work Legitimacy Assessment | 0/3 | Not started | - |
 | 11. Integration Testing | 0/3 | Not started | - |
 | 12. Gap Analysis & Reporting | 0/2 | Not started | - |
