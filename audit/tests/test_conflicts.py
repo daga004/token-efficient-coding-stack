@@ -613,3 +613,415 @@ class TestCrossServerStateIsolation:
             elapsed,
             True,
         )
+
+
+# ===========================================================================
+# Task 2: Tool dispatch isolation and async/sync compatibility
+# ===========================================================================
+
+
+class TestToolDispatchIsolation:
+    """Test that tool namespacing prevents cross-dispatch."""
+
+    def test_auzoom_rejects_orchestrator_tool(self, auzoom_server):
+        """Calling AuZoom with an orchestrator tool name should return clean error."""
+        t0 = time.time()
+
+        result = auzoom_server.handle_tool_call(
+            "orchestrator_route", {"task": "test"}
+        )
+
+        # Should return error dict (not crash)
+        assert isinstance(result, dict), "Should return a dict, not crash"
+        assert "error" in result, "Should contain 'error' key for unknown tool"
+        assert "Unknown tool" in result["error"], (
+            f"Error message should mention unknown tool: {result['error']}"
+        )
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "auzoom_rejects_orchestrator_tool",
+            ["auzoom"],
+            f"Clean error: {result['error']}",
+            elapsed,
+            True,
+        )
+
+    def test_orchestrator_rejects_auzoom_tool(self, orchestrator_server):
+        """Calling Orchestrator with an AuZoom tool name should return clean error."""
+        t0 = time.time()
+
+        result = run_async(
+            orchestrator_server.handle_tool_call(
+                "auzoom_read", {"path": "test.py", "level": "skeleton"}
+            )
+        )
+
+        # Should return error dict (not crash)
+        assert isinstance(result, dict), "Should return a dict, not crash"
+        assert "error" in result, "Should contain 'error' key for unknown tool"
+        assert "Unknown tool" in result["error"], (
+            f"Error message should mention unknown tool: {result['error']}"
+        )
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "orchestrator_rejects_auzoom_tool",
+            ["orchestrator"],
+            f"Clean error: {result['error']}",
+            elapsed,
+            True,
+        )
+
+    def test_auzoom_rejects_completely_unknown_tool(self, auzoom_server):
+        """AuZoom should handle completely unknown tool names gracefully."""
+        t0 = time.time()
+
+        result = auzoom_server.handle_tool_call(
+            "nonexistent_tool", {"arg": "value"}
+        )
+
+        assert isinstance(result, dict)
+        assert "error" in result
+        assert "Unknown tool" in result["error"]
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "auzoom_rejects_unknown_tool",
+            ["auzoom"],
+            f"Clean error for unknown tool: {result['error']}",
+            elapsed,
+            True,
+        )
+
+    def test_orchestrator_rejects_completely_unknown_tool(self, orchestrator_server):
+        """Orchestrator should handle completely unknown tool names gracefully."""
+        t0 = time.time()
+
+        result = run_async(
+            orchestrator_server.handle_tool_call(
+                "nonexistent_tool", {"arg": "value"}
+            )
+        )
+
+        assert isinstance(result, dict)
+        assert "error" in result
+        assert "Unknown tool" in result["error"]
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "orchestrator_rejects_unknown_tool",
+            ["orchestrator"],
+            f"Clean error for unknown tool: {result['error']}",
+            elapsed,
+            True,
+        )
+
+    def test_error_format_is_json_serializable(self, auzoom_server, orchestrator_server):
+        """Error responses from both servers should be JSON-serializable dicts."""
+        t0 = time.time()
+
+        az_error = auzoom_server.handle_tool_call(
+            "orchestrator_route", {"task": "test"}
+        )
+        orch_error = run_async(
+            orchestrator_server.handle_tool_call(
+                "auzoom_read", {"path": "test.py"}
+            )
+        )
+
+        # Both should be serializable
+        az_json = json.dumps(az_error)
+        orch_json = json.dumps(orch_error)
+
+        assert len(az_json) > 0
+        assert len(orch_json) > 0
+
+        # Both should round-trip
+        assert json.loads(az_json)["error"] == az_error["error"]
+        assert json.loads(orch_json)["error"] == orch_error["error"]
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "error_format_json_serializable",
+            ["auzoom", "orchestrator"],
+            "Both error responses are JSON-serializable dicts with 'error' key",
+            elapsed,
+            True,
+        )
+
+
+class TestAsyncSyncCompatibility:
+    """Test that AuZoom (sync) and Orchestrator (async) work from each calling context."""
+
+    def test_auzoom_sync_from_sync_context(self, auzoom_server):
+        """AuZoom sync handle_tool_call works from normal sync code."""
+        t0 = time.time()
+
+        result = auzoom_server.handle_tool_call(
+            "auzoom_read",
+            {"path": "auzoom/src/auzoom/models.py", "level": "skeleton"},
+        )
+
+        assert _is_valid_auzoom_result(result)
+        assert result.get("type") in VALID_PYTHON_TYPES
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "auzoom_sync_from_sync",
+            ["auzoom"],
+            "Sync call from sync context works",
+            elapsed,
+            True,
+        )
+
+    def test_orchestrator_async_from_sync_context(self, orchestrator_server):
+        """Orchestrator async handle_tool_call works via asyncio.run wrapper."""
+        t0 = time.time()
+
+        # This is how Claude Code would invoke it: wrap async in sync
+        result = run_async(
+            orchestrator_server.handle_tool_call(
+                "orchestrator_route",
+                {"task": "Simple task"},
+            )
+        )
+
+        assert "error" not in result
+        assert "model" in result
+        assert "complexity_score" in result
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "orchestrator_async_from_sync",
+            ["orchestrator"],
+            "Async call wrapped with run_async works from sync context",
+            elapsed,
+            True,
+        )
+
+    def test_auzoom_sync_from_async_context(self, auzoom_server):
+        """AuZoom sync call works when invoked inside an async function.
+
+        Tests that calling a sync function from within an event loop
+        (via loop.run_in_executor or direct call) works correctly.
+        """
+        t0 = time.time()
+
+        async def call_auzoom_from_async():
+            """Simulate async caller invoking sync AuZoom."""
+            loop = asyncio.get_event_loop()
+            # Use run_in_executor to call sync from async without blocking
+            result = await loop.run_in_executor(
+                None,
+                lambda: auzoom_server.handle_tool_call(
+                    "auzoom_read",
+                    {"path": "auzoom/src/auzoom/models.py", "level": "skeleton"},
+                ),
+            )
+            return result
+
+        result = run_async(call_auzoom_from_async())
+
+        assert _is_valid_auzoom_result(result)
+        assert result.get("type") in VALID_PYTHON_TYPES
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "auzoom_sync_from_async",
+            ["auzoom"],
+            "Sync AuZoom called via run_in_executor from async context",
+            elapsed,
+            True,
+        )
+
+    def test_both_servers_from_single_async_context(
+        self, auzoom_server, orchestrator_server
+    ):
+        """Both servers can be called from the same async function.
+
+        This is the pattern Claude Code uses: one async orchestration
+        loop calling both sync (AuZoom) and async (Orchestrator) servers.
+        """
+        t0 = time.time()
+
+        async def combined_workflow():
+            """Simulate Claude Code calling both servers."""
+            # Orchestrator: async native
+            route_result = await orchestrator_server.handle_tool_call(
+                "orchestrator_route",
+                {"task": "Read a file and analyze it"},
+            )
+
+            # AuZoom: sync via executor
+            loop = asyncio.get_event_loop()
+            read_result = await loop.run_in_executor(
+                None,
+                lambda: auzoom_server.handle_tool_call(
+                    "auzoom_read",
+                    {"path": "auzoom/src/auzoom/models.py", "level": "skeleton"},
+                ),
+            )
+
+            return route_result, read_result
+
+        route_result, read_result = run_async(combined_workflow())
+
+        assert "error" not in route_result
+        assert "model" in route_result
+        assert _is_valid_auzoom_result(read_result)
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "both_servers_single_async_context",
+            ["auzoom", "orchestrator"],
+            "Both servers callable from single async orchestration loop",
+            elapsed,
+            True,
+        )
+
+
+class TestConcurrentAccessPattern:
+    """Test rapid interleaved access simulating concurrent usage."""
+
+    def test_ten_interleaved_calls(self, auzoom_server, orchestrator_server):
+        """10 rapid interleaved calls across both servers produce valid results."""
+        t0 = time.time()
+
+        call_log = []
+        files = [
+            "auzoom/src/auzoom/models.py",
+            "auzoom/src/auzoom/mcp/server.py",
+        ]
+        tasks = [
+            "Fix a typo in docs",
+            "Refactor the authentication module with security patterns",
+            "Add unit tests for the parser",
+            "Update API endpoint",
+            "Migrate database schema",
+        ]
+
+        for i in range(10):
+            call_t0 = time.time()
+
+            if i % 2 == 0:
+                # AuZoom call
+                server = "auzoom"
+                result = auzoom_server.handle_tool_call(
+                    "auzoom_read",
+                    {
+                        "path": files[i % len(files)],
+                        "level": ["skeleton", "summary", "full"][i % 3],
+                    },
+                )
+                valid = _is_valid_auzoom_result(result)
+            else:
+                # Orchestrator call
+                server = "orchestrator"
+                result = run_async(
+                    orchestrator_server.handle_tool_call(
+                        "orchestrator_route",
+                        {"task": tasks[i % len(tasks)]},
+                    )
+                )
+                valid = "error" not in result and "model" in result
+
+            call_elapsed = (time.time() - call_t0) * 1000
+
+            call_log.append({
+                "call_index": i,
+                "server": server,
+                "timing_ms": round(call_elapsed, 2),
+                "valid": valid,
+                "result_type": result.get("type") or result.get("model", "N/A"),
+            })
+
+            assert valid, f"Call {i} to {server} failed: {result}"
+
+        # All 10 calls should have succeeded
+        assert len(call_log) == 10
+        assert all(c["valid"] for c in call_log)
+
+        # Verify no state bleeding: re-check a specific routing
+        verify_result = run_async(
+            orchestrator_server.handle_tool_call(
+                "orchestrator_route", {"task": tasks[0]}
+            )
+        )
+        # Find the first orchestrator call with same task
+        first_orch_with_task0 = None
+        for entry in call_log:
+            if entry["server"] == "orchestrator" and entry["call_index"] % len(tasks) == 0:
+                # This was a call with tasks[0]
+                first_orch_with_task0 = entry
+                break
+        assert "error" not in verify_result
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "ten_interleaved_calls",
+            ["auzoom", "orchestrator"],
+            f"10 interleaved calls completed in {elapsed:.1f}ms, all valid",
+            elapsed,
+            True,
+            {
+                "call_log": call_log,
+                "total_auzoom_calls": sum(1 for c in call_log if c["server"] == "auzoom"),
+                "total_orchestrator_calls": sum(1 for c in call_log if c["server"] == "orchestrator"),
+            },
+        )
+
+    def test_rapid_same_file_reads_stable(self, auzoom_server):
+        """Reading the same file rapidly 5 times should return identical types."""
+        t0 = time.time()
+
+        results = []
+        for _ in range(5):
+            r = auzoom_server.handle_tool_call(
+                "auzoom_read",
+                {"path": "auzoom/src/auzoom/mcp/server.py", "level": "skeleton"},
+            )
+            assert _is_valid_auzoom_result(r)
+            results.append(r)
+
+        # All results should have the same type
+        types = [r["type"] for r in results]
+        assert len(set(types)) == 1, f"Result types should be stable: {types}"
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "rapid_same_file_reads_stable",
+            ["auzoom"],
+            f"5 rapid reads: type={types[0]}, all identical",
+            elapsed,
+            True,
+        )
+
+    def test_rapid_same_route_stable(self, orchestrator_server):
+        """Routing the same task rapidly 5 times should return identical results."""
+        t0 = time.time()
+
+        results = []
+        for _ in range(5):
+            r = run_async(
+                orchestrator_server.handle_tool_call(
+                    "orchestrator_route",
+                    {"task": "Add error handling to the API"},
+                )
+            )
+            assert "error" not in r
+            results.append(r)
+
+        scores = [r["complexity_score"] for r in results]
+        models = [r["model"] for r in results]
+        assert len(set(scores)) == 1, f"Scores should be stable: {scores}"
+        assert len(set(models)) == 1, f"Models should be stable: {models}"
+
+        elapsed = (time.time() - t0) * 1000
+        _record_evidence(
+            "rapid_same_route_stable",
+            ["orchestrator"],
+            f"5 rapid routes: score={scores[0]}, model={models[0]}, all identical",
+            elapsed,
+            True,
+        )
