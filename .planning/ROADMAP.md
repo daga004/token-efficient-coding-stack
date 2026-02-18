@@ -208,7 +208,7 @@ Plans:
 
 Plans:
 - [x] 11-01: Test full workflow (GSD plan → AuZoom file read → Orchestrator route → execution) (8 min - 02a73fd, 34870a0)
-- [ ] 11-02: Test for conflicts (caching, model selection, file access coordination)
+- [x] 11-02: Test for conflicts (caching, model selection, tool isolation, async/sync) (7 min - 071355d, 5c9c89a)
 - [ ] 11-03: Verify MCP protocol compliance (v2024-11-05) and error handling
 
 ### Phase 12: Gap Analysis & Reporting (formerly Phase 11)
@@ -255,6 +255,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6.5 (inserted) �
 | 8. Small File Overhead Assessment | 0/2 (superseded) | Complete (superseded) | 2026-02-03 |
 | 9. Non-Python File Handling Audit | 2/2 | Complete | 2026-02-11 |
 | 10. Deferred Work Legitimacy Assessment | 3/3 | Complete | 2026-02-12 |
-| 11. Integration Testing | 1/3 | In progress | - |
+| 11. Integration Testing | 2/3 | In progress | - |
 | 12. Gap Analysis & Reporting | 0/2 | Not started | - |
 | 13. Critical Fixes & V1.1 Roadmap | 0/3 | Not started | - |
