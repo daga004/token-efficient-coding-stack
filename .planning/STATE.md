@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-12)
 ## Current Position
 
 Phase: 11 of 13 (Integration Testing)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-18 — Completed 11-01-PLAN.md (24 e2e workflow tests, all pass)
+Last activity: 2026-02-18 — Completed 11-02-PLAN.md (21 conflict tests, all pass)
 
-Progress: █████████████████ 73% (27/37 plans complete, 2 superseded)
+Progress: █████████████████░ 76% (28/37 plans complete, 2 superseded)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 27
-- Average duration: 22.52 min
-- Total execution time: 10.1 hours
+- Total plans completed: 28
+- Average duration: 21.96 min
+- Total execution time: 10.2 hours
 
 **By Phase:**
 
@@ -36,12 +36,12 @@ Progress: █████████████████ 73% (27/37 plans c
 | Phase 7 | 3 | 50 min | 16.67 min |
 | Phase 9 | 2 | 180 min | 90.0 min |
 | Phase 10 | 3 | 40 min | 13.3 min |
-| Phase 11 | 1/3 | 8 min | 8.0 min |
+| Phase 11 | 2/3 | 15 min | 7.5 min |
 
 **Recent Trend:**
-- Last plan: 8 min (11-01) - E2E workflow integration tests (24 tests, all pass)
-- Phase 11 IN PROGRESS: 1/3 plans complete
-- Notable: AuZoom parser fallback in integration context (module resolution limitation)
+- Last plan: 7 min (11-02) - Conflict tests (21 tests, all pass)
+- Phase 11 IN PROGRESS: 2/3 plans complete
+- Notable: No cross-server interference, cache coherency verified, routing deterministic
 
 ## Accumulated Context
 
@@ -373,10 +373,18 @@ None yet.
   - Integration tests adapted to accept both parsed and fallback modes
   - Pre-existing condition (not new regression)
 - **Evidence:** 8 records in audit/evidence/11-01-e2e-workflow.jsonl
+- **Conflict Testing (11-02):** 21/21 tests pass across 7 test classes
+- **Cache Coherency:** File modifications detected, cache invalidated correctly (Python + non-Python)
+- **Routing Determinism:** Same input → identical scores across 5 consecutive calls
+- **Cross-Server State Isolation:** Interleaved calls produce no interference
+- **Tool Dispatch Isolation:** Cross-server tool calls return clean JSON errors
+- **Async/Sync Compatibility:** Both servers callable from sync and async contexts
+- **Concurrent Access:** 10 rapid interleaved calls all valid, no corruption
+- **Evidence:** 21 records in audit/evidence/11-02-conflicts.jsonl
 
 ## Session Continuity
 
-Last session: 2026-02-18T08:29:42Z
-Stopped at: Completed 11-01-PLAN.md (e2e workflow integration tests)
+Last session: 2026-02-18T08:49:55Z
+Stopped at: Completed 11-02-PLAN.md (conflict testing)
 Resume file: None
-Next action: Execute 11-02-PLAN.md (conflict testing)
+Next action: Execute 11-03-PLAN.md (MCP protocol compliance)
