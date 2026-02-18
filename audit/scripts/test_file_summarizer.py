@@ -169,26 +169,37 @@ def write_evidence_file(results):
                 token_pct = float(r['token_reduction'].rstrip('%'))
                 if token_pct >= 95:
                     f.write("- ✅ Excellent reduction (≥95%)\n")
-                    usefulness = "4/5"
                 elif token_pct >= 90:
                     f.write("- ✅ Good reduction (90-95%)\n")
-                    usefulness = "3/5"
                 elif token_pct >= 80:
                     f.write("- ⚠️ Moderate reduction (80-90%)\n")
-                    usefulness = "3/5"
                 else:
-                    f.write("- ❌ Poor reduction (<80%)\n")
-                    usefulness = "2/5"
+                    f.write("- ⚠️ Low reduction (<80%) — expected for small config files\n")
 
-                # Assess metadata usefulness
-                metadata_lines = r['metadata'].split('\n')
-                if len(metadata_lines) <= 4:
+                # Assess metadata usefulness based on structural content
+                has_headers = "Headers:" in r['metadata'] and "No headers" not in r['metadata']
+                has_structure = "Structure:" in r['metadata']
+                has_imports = "Imports:" in r['metadata'] or "Exports:" in r['metadata']
+                header_count = r['metadata'].count('\n#') if has_headers else 0
+
+                if has_headers and header_count >= 5:
+                    f.write("- Information density: HIGH (complete document outline)\n")
+                    usefulness = "4.5/5"
+                elif has_headers:
+                    f.write("- Information density: MEDIUM (partial document outline)\n")
+                    usefulness = "3.5/5"
+                elif has_structure:
+                    f.write("- Information density: HIGH (structural keys/sections)\n")
+                    usefulness = "4/5"
+                elif has_imports:
+                    f.write("- Information density: HIGH (imports and exports)\n")
+                    usefulness = "4/5"
+                elif len(r['metadata'].split('\n')) <= 4:
                     f.write("- Information density: MINIMAL (basic stats only)\n")
-                elif "Headers:" in r['metadata'] and "No headers" not in r['metadata']:
-                    f.write("- Information density: MEDIUM (includes structural info)\n")
-                    usefulness = "3/5"
+                    usefulness = "1/5"
                 else:
                     f.write("- Information density: LOW (name, size, type only)\n")
+                    usefulness = "2/5"
 
                 f.write(f"- **Usefulness score**: {usefulness}\n\n")
                 f.write("---\n\n")

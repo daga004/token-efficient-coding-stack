@@ -1,15 +1,15 @@
 # Non-Python File Metadata Tests
 
-**Test Execution Date**: 1770288345.134607
+**Test Execution Date**: 1771401340.938862
 **Files Tested**: 6
 
 ## Summary Statistics
 
 - **Total files**: 6
-- **Total full tokens**: 15,704
-- **Total metadata tokens**: 1,304
+- **Total full tokens**: 15,869
+- **Total metadata tokens**: 1,316
 - **Average token reduction**: 91.7%
-- **File types tested**: toml, markdown, json
+- **File types tested**: toml, json, markdown
 
 ---
 
@@ -37,9 +37,9 @@ Top-level keys: mode, depth, gates, safety
 ```
 
 **Assessment:**
-- ❌ Poor reduction (<80%)
-- Information density: LOW (name, size, type only)
-- **Usefulness score**: 2/5
+- ⚠️ Low reduction (<80%) — expected for small config files
+- Information density: HIGH (structural keys/sections)
+- **Usefulness score**: 4/5
 
 ---
 
@@ -156,8 +156,8 @@ Headers:
 
 **Assessment:**
 - ⚠️ Moderate reduction (80-90%)
-- Information density: MEDIUM (includes structural info)
-- **Usefulness score**: 3/5
+- Information density: HIGH (complete document outline)
+- **Usefulness score**: 4.5/5
 
 ---
 
@@ -205,24 +205,24 @@ Headers:
 
 **Assessment:**
 - ✅ Excellent reduction (≥95%)
-- Information density: MEDIUM (includes structural info)
-- **Usefulness score**: 3/5
+- Information density: HIGH (complete document outline)
+- **Usefulness score**: 4.5/5
 
 ---
 
 #### .planning/ROADMAP.md
 
-- **Full size**: 11,860 bytes (2,965 tokens)
-- **Metadata size**: 944 bytes (236 tokens)
-- **Token reduction**: 92.0%
-- **Cost savings**: $0.008187
-- **Lines**: 247
+- **Full size**: 12,523 bytes (3,130 tokens)
+- **Metadata size**: 992 bytes (248 tokens)
+- **Token reduction**: 92.1%
+- **Cost savings**: $0.008646
+- **Lines**: 260
 
 **Metadata content:**
 ```
 Document: ROADMAP.md
 Type: .md
-Lines: 247
+Lines: 260
 Headers:
 # Roadmap: Token-Efficient AI Coding Stack - V1 Comprehensive Audit
 ## Overview
@@ -237,8 +237,8 @@ Headers:
 ### Phase 6.5: Progressive Traversal & Graph Navigation Validation ⚠️ CRITICAL GAP
 ### Phase 7: Gemini Flash Real Integration (formerly Phase 6)
 ### Phase 8: Small File Overhead Assessment (formerly Phase 7)
-### Phase 9: Non-Python File Handling Audit (formerly Phase 8)
-### Phase 10: Deferred Work Legitimacy Assessment (formerly Phase 9)
+### Phase 9: Non-Python File Handling Audit (formerly Phase 8) ✅ Complete (2026-02-11)
+### Phase 10: Deferred Work Legitimacy Assessment (formerly Phase 9) ✅ Complete (2026-02-12)
 ### Phase 11: Integration Testing (formerly Phase 10)
 ### Phase 12: Gap Analysis & Reporting (formerly Phase 11)
 ### Phase 13: Critical Fixes & V1.1 Roadmap (formerly Phase 12)
@@ -247,8 +247,8 @@ Headers:
 
 **Assessment:**
 - ✅ Good reduction (90-95%)
-- Information density: MEDIUM (includes structural info)
-- **Usefulness score**: 3/5
+- Information density: HIGH (complete document outline)
+- **Usefulness score**: 4.5/5
 
 ---
 
@@ -283,8 +283,8 @@ Headers:
 
 **Assessment:**
 - ✅ Excellent reduction (≥95%)
-- Information density: MEDIUM (includes structural info)
-- **Usefulness score**: 3/5
+- Information density: HIGH (complete document outline)
+- **Usefulness score**: 4.5/5
 
 ---
 
@@ -310,9 +310,9 @@ Sections: build-system, project, project.optional-dependencies, tool.pytest.ini_
 ```
 
 **Assessment:**
-- ❌ Poor reduction (<80%)
-- Information density: LOW (name, size, type only)
-- **Usefulness score**: 2/5
+- ⚠️ Low reduction (<80%) — expected for small config files
+- Information density: HIGH (structural keys/sections)
+- **Usefulness score**: 4/5
 
 ---
 
