@@ -21,8 +21,8 @@ The Token-Efficient AI Coding Stack V1 audit executed **29 plans across 10 phase
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| Resolved | 10 | 33.3% |
-| Documented | 13 | 43.3% |
+| Resolved | 8 | 26.7% |
+| Documented | 15 | 50.0% |
 | Superseded | 4 | 13.3% |
 | Open | 3 | 10.0% |
 
@@ -30,12 +30,12 @@ The Token-Efficient AI Coding Stack V1 audit executed **29 plans across 10 phase
 
 | Component | Count | Open | Resolved | Documented | Superseded |
 |-----------|-------|------|----------|------------|------------|
-| AuZoom | 11 | 0 | 4 | 4 | 3 |
-| Orchestrator | 2 | 1 | 0 | 1 | 0 |
-| Integration | 4 | 2 | 1 | 1 | 0 |
-| Methodology | 10 | 0 | 3 | 6 | 1 |
+| AuZoom | 12 | 0 | 3 | 6 | 3 |
+| Orchestrator | 3 | 1 | 0 | 2 | 0 |
+| Integration | 5 | 2 | 1 | 2 | 0 |
+| Methodology | 9 | 0 | 3 | 5 | 1 |
 | Documentation | 1 | 0 | 1 | 0 | 0 |
-| **Totals** | **30** | **3** | **10** | **13** | **4** |
+| **Totals** | **30** | **3** | **8** | **15** | **4** |
 
 **By Severity (for Open gaps):**
 
@@ -90,11 +90,11 @@ Three open gaps remain, all classified as non-blocking for V1: two Important pro
 
 ## Gap Detail Sections by Component
 
-### AuZoom Gaps (11 gaps)
+### AuZoom Gaps (12 gaps)
 
 AuZoom is the progressive file discovery MCP server providing skeleton/summary/full disclosure levels and dependency graph navigation.
 
-#### Resolved (4)
+#### Resolved (3)
 
 - **GAP-001** (Phase 2): Dependency tracking 6.25% accuracy -> Fixed with AST-based extraction (now 100%)
 - **GAP-015** (Phase 5): Small file overhead (-474% to -655%) -> Resolved by threshold bypass and baseline correction
@@ -106,7 +106,7 @@ AuZoom is the progressive file discovery MCP server providing skeleton/summary/f
 - **GAP-004** (Phase 2): Medium file negative savings -> Superseded by Phase 6.5 (65.1% savings)
 - **GAP-005** (Phase 2): Multi-file 5.26% savings -> Superseded by Phase 6.5-03 (71.1% file reduction)
 
-#### Documented (4)
+#### Documented (6)
 
 - **GAP-003** (Phase 2): Cache hit rate 75% vs 90% target (minor performance issue)
 - **GAP-006** (Phase 3): 9 structural violations, all benign (guidelines issue, not performance)
@@ -115,11 +115,11 @@ AuZoom is the progressive file discovery MCP server providing skeleton/summary/f
 - **GAP-029** (Phase 2): Parser anomaly on tools.py (zero tokens at skeleton level)
 - **GAP-030** (Phase 11): LazyCodeGraph module resolution limitation (pre-existing)
 
-### Orchestrator Gaps (2 gaps)
+### Orchestrator Gaps (3 gaps)
 
 The Orchestrator handles complexity scoring and model routing.
 
-#### Documented (1)
+#### Documented (2)
 
 - **GAP-007** (Phase 4): Scorer 40% tier match vs 80% target. Under-scoring is conservative; 100% quality maintained. Cost impact positive (routes to cheaper models). V1.1: expand keywords, lower threshold.
 - **GAP-008** (Phase 4): 60% strict tier adherence vs ~100% target. 90% appropriateness achieved. Haiku boundary should expand 3-5 to 3-6.
@@ -128,7 +128,7 @@ The Orchestrator handles complexity scoring and model routing.
 
 - **GAP-025** (Phase 11): Uncaught Pydantic ValidationError on wrong types. Enhancement severity. ~5 lines fix per handler.
 
-### Integration Gaps (4 gaps)
+### Integration Gaps (5 gaps)
 
 Integration covers cross-server compatibility and protocol compliance.
 
@@ -136,7 +136,7 @@ Integration covers cross-server compatibility and protocol compliance.
 
 - **GAP-022** (Phase 10): 0 V1-critical deferred items confirmed across 21 items assessed.
 
-#### Documented (1)
+#### Documented (2)
 
 - **GAP-013** (Phase 5/7): Gemini Flash costs theoretical, not real API execution. MODERATE severity. Pricing-based confirms 50.7%.
 - **GAP-018** (Phase 7): Gemini API quota exhaustion blocking real execution. External blocker.
@@ -146,7 +146,7 @@ Integration covers cross-server compatibility and protocol compliance.
 - **GAP-023** (Phase 11): AuZoom missing MCP initialize handshake. Important severity. ~15 lines fix.
 - **GAP-024** (Phase 11): auzoom_get_calls not in tool manifest. Important severity. ~25 lines fix.
 
-### Methodology Gaps (10 gaps)
+### Methodology Gaps (9 gaps)
 
 Methodology covers measurement approaches, baselines, test suite design, and validation rigor.
 
@@ -160,14 +160,13 @@ Methodology covers measurement approaches, baselines, test suite design, and val
 
 - **GAP-010** (Phase 5): Token savings -95.6% vs +23% claimed -> Superseded by Phase 6.5 (71.3%)
 
-#### Documented (6)
+#### Documented (5)
 
 - **GAP-012** (Phase 5): Test suite skewed 60% challenging vs realistic 30% (moderate impact)
 - **GAP-014** (Phase 5): Quality validation subjective, no automated test suites
 - **GAP-026** (Phase 5): All-Sonnet baseline inflates savings; progressive disclosure alone = 3.0%
 - **GAP-027** (Phase 5): No real Claude Code Task execution (file measurements used)
 - **GAP-028** (Phase 5): Challenging tasks only 33% sample coverage (5/15)
-- **GAP-029** (Phase 2): Parser anomaly requires investigation
 
 ### Documentation Gaps (1 gap)
 
@@ -304,6 +303,7 @@ This self-correction demonstrates audit integrity: negative findings were not su
 | Phase 5 | 4 | 8 (GAP-009 to GAP-012, GAP-014, GAP-015, GAP-026 to GAP-028) | `audit/evidence/simple_validation_*.jsonl`, `audit/aggregate_metrics.json` |
 | Phase 6.5 | 3 | 2 (GAP-016, GAP-017) | `audit/evidence/progressive_traversal_*.jsonl`, `graph_navigation_*.jsonl` |
 | Phase 7 | 3 | 2 (GAP-013, GAP-018) | `audit/evidence/07-02-gemini-real-execution.md` |
+| Phase 8 | 0 | 0 (superseded by Phase 6.5) | Small file overhead already resolved; no plans executed |
 | Phase 9 | 2 | 2 (GAP-019, GAP-020) | `audit/reports/09-02-v1-adequacy-verdict.md` |
 | Phase 10 | 3 | 1 (GAP-022) | `audit/reports/10-03-deferred-categorization.md` |
 | Phase 11 | 3 | 3 (GAP-023 to GAP-025, GAP-030) | `audit/evidence/11-01-e2e-workflow.jsonl`, `11-02-conflicts.jsonl`, `11-03-protocol-compliance.jsonl` |
