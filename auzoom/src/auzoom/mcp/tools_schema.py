@@ -8,6 +8,7 @@ def get_tools_manifest() -> dict:
             _auzoom_read_schema(),
             _auzoom_find_schema(),
             _auzoom_get_dependencies_schema(),
+            _auzoom_get_calls_schema(),
             _auzoom_stats_schema(),
             _auzoom_validate_schema()
         ]
@@ -118,5 +119,23 @@ def _auzoom_validate_schema() -> dict:
                     "description": "Path to validate (defaults to project root)"
                 }
             }
+        }
+    }
+
+
+def _auzoom_get_calls_schema() -> dict:
+    """Schema for auzoom_get_calls tool."""
+    return {
+        "name": "auzoom_get_calls",
+        "description": "Get function/method calls made by a specific node in the code graph",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "node_id": {
+                    "type": "string",
+                    "description": "Fully qualified node ID (e.g., 'module.py::ClassName.method_name')"
+                }
+            },
+            "required": ["node_id"]
         }
     }
