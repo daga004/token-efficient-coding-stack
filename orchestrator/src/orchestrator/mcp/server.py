@@ -7,6 +7,7 @@ from ..scoring import ComplexityScorer
 from ..registry import ModelRegistry, ModelTier
 from ..executor import Executor
 from ..models import Task
+from pydantic import ValidationError
 from .jsonrpc_handler import JSONRPCHandler
 
 
@@ -67,7 +68,10 @@ class OrchestratorMCPServer:
         context = args.get("context", {})
 
         # Create Task object
-        task = Task(description=task_description, context=context)
+        try:
+            task = Task(description=task_description, context=context)
+        except ValidationError as e:
+            return {"error": f"Invalid task parameters: {e}", "type": "validation_error"}
 
         # Score complexity
         complexity = self.scorer.score_task(task)
