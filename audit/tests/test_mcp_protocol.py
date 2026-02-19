@@ -6,8 +6,9 @@ handshake support, error code compliance, and error handling edge cases.
 Phase 11-03: Protocol Compliance Testing
 
 Findings documented:
-- AuZoom lacks initialize handshake (MCP v2024-11-05 compliance gap)
-- auzoom_get_calls exists in server handler but NOT in tools_schema.py manifest
+- AuZoom initialize handshake FIXED (Phase 13-01, GAP-023)
+- auzoom_get_calls added to tools_schema.py manifest FIXED (Phase 13-01, GAP-024)
+- Orchestrator ValidationError now caught at handler level FIXED (Phase 13-01, GAP-025)
 - Both servers correctly implement -32601 (Method not found) and -32700 (Parse error)
 """
 
@@ -244,15 +245,15 @@ class TestToolManifestCompleteness:
     """Test that tool manifests accurately reflect available tools."""
 
     def test_auzoom_manifest_tool_count(self):
-        """AuZoom manifest lists 5 tools (missing auzoom_get_calls)."""
+        """AuZoom manifest lists all 6 tools including auzoom_get_calls."""
         manifest = auzoom_get_tools_manifest()
         tools = manifest["tools"]
         tool_names = [t["name"] for t in tools]
 
-        assert len(tools) == 5, f"Expected 5 tools in manifest, got {len(tools)}"
+        assert len(tools) == 6, f"Expected 6 tools in manifest, got {len(tools)}"
         expected_tools = [
             "auzoom_read", "auzoom_find", "auzoom_get_dependencies",
-            "auzoom_stats", "auzoom_validate",
+            "auzoom_get_calls", "auzoom_stats", "auzoom_validate",
         ]
         for name in expected_tools:
             assert name in tool_names, f"Missing tool in manifest: {name}"
@@ -261,40 +262,46 @@ class TestToolManifestCompleteness:
             "auzoom_manifest_tool_count", "auzoom",
             {"action": "get_tools_manifest"},
             {"tools": tool_names, "count": len(tools)},
-            "partial - auzoom_get_calls missing",
-            ["auzoom_get_calls in handler but not in manifest"],
+            "pass - all 6 tools listed",
         )
 
-    def test_auzoom_get_calls_manifest_gap(self, auzoom_server):
-        """FINDING: auzoom_get_calls exists in handler but NOT in manifest.
+    def test_auzoom_get_calls_in_manifest(self, auzoom_server):
+        """VERIFIED: auzoom_get_calls is now in manifest and discoverable (GAP-024 fixed).
 
-        The handler dict in server.py includes 'auzoom_get_calls' -> _tool_get_calls,
-        but tools_schema.py does not define a schema for it. This means the tool
-        is callable but not discoverable via tools/list.
+        Phase 13-01 added auzoom_get_calls schema to tools_schema.py.
+        The tool is both callable via handler AND discoverable via tools/list.
         """
         manifest = auzoom_get_tools_manifest()
         manifest_names = [t["name"] for t in manifest["tools"]]
 
-        # Verify it is NOT in the manifest
-        assert "auzoom_get_calls" not in manifest_names, (
-            "auzoom_get_calls should NOT be in manifest (documenting known gap)"
+        # Verify it IS in the manifest (was missing before GAP-024 fix)
+        assert "auzoom_get_calls" in manifest_names, (
+            "auzoom_get_calls should be in manifest after GAP-024 fix"
         )
 
-        # But it IS in the server handler (callable)
+        # Verify the schema has correct inputSchema with required node_id
+        tool_map = {t["name"]: t for t in manifest["tools"]}
+        get_calls_schema = tool_map["auzoom_get_calls"]["inputSchema"]
+        assert "node_id" in get_calls_schema.get("properties", {}), (
+            "auzoom_get_calls schema must have node_id property"
+        )
+        assert "node_id" in get_calls_schema.get("required", []), (
+            "auzoom_get_calls schema must require node_id"
+        )
+
+        # Also verify it IS in the server handler (callable)
         result = auzoom_server.handle_tool_call(
             "auzoom_get_calls", {"node_id": "nonexistent::node"}
         )
-        # Should return a result (not "Unknown tool" error)
         assert "Unknown tool" not in result.get("error", ""), (
             "auzoom_get_calls should be recognized by the handler"
         )
 
         _record_evidence(
-            "auzoom_get_calls_manifest_gap", "auzoom",
-            {"action": "check_get_calls_in_manifest_vs_handler"},
-            {"in_manifest": False, "in_handler": True, "handler_result": result},
-            "gap - tool callable but not discoverable",
-            ["auzoom_get_calls exists in handler but not in tools_schema.py"],
+            "auzoom_get_calls_in_manifest", "auzoom",
+            {"action": "check_get_calls_in_manifest_and_handler"},
+            {"in_manifest": True, "in_handler": True, "handler_result": result},
+            "pass - tool discoverable and callable",
         )
 
     def test_orchestrator_manifest_tool_count(self):
@@ -425,11 +432,11 @@ class TestInitializeHandshake:
             request, response, "compliant",
         )
 
-    def test_auzoom_lacks_initialize(self, auzoom_handler):
-        """FINDING: AuZoom does NOT implement initialize handshake.
+    def test_auzoom_initialize_handshake(self, auzoom_handler):
+        """VERIFIED: AuZoom implements initialize handshake (GAP-023 fixed).
 
-        MCP v2024-11-05 requires initialize handshake. AuZoom returns
-        -32601 (Method not found) for initialize requests.
+        Phase 13-01 added _handle_initialize() to AuZoom's JSONRPCHandler.
+        Returns protocolVersion, capabilities, and serverInfo per MCP v2024-11-05.
         """
         request = {
             "jsonrpc": "2.0", "id": 11,
@@ -444,16 +451,24 @@ class TestInitializeHandshake:
 
         assert response.get("jsonrpc") == "2.0"
         assert response.get("id") == 11
-        assert "error" in response, "AuZoom should return error for initialize"
-        assert response["error"]["code"] == -32601, (
-            "Should return -32601 (Method not found)"
+        assert "result" in response, "AuZoom should return result for initialize"
+        assert "error" not in response, "Initialize should not return error"
+
+        result = response["result"]
+        assert result.get("protocolVersion") == "2024-11-05", (
+            "Must return protocolVersion 2024-11-05"
+        )
+        assert "capabilities" in result, "Must return capabilities"
+        assert "tools" in result["capabilities"], "Must declare tools capability"
+        assert "serverInfo" in result, "Must return serverInfo"
+        assert result["serverInfo"].get("name") == "auzoom", (
+            "serverInfo.name must be 'auzoom'"
         )
 
         _record_evidence(
-            "auzoom_lacks_initialize", "auzoom",
+            "auzoom_initialize_handshake", "auzoom",
             request, response,
-            "gap - missing initialize handshake",
-            ["AuZoom does not implement MCP v2024-11-05 initialize handshake"],
+            "pass - initialize handshake implemented",
         )
 
 
@@ -734,33 +749,33 @@ class TestInvalidParamTypes:
         )
 
     def test_orchestrator_route_task_as_integer(self, orchestrator_server):
-        """orchestrator_route with task=123 (not string) raises ValidationError.
+        """VERIFIED: orchestrator_route with task=123 returns error dict (GAP-025 fixed).
 
-        FINDING: Orchestrator does not catch Pydantic ValidationError at the
-        handler level. The Task model enforces description: str, so passing
-        an integer raises ValidationError. This is acceptable behavior since
-        the JSON-RPC handler's run() method catches all exceptions and returns
-        -32603 (Internal error), but the server-level handle_tool_call does not.
+        Phase 13-01 added ValidationError catch in _route(). Instead of
+        propagating a raw Pydantic exception, it now returns a structured
+        error dict with "error" and "type" keys.
         """
-        with pytest.raises(Exception) as exc_info:
-            run_async(
-                orchestrator_server.handle_tool_call(
-                    "orchestrator_route", {"task": 123}
-                )
+        result = run_async(
+            orchestrator_server.handle_tool_call(
+                "orchestrator_route", {"task": 123}
             )
+        )
 
-        # Pydantic ValidationError is expected
-        assert "validation error" in str(exc_info.value).lower() or \
-               "string" in str(exc_info.value).lower(), (
-            f"Expected Pydantic validation error, got: {exc_info.value}"
+        # Should return error dict, not raise exception
+        assert isinstance(result, dict), (
+            f"Expected error dict, got {type(result).__name__}"
+        )
+        assert "error" in result, "Result must contain 'error' key"
+        assert "type" in result, "Result must contain 'type' key"
+        assert result["type"] == "validation_error", (
+            f"Expected type 'validation_error', got '{result.get('type')}'"
         )
 
         _record_evidence(
             "orchestrator_route_task_as_integer", "orchestrator",
             {"tool": "orchestrator_route", "arguments": {"task": 123}},
-            {"error": str(exc_info.value), "type": type(exc_info.value).__name__},
-            "gap - ValidationError not caught at handler level",
-            ["orchestrator_route does not catch Pydantic ValidationError for wrong types"],
+            result,
+            "pass - ValidationError caught and returned as error dict",
         )
 
     def test_auzoom_read_nonexistent_file(self, auzoom_server):
