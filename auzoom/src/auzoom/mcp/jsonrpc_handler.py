@@ -27,7 +27,9 @@ class JSONRPCHandler:
         """Route request to appropriate handler."""
         method = request.get("method")
 
-        if method == "tools/list":
+        if method == "initialize":
+            return self._handle_initialize(request)
+        elif method == "tools/list":
             return self._handle_tools_list(request)
         elif method == "tools/call":
             return self._handle_tools_call(request)
@@ -37,6 +39,18 @@ class JSONRPCHandler:
                 -32601,
                 f"Method not found: {method}"
             )
+
+    def _handle_initialize(self, request: dict) -> dict:
+        """Handle MCP initialize handshake."""
+        return {
+            "jsonrpc": "2.0",
+            "id": request.get("id"),
+            "result": {
+                "protocolVersion": "2024-11-05",
+                "capabilities": {"tools": {}},
+                "serverInfo": {"name": "auzoom", "version": "1.0.0"}
+            }
+        }
 
     def _handle_tools_list(self, request: dict) -> dict:
         """Handle tools/list request."""
