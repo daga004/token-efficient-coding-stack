@@ -150,26 +150,79 @@ else
 fi
 
 # ============================================
-# Step 3: Install project instructions + hooks
+# Step 3: Install global instructions + hooks
 # ============================================
 
 echo ""
-echo "Setting up project instructions..."
+echo "Setting up global instructions and hooks..."
 
-# CLAUDE.md — project-level instructions (read by Claude Code automatically)
+CLAUDE_DIR="$HOME/.claude"
+mkdir -p "$CLAUDE_DIR"
+
+# CLAUDE.md — global instructions (applies to ALL Claude Code sessions)
 if [ -f "$INSTALL_DIR/CLAUDE.md" ]; then
-    echo -e "${GREEN}✓ CLAUDE.md present (project instructions)${NC}"
+    if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
+        # Check if it's our file (contains our marker)
+        if grep -q "Token-Efficient Coding Stack" "$CLAUDE_DIR/CLAUDE.md" 2>/dev/null; then
+            cp "$INSTALL_DIR/.claude/global-CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
+            echo -e "${GREEN}✓ Global CLAUDE.md updated (~/.claude/CLAUDE.md)${NC}"
+        else
+            echo -e "${YELLOW}⚠ Existing ~/.claude/CLAUDE.md found (not ours). Skipping to avoid overwrite.${NC}"
+            echo "  To install manually, copy .claude/global-CLAUDE.md to ~/.claude/CLAUDE.md"
+        fi
+    else
+        cp "$INSTALL_DIR/.claude/global-CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
+        echo -e "${GREEN}✓ Global CLAUDE.md installed (~/.claude/CLAUDE.md)${NC}"
+    fi
 else
     echo -e "${YELLOW}⚠ CLAUDE.md not found in project root${NC}"
 fi
 
-# Hooks — installed via .claude/settings.json (already in repo)
-if grep -q "hooks" "$INSTALL_DIR/.claude/settings.json" 2>/dev/null; then
-    echo -e "${GREEN}✓ Claude Code hooks configured (.claude/settings.json)${NC}"
-    echo "  - Read hook: suggests auzoom_read for .py files"
-    echo "  - Edit hook: protects test files during plan execution"
+# Hooks — merge into global ~/.claude/settings.json
+echo "Configuring global hooks..."
+GLOBAL_SETTINGS="$CLAUDE_DIR/settings.json"
+
+if [ -f "$GLOBAL_SETTINGS" ]; then
+    if grep -q '"hooks"' "$GLOBAL_SETTINGS" 2>/dev/null; then
+        echo -e "${GREEN}✓ Hooks already present in global settings${NC}"
+    else
+        # Add hooks to existing settings using Python (reliable JSON manipulation)
+        python3 -c "
+import json
+with open('$GLOBAL_SETTINGS') as f:
+    settings = json.load(f)
+settings['hooks'] = {
+    'PreToolUse': [
+        {
+            'matcher': 'Read',
+            'hooks': [{'type': 'command', 'command': \"if echo \\\"\\\$TOOL_INPUT\\\" | grep -q '.py\\\"'; then echo '💡 Suggestion: Use auzoom_read instead of Read for Python files (progressive disclosure saves ~71% tokens)' >&2; fi; exit 0\"}]
+        },
+        {
+            'matcher': 'Edit',
+            'hooks': [{'type': 'command', 'command': \"if echo \\\"\\\$TOOL_INPUT\\\" | grep -qE '(test_|_test\\\\.py|tests/)' && [ -f .planning/STATE.md ] && grep -q 'In progress' .planning/STATE.md; then echo '🛡️ BLOCKED: Modifying test files during plan execution.' >&2; exit 2; fi; exit 0\"}]
+        }
+    ]
+}
+with open('$GLOBAL_SETTINGS', 'w') as f:
+    json.dump(settings, f, indent=2)
+    f.write('\n')
+" 2>/dev/null
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}✓ Hooks added to global settings (~/.claude/settings.json)${NC}"
+        else
+            echo -e "${YELLOW}⚠ Could not auto-configure hooks. Add manually to ~/.claude/settings.json${NC}"
+        fi
+    fi
 else
-    echo -e "${YELLOW}⚠ Hooks not found in .claude/settings.json${NC}"
+    echo -e "${YELLOW}⚠ No global settings file found. Hooks will use project-level config.${NC}"
+fi
+
+echo "  - Read hook: suggests auzoom_read for .py files"
+echo "  - Edit hook: protects test files during plan execution"
+
+# Verify project-level CLAUDE.md is also present
+if [ -f "$INSTALL_DIR/CLAUDE.md" ]; then
+    echo -e "${GREEN}✓ Project CLAUDE.md present (project-specific instructions)${NC}"
 fi
 
 # ============================================
@@ -240,12 +293,12 @@ echo "=========================================="
 echo -e "${GREEN}Installation Complete!${NC}"
 echo "=========================================="
 echo ""
-echo "What's installed:"
+echo "What's installed (globally — available in ALL Claude Code sessions):"
 echo "  ✓ AuZoom MCP server (progressive code reading)"
 echo "  ✓ Orchestrator MCP server (smart model routing)"
-echo "  ✓ CLAUDE.md (project instructions — auto-loaded by Claude Code)"
-echo "  ✓ Hooks (auzoom_read suggestions, TDD test protection)"
-echo "  ✓ Skills (token-efficient-coding, auzoom-use, orchestrator-use)"
+echo "  ✓ Global CLAUDE.md (~/.claude/CLAUDE.md — auto-loaded everywhere)"
+echo "  ✓ Global hooks (~/.claude/settings.json — auzoom_read suggestions, TDD protection)"
+echo "  ✓ Skills (~/.claude/skills/ — token-efficient-coding, auzoom-use, orchestrator-use)"
 echo ""
 echo "Optional: Enable MCP CLI mode for zero-overhead tool loading:"
 echo '  Add to ~/.claude/settings.json: { "env": { "CLAUDE_MCP_CLI": "true" } }'
