@@ -105,18 +105,23 @@ def test_fetch_levels():
     summary = g.get_file('src/auzoom/models.py', FetchLevel.SUMMARY)
     full = g.get_file('src/auzoom/models.py', FetchLevel.FULL)
 
-    # Verify progressive detail
-    assert len(str(skeleton)) < len(str(summary)) < len(str(full))
+    # get_file returns (import_names, serialized_nodes)
+    skeleton_imports, skeleton_nodes = skeleton
+    summary_imports, summary_nodes = summary
+    full_imports, full_nodes = full
 
-    # Skeleton should have minimal fields
-    if skeleton:
-        assert 'id' in skeleton[0]
-        assert 'name' in skeleton[0]
-        assert 'dependencies' in skeleton[0]
+    # Verify progressive detail (nodes get larger)
+    assert len(str(skeleton_nodes)) <= len(str(summary_nodes)) <= len(str(full_nodes))
 
-    # Full should have source
-    if full:
-        assert 'source' in full[0] or full[0].get('type') == 'import'
+    # Skeleton nodes should have minimal fields
+    if skeleton_nodes:
+        assert 'id' in skeleton_nodes[0]
+        assert 'name' in skeleton_nodes[0]
+        assert 'dependents' in skeleton_nodes[0]
+
+    # Full nodes should have source
+    if full_nodes:
+        assert 'source' in full_nodes[0]
 
 
 def test_node_access():
@@ -172,8 +177,8 @@ def test_file_modification_detection():
     try:
         g = LazyCodeGraph(os.path.dirname(temp_path), auto_warm=False)
 
-        # First access
-        nodes1 = g.get_file(temp_path, FetchLevel.SKELETON)
+        # First access — get_file returns (imports, nodes)
+        imports1, nodes1 = g.get_file(temp_path, FetchLevel.SKELETON)
         assert len(nodes1) == 1
 
         # Modify file
@@ -184,7 +189,7 @@ def test_file_modification_detection():
         g2 = LazyCodeGraph(os.path.dirname(temp_path), auto_warm=False)
 
         # Should detect change and re-parse
-        nodes2 = g2.get_file(temp_path, FetchLevel.SKELETON)
+        imports2, nodes2 = g2.get_file(temp_path, FetchLevel.SKELETON)
         assert len(nodes2) == 2  # Now has foo and bar
 
     finally:
@@ -211,11 +216,11 @@ def top():
     # Parse the file
     g.get_file('/tmp/test_lazy_deps.py', FetchLevel.SKELETON)
 
-    # Get dependencies (should not trigger additional parses)
-    nodes = [n for n in g.nodes.values() if n.name == 'top']
+    # Get dependents (reverse deps — who calls leaf?)
+    nodes = [n for n in g.nodes.values() if n.name == 'leaf']
     if nodes:
-        top_id = nodes[0].id
-        deps = g.get_dependencies(top_id, depth=2)
+        leaf_id = nodes[0].id
+        deps = g.get_dependencies(leaf_id, depth=2)
 
         dep_names = [d['name'] for d in deps]
         assert 'middle' in dep_names

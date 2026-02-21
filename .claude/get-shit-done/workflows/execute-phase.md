@@ -1065,6 +1065,78 @@ Wait for user decision.
 If user chose "Skip", note it in SUMMARY.md under "Issues Encountered".
 </step>
 
+<step name="predictive_failure_analysis">
+**After all tasks pass verification, perform predictive failure analysis before creating SUMMARY.**
+
+This step catches issues that passed testing but could fail in production or under edge cases.
+
+**1. Review implementation against requirements:**
+
+Re-read the PLAN.md objective and success criteria. Compare against what was actually built.
+
+```
+Ask yourself:
+- Does the implementation fully satisfy the objective?
+- Are there any success criteria that are technically met but fragile?
+- Did any deviations weaken the original intent?
+```
+
+**2. Identify potential failure modes:**
+
+For each file modified during this plan, consider:
+
+```
+- What happens with unexpected input? (nulls, empty strings, huge payloads)
+- What happens under concurrent access? (race conditions, deadlocks)
+- What happens when external dependencies fail? (network, APIs, disk)
+- What happens at scale? (10x data, 100x users)
+- What happens with malicious input? (injection, overflow, path traversal)
+```
+
+**3. Document findings:**
+
+Categorize findings by severity:
+
+| Severity | Definition | Action |
+|----------|-----------|--------|
+| **Critical** | Would cause data loss, security breach, or complete failure | Fix NOW before marking phase complete |
+| **High** | Would cause significant user-facing issues | Fix if <15 min, else log to ISSUES.md |
+| **Medium** | Edge cases that degrade experience | Log to ISSUES.md |
+| **Low** | Theoretical concerns, unlikely scenarios | Note in SUMMARY.md only |
+
+**4. Fix or defer:**
+
+- **Critical findings**: Fix immediately, add to deviations list as `[Predictive Analysis - Critical]`
+- **High findings**: Fix if quick, otherwise add to ISSUES.md with `[PFA]` prefix
+- **Medium/Low findings**: Document in SUMMARY.md under "## Predictive Failure Analysis"
+
+**5. Include in SUMMARY.md:**
+
+```markdown
+## Predictive Failure Analysis
+
+Reviewed [N] files for potential failure modes after all tasks passed.
+
+**Findings:** [N] total ([critical], [high], [medium], [low])
+
+| # | Finding | Severity | Action |
+|---|---------|----------|--------|
+| 1 | [description] | Critical | Fixed in commit [hash] |
+| 2 | [description] | High | Logged as ISS-XXX |
+| 3 | [description] | Low | Noted — unlikely scenario |
+
+**Critical fixes applied:** [count] (see Deviations section)
+**Issues logged:** [count]
+**Accepted risks:** [count] with rationale
+```
+
+**If no findings:** Still include the section with "No significant failure modes identified."
+
+**Skip conditions:**
+- Plans with only documentation/config changes (no code)
+- Plans where all tasks are type="checkpoint" (no implementation)
+</step>
+
 <step name="record_completion_time">
 Record execution end time and calculate duration:
 

@@ -71,6 +71,6 @@ def callee():
     parser = PythonParser()
     nodes = parser.parse_file('/tmp/test_deps.py')
 
-    caller_node = [n for n in nodes if n.name == 'caller'][0]
-    # Should have dependency on callee
-    assert len(caller_node.dependencies) > 0
+    callee_node = [n for n in nodes if n.name == 'callee'][0]
+    # callee should have reverse dependency (caller depends on it)
+    assert len(callee_node.dependents) > 0
