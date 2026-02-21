@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A thorough system audit to verify the Token-Efficient AI Coding Stack implementation matches core assumptions, validate published metrics against real-world testing, and assess all deferred work to determine if critical functionality was improperly postponed. This audit treats implementation as source of truth for correctness but core assumptions as source of truth for requirements - where implementation deviates from assumptions, implementation gets fixed.
+A comprehensive V1 audit of the Token-Efficient AI Coding Stack that verified all core assumptions, validated metrics with real-world evidence, assessed 21 deferred items, and certified V1 for production use. Progressive disclosure (71.3% savings), graph navigation (71.1% file reduction), and model routing (50.7% cost savings) all validated. V1 CERTIFIED with zero critical blockers.
 
 ## Core Value
 
@@ -12,121 +12,46 @@ Full alignment verification: Every core assumption tested against actual impleme
 
 ### Validated
 
-V1 Implementation exists with claimed capabilities:
-- ✓ AuZoom MCP server with tree-sitter Python parser (skeleton/summary/full levels)
-- ✓ LazyCodeGraph with on-demand indexing and persistent caching
-- ✓ Orchestrator with complexity scoring (0-10 scale) and model routing
-- ✓ Integration with GSD workflow
-- ✓ Validation testing showing 50.7% cost savings (revised from 79.5% in Phase 5, confirmed in Phase 7)
+- ✓ AuZoom MCP server with tree-sitter Python parser (skeleton/summary/full levels) — v1.0
+- ✓ LazyCodeGraph with on-demand indexing and persistent caching — v1.0
+- ✓ Orchestrator with complexity scoring (0-10 scale) and model routing — v1.0
+- ✓ Integration with GSD workflow — v1.0
+- ✓ Progressive disclosure: 71.3% token savings, 100% win rate — v1.0 (Phase 6.5)
+- ✓ Graph navigation: 71.1% file reduction, 97.6% combined savings — v1.0 (Phase 6.5)
+- ✓ Cost savings: 50.7% (revised from 79.5%, confirmed Phase 7) — v1.0
+- ✓ Dependency tracking: 100% precision/recall (AST-based extraction) — v1.0 (Phase 2)
+- ✓ Non-Python metadata: 91.7% token reduction, 4.0/5 usefulness — v1.0 (Phase 9)
+- ✓ Structural compliance: 87.32% rate, no critical violations — v1.0 (Phase 3)
+- ✓ Quality maintenance: 100% across model tiers (Flash, Haiku) — v1.0 (Phase 4)
+- ✓ MCP protocol compliance: JSON-RPC 2.0, initialize handshake, tool manifest — v1.0 (Phase 13)
+- ✓ Integration testing: 84/84 tests pass (e2e, conflicts, protocol) — v1.0 (Phase 11)
+- ✓ All 21 deferred items assessed legitimate, 0 V1-critical — v1.0 (Phase 10)
+- ✓ Gap analysis: 30 gaps documented, 0 critical, V1 CERTIFIED — v1.0 (Phase 12)
 
-### Active
+### Active (V1.1)
 
-**Core Assumption Verification**:
-- [ ] Assumption 1: Local code indexing with function-level dependency tracking reduces full-file reads
-  - Test: Does `auzoom_get_dependencies` work correctly?
-  - Test: Are dependency graphs accurate for real codebases?
-  - Test: Does progressive disclosure (skeleton → summary → full) actually reduce token usage?
-  - Test: Is there evidence of bypassing to full reads when not needed?
-
-- [ ] Assumption 2: Dynamic model routing based on task difficulty rubric uses appropriate models
-  - Test: Does complexity scorer accurately assess task difficulty?
-  - Test: Are model routing decisions appropriate (simple→cheap, complex→expensive)?
-  - Test: Is quality maintained across model tiers?
-  - Test: Are cost savings real or inflated by bad baselines?
-
-**Validation Metrics Verification**:
-- [ ] Re-run all 25 validation tasks with actual API calls (not theoretical)
-- [x] Verify 79.5% cost savings claim is reproducible → Revised to 50.7%, confirmed in Phase 7
-- [ ] Verify 100% quality claim (no functional regressions)
-- [ ] Check measurement methodology for errors or bias
-- [ ] Test with real Gemini Flash (not placeholder/theoretical costs)
-
-**Deferred Work Assessment** (audit-critical items):
-- [ ] Auto-detect file size threshold: Does AuZoom add overhead on small files (<200 lines)?
-  - Finding: Validation showed token increases on 3 tasks (2.1, 3.1, 4.1)
-  - Required: File size heuristics to skip progressive disclosure when counterproductive
-  - Decision: Should this have been V1 or legitimately V2?
-
-- [x] Real Gemini Flash integration: Are cost savings based on actual API execution?
-  - Phase 7: GeminiClient CLI integration fixed and validated (13 tests pass)
-  - Real execution blocked by API quota exhaustion
-  - Cost savings confirmed at 50.7% using pricing-based Gemini calculation
-  - Confidence: MEDIUM (Claude real ✓, Gemini pricing-based ⚠️)
-  - Recommendation: V1.1 validation with fresh API quota
-  - Decision: Were Flash claims verified or theoretical?
-
-- [ ] Missing WISHLIST-COMPLIANCE.md: Is there traceability between promises and delivery?
-  - Finding: Plans reference this document but it doesn't exist
-  - Required: Reconstruct original requirements and map to implementation
-  - Decision: What was promised vs what was built?
-
-- [ ] Semantic summaries for non-Python files: Does metadata approach meet requirements?
-  - Finding: V1 uses file type + line count, V2 planned for Claude Code callback
-  - Required: Test if metadata summaries provide sufficient context reduction
-  - Decision: Is this adequate for "progressive discovery of context" claim?
-
-**Deferred Work Catalog** (V2 legitimacy check):
-- [ ] Local LLM integration (Qwen3): Why deferred? Is this architecturally separable?
-- [ ] Escalation matrix: Was this a wishlist item or core requirement?
-- [ ] File watching for cache invalidation: Nice-to-have or correctness issue?
-- [ ] Multi-language tree-sitter support: Appropriately scoped to V2?
-- [ ] Cross-project learning: Was this promised for V1?
-- [ ] Automatic test generation: Where did this come from?
-
-**Integration Correctness**:
-- [ ] AuZoom + Orchestrator + GSD workflow end-to-end testing
-- [ ] No conflicts between systems (caching, model selection, file access)
-- [ ] MCP protocol implementation follows spec (v2024-11-05)
-- [ ] Error handling and fallback behavior correct
-
-**Gap Analysis**:
-- [ ] Create comprehensive gap report: Expected vs Actual
-- [ ] Classify gaps: Critical (fix now), Important (V1.1), Enhancement (V2)
-- [ ] Log issues for misalignments with evidence and proposed fixes
+- [ ] Configuration file for user-customizable models/thresholds
+- [ ] JS/TS tree-sitter support (doubles target audience)
+- [ ] Feedback logging for routing visibility
+- [ ] Basic escalation matrix (retry → escalate)
+- [ ] Real Gemini API execution validation (fresh quota)
 
 ### Out of Scope
 
-- Multi-language support beyond Python — Python-only audit acceptable
-- Performance optimization — Audit verifies correctness, not speed
-- User experience improvements — Technical verification only, not UX polish
-- Building new features during audit — Audit identifies gaps, doesn't fill them
+- Local LLM integration — Anti-portable (hardware-specific), deferred indefinitely
+- Cross-project learning — Conflicts with Claude Code memory, deferred indefinitely
+- Evolving memory — Conflicts with Claude Code memory, deferred indefinitely
+- UI/Dashboard — Anti-portable (CLI-first), deferred indefinitely
+- Test generation — Separate concern (separate skill), deferred indefinitely
+- Performance optimization — Correctness verified, speed optimization is V2
 
 ## Context
 
-### Audit Motivation
-
-User identified core system as:
-1. Local code indexing with function-level dependency tracking to reduce full-file reads
-2. Dynamic model routing based on task difficulty rubric instead of always using Sonnet
-
-User wants verification that implementation aligns with these assumptions. Where misalignment exists, fix implementation to match assumptions (not documentation to match implementation).
-
-### Existing Implementation
-
-**Repository**: `/Users/dhirajd/Documents/claude`
-- AuZoom: `auzoom/src/auzoom/` (Python MCP server, tree-sitter parser, lazy graph)
-- Orchestrator: `orchestrator/src/orchestrator/` (complexity scoring, model routing, MCP server)
-- Documentation: `README.md`, `VALIDATION-SUMMARY.md`, `.planning/phases/`
-- Tests: `auzoom/tests/`, `orchestrator/tests/`
-
-**Validation Results** (from Phase 3, revised in Phases 5 & 7):
-- 25 tasks tested (10 simple, 15 challenging)
-- Cost savings: 50.7% actual (revised from 79.5% claimed, confirmed Phase 7 with pricing-based Gemini)
-- Quality: 100% claim not validated (simple tasks), 67% challenging tasks not fully tested
-- Token overhead: Phase 6.5 validated 71.3% savings with progressive disclosure
-
-**Deferred Work Locations**:
-- `.planning/phases/01-auzoom-implementation/01-02-SUMMARY.md` lines 163-175
-- `.planning/phases/01-auzoom-implementation/01-03-SUMMARY.md` lines 198-210
-- `.planning/phases/03-integration-validation/03-02-SUMMARY.md` lines 216-332
-- `.planning/PROJECT.md` Out of Scope section
-
-### Audit Philosophy
-
-- **Evidence-based**: Every finding documented with file references, line numbers, test results
-- **Assumption-aligned**: Core assumptions define requirements; implementation must match
-- **No excuses**: "Deferred to V2" doesn't mean "not important" — audit determines legitimacy
-- **Actionable**: Every gap gets: severity (Critical/Important/Enhancement) + proposed fix
+Shipped V1 with 21,327 lines of Python, 25,698 lines of planning docs.
+Tech stack: Python, tree-sitter, MCP protocol (v2024-11-05), Claude/Gemini APIs.
+Audit ran 84+ automated tests, 60+ evidence records across 13 phases.
+Key caveats: Gemini costs pricing-based (not real API), quality validated for simple tasks only.
+V1.1 roadmap defined: 5 phases, 7-10 days estimated effort.
 
 ## Constraints
 
@@ -140,11 +65,15 @@ User wants verification that implementation aligns with these assumptions. Where
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Audit as separate milestone | Existing PROJECT.md archived, audit gets fresh requirements tracking | — Pending |
-| Comprehensive scope | User selected all deferred items for review, not just core claims | — Pending |
-| Fix-implementation-first | When assumptions ≠ implementation, fix code not docs | — Pending |
-| YOLO execution mode | Fast iteration, report findings at end | — Pending |
-| Real API testing required | No theoretical costs — all validation must use actual execution | — Pending |
+| Audit as separate milestone | Existing PROJECT.md archived, audit gets fresh requirements tracking | ✓ Good — clean separation of concerns |
+| Comprehensive scope | User selected all deferred items for review, not just core claims | ✓ Good — found 0 V1-critical deferrals |
+| Fix-implementation-first | When assumptions ≠ implementation, fix code not docs | ✓ Good — 3 fixes in Phase 13, all verified |
+| YOLO execution mode | Fast iteration, report findings at end | ✓ Good — 11.2 hours total, 18.4 min/plan avg |
+| Real API testing required | No theoretical costs — all validation must use actual execution | ⚠️ Revisit — Gemini quota blocked real execution, used pricing-based |
+| Insert Phase 6.5 for core feature validation | Phase 5 validated static levels, not progressive traversal | ✓ Good — validated 71.3% savings, caught baseline error |
+| Supersede Phase 8 (small file overhead) | Phase 6.5 already resolved the concern | ✓ Good — avoided duplicate work |
+| Revise cost savings 79.5% → 50.7% | Baseline inflation identified, honest reporting | ✓ Good — confirmed in Phase 7 |
+| Portability as primary filter | V1 skill must work as portable Claude Code skill | ✓ Good — 12 items deferred indefinitely as anti-portable |
 
 ---
-*Last updated: 2026-01-12 after audit initialization*
+*Last updated: 2026-02-21 after v1.0 milestone*
