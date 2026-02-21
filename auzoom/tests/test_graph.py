@@ -65,13 +65,13 @@ def top():
     for node in nodes:
         graph.add_node(node)
 
-    top_id = [n.id for n in nodes if n.name == 'top'][0]
-    deps = graph.get_dependencies(top_id, depth=2)
+    leaf_id = [n.id for n in nodes if n.name == 'leaf'][0]
+    deps = graph.get_dependencies(leaf_id, depth=2)
 
-    # Should find middle (depth 1) and leaf (depth 2)
+    # Should find dependents: middle (depth 1) and top (depth 2)
     dep_names = [d['name'] for d in deps]
     assert 'middle' in dep_names
-    assert 'leaf' in dep_names
+    assert 'top' in dep_names
 
 def test_token_reduction():
     """Verify skeleton provides significant token reduction."""

@@ -1,6 +1,7 @@
 #!/bin/bash
-# Token-Efficient Coding Stack - Installation Script for macOS
-# Installs AuZoom, Orchestrator, and configures Claude Code with MCP servers
+# Token-Efficient Coding Stack - Installation Script
+# Installs AuZoom, Orchestrator, configures Claude Code with MCP servers,
+# sets up CLAUDE.md project instructions, hooks, and skills.
 
 set -e  # Exit on error
 
@@ -15,24 +16,28 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Check if running on macOS
-if [[ "$OSTYPE" != "darwin"* ]]; then
-    echo -e "${RED}Error: This installer is designed for macOS only${NC}"
-    exit 1
+# Detect OS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    OS="macos"
+elif [[ "$OSTYPE" == "linux"* ]]; then
+    OS="linux"
+else
+    echo -e "${YELLOW}Warning: Untested OS ($OSTYPE). Proceeding anyway...${NC}"
+    OS="other"
 fi
 
-# Check Python version
+# Check Python version (3.11+ required for AuZoom)
 echo "Checking Python installation..."
 if ! command -v python3 &> /dev/null; then
-    echo -e "${RED}Error: Python 3 not found. Please install Python 3.10+${NC}"
+    echo -e "${RED}Error: Python 3 not found. Please install Python 3.11+${NC}"
     exit 1
 fi
 
 PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
-REQUIRED_VERSION="3.10"
 
-if ! python3 -c "import sys; exit(0 if sys.version_info >= (3, 10) else 1)"; then
-    echo -e "${RED}Error: Python $PYTHON_VERSION found, but 3.10+ required${NC}"
+if ! python3 -c "import sys; exit(0 if sys.version_info >= (3, 11) else 1)"; then
+    echo -e "${RED}Error: Python $PYTHON_VERSION found, but 3.11+ required${NC}"
+    echo "AuZoom requires Python 3.11+ for tree-sitter support."
     exit 1
 fi
 
@@ -42,41 +47,29 @@ echo -e "${GREEN}✓ Python $PYTHON_VERSION found${NC}"
 echo "Checking Claude Code installation..."
 if ! command -v claude &> /dev/null; then
     echo -e "${RED}Error: Claude Code CLI not found${NC}"
-    echo "Please install Claude Code first: https://claude.com/claude-code"
+    echo "Please install Claude Code first: https://claude.ai/download"
     exit 1
 fi
 echo -e "${GREEN}✓ Claude Code found${NC}"
 
-# Check for Gemini CLI
+# Check for Gemini CLI (optional — needed for model routing)
 echo "Checking Gemini CLI installation..."
 if ! command -v gemini &> /dev/null; then
-    echo -e "${YELLOW}Gemini CLI not found. Installing via Homebrew...${NC}"
-
-    # Check if Homebrew is installed
-    if ! command -v brew &> /dev/null; then
-        echo -e "${RED}Error: Homebrew not found. Install from https://brew.sh${NC}"
-        echo "Then run: brew install gemini-cli"
-        exit 1
-    fi
-
-    # Install Gemini CLI via Homebrew
-    brew install gemini-cli
-
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✓ Gemini CLI installed${NC}"
+    echo -e "${YELLOW}⚠ Gemini CLI not found (optional — needed for cost savings via model routing)${NC}"
+    if [ "$OS" == "macos" ] && command -v brew &> /dev/null; then
+        echo "  Install with: brew install gemini-cli"
     else
-        echo -e "${RED}✗ Gemini CLI installation failed${NC}"
-        echo "You can install manually: npm install -g @google/gemini-cli"
-        exit 1
+        echo "  Install with: npm install -g @google/gemini-cli"
     fi
+    echo ""
 else
-    GEMINI_VERSION=$(gemini --version)
+    GEMINI_VERSION=$(gemini --version 2>/dev/null || echo "unknown")
     echo -e "${GREEN}✓ Gemini CLI found (version $GEMINI_VERSION)${NC}"
 fi
 
 # Check for Gemini API key
 if [ -z "$GEMINI_API_KEY" ]; then
-    echo -e "${YELLOW}⚠ GEMINI_API_KEY not set${NC}"
+    echo -e "${YELLOW}⚠ GEMINI_API_KEY not set (optional — needed for Gemini Flash routing)${NC}"
     echo "  Get your API key from: https://aistudio.google.com/apikey"
     echo "  Add to your shell profile (~/.zshrc or ~/.bashrc):"
     echo "    export GEMINI_API_KEY='your-api-key-here'"
@@ -90,7 +83,10 @@ INSTALL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "Installation directory: $INSTALL_DIR"
 echo ""
 
-# Install AuZoom
+# ============================================
+# Step 1: Install Python packages
+# ============================================
+
 echo "Installing AuZoom..."
 cd "$INSTALL_DIR/auzoom"
 python3 -m pip install -e . --quiet
@@ -109,7 +105,6 @@ fi
 AUZOOM_MCP_PATH=$(which auzoom-mcp)
 echo "  AuZoom MCP server: $AUZOOM_MCP_PATH"
 
-# Install Orchestrator
 echo ""
 echo "Installing Orchestrator..."
 cd "$INSTALL_DIR/orchestrator"
@@ -125,7 +120,10 @@ fi
 PYTHON_PATH=$(which python3)
 echo "  Orchestrator will use: $PYTHON_PATH"
 
-# Configure MCP servers at user scope
+# ============================================
+# Step 2: Configure MCP servers
+# ============================================
+
 echo ""
 echo "Configuring MCP servers..."
 
@@ -151,7 +149,33 @@ else
     echo -e "${YELLOW}⚠ Orchestrator MCP server already configured, skipping${NC}"
 fi
 
-# Install skills
+# ============================================
+# Step 3: Install project instructions + hooks
+# ============================================
+
+echo ""
+echo "Setting up project instructions..."
+
+# CLAUDE.md — project-level instructions (read by Claude Code automatically)
+if [ -f "$INSTALL_DIR/CLAUDE.md" ]; then
+    echo -e "${GREEN}✓ CLAUDE.md present (project instructions)${NC}"
+else
+    echo -e "${YELLOW}⚠ CLAUDE.md not found in project root${NC}"
+fi
+
+# Hooks — installed via .claude/settings.json (already in repo)
+if grep -q "hooks" "$INSTALL_DIR/.claude/settings.json" 2>/dev/null; then
+    echo -e "${GREEN}✓ Claude Code hooks configured (.claude/settings.json)${NC}"
+    echo "  - Read hook: suggests auzoom_read for .py files"
+    echo "  - Edit hook: protects test files during plan execution"
+else
+    echo -e "${YELLOW}⚠ Hooks not found in .claude/settings.json${NC}"
+fi
+
+# ============================================
+# Step 4: Install skills
+# ============================================
+
 echo ""
 echo "Installing Claude Code skills..."
 SKILLS_DIR="$HOME/.claude/skills"
@@ -166,7 +190,10 @@ else
     echo -e "${YELLOW}⚠ Skills installation incomplete${NC}"
 fi
 
-# Verify installation
+# ============================================
+# Step 5: Verify installation
+# ============================================
+
 echo ""
 echo "Verifying installation..."
 echo ""
@@ -204,24 +231,33 @@ else
     echo -e "${YELLOW}⚠ Some tests failed (non-critical)${NC}"
 fi
 
+# ============================================
+# Done
+# ============================================
+
 echo ""
 echo "=========================================="
 echo -e "${GREEN}Installation Complete!${NC}"
 echo "=========================================="
 echo ""
+echo "What's installed:"
+echo "  ✓ AuZoom MCP server (progressive code reading)"
+echo "  ✓ Orchestrator MCP server (smart model routing)"
+echo "  ✓ CLAUDE.md (project instructions — auto-loaded by Claude Code)"
+echo "  ✓ Hooks (auzoom_read suggestions, TDD test protection)"
+echo "  ✓ Skills (token-efficient-coding, auzoom-use, orchestrator-use)"
+echo ""
+echo "Optional: Enable MCP CLI mode for zero-overhead tool loading:"
+echo '  Add to ~/.claude/settings.json: { "env": { "CLAUDE_MCP_CLI": "true" } }'
+echo ""
 echo "Next steps:"
-echo "1. Restart Claude Code to load MCP servers"
-echo "2. Verify with: claude mcp list"
+echo "  1. Restart Claude Code to load MCP servers"
+echo "  2. Verify with: claude mcp list"
 echo ""
-echo "Usage:"
-echo "  - Use auzoom_read for efficient file navigation"
-echo "  - Use orchestrator_route for smart model selection"
-echo "  - See skills in Claude Code: /skills"
-echo ""
-echo "Documentation:"
-echo "  - README: $INSTALL_DIR/README.md"
-echo "  - AuZoom docs: $INSTALL_DIR/auzoom/README.md"
-echo "  - Orchestrator docs: $INSTALL_DIR/orchestrator/README.md"
+echo "Validated savings (V1 audit):"
+echo "  - Token reduction: 71.3% (progressive disclosure)"
+echo "  - Cost reduction: ~51% (model routing)"
+echo "  - Quality: 100% maintained (simple tasks)"
 echo ""
 echo -e "${YELLOW}Please restart Claude Code now to activate MCP servers${NC}"
 echo ""

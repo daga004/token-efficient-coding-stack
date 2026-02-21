@@ -64,7 +64,7 @@ class CodeGraph:
             if not node:
                 return
 
-            for dep_id in node.dependencies:
+            for dep_id in node.dependents:
                 if dep_id not in visited:
                     result.append(self.get_node(dep_id, FetchLevel.SKELETON))
                     traverse(dep_id, d + 1)

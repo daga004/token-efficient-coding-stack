@@ -203,7 +203,7 @@ class LazyCodeGraph:
             - import_names: Simple string list of imported modules
             - serialized_nodes: Serialized non-import nodes (functions, classes, methods)
         """
-        from ..models import NodeType
+        from ...models import NodeType
 
         node_ids = self.file_index.get(file_path, [])
         all_nodes = [self.nodes[nid] for nid in node_ids]
@@ -236,9 +236,9 @@ class LazyCodeGraph:
         """Delegate to graph queries."""
         return self.queries.get_children(node_id, level)
 
-    def get_dependencies(self, node_id: str, depth: int = 1) -> list[dict]:
+    def get_dependencies(self, node_id: str, depth: int = 1, **kwargs) -> list[dict]:
         """Delegate to graph queries."""
-        return self.queries.get_dependencies(node_id, depth)
+        return self.queries.get_dependencies(node_id, depth, **kwargs)
 
     def find_by_name(self, name_pattern: str) -> list[dict]:
         """Delegate to graph queries."""

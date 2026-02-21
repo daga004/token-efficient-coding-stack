@@ -89,7 +89,7 @@ class TestModelRegistry:
     def test_get_profile(self, registry):
         """Test retrieving model profiles."""
         flash_profile = registry.get_profile(ModelTier.FLASH)
-        assert flash_profile.name == "Gemini Flash"
+        assert flash_profile.name == "Gemini Flash 3"
         assert flash_profile.tier == 0
 
         opus_profile = registry.get_profile(ModelTier.OPUS)
@@ -101,8 +101,8 @@ class TestModelRegistry:
         # 100K input, 10K output tokens
         cost = registry.estimate_cost(ModelTier.FLASH, 100_000, 10_000)
 
-        expected_input = (100_000 * 0.01) / 1_000_000
-        expected_output = (10_000 * 0.04) / 1_000_000
+        expected_input = (100_000 * 0.50) / 1_000_000
+        expected_output = (10_000 * 2.00) / 1_000_000
         expected_total = expected_input + expected_output
 
         assert abs(cost - expected_total) < 0.0001
@@ -133,16 +133,16 @@ class TestModelRegistry:
         """Test that models are ordered correctly by cost."""
         comparison = registry.compare_costs(100_000, 10_000)
 
-        # Flash should be cheapest
-        assert comparison["gemini-flash"] < comparison["gemini-pro"]
-        assert comparison["gemini-flash"] < comparison["haiku"]
-        assert comparison["gemini-flash"] < comparison["sonnet"]
-        assert comparison["gemini-flash"] < comparison["opus"]
+        # Pro should be cheapest (tier 0, $0.125/$0.50)
+        assert comparison["gemini-pro"] < comparison["gemini-flash"]
+        assert comparison["gemini-pro"] < comparison["haiku"]
+        assert comparison["gemini-pro"] < comparison["sonnet"]
+        assert comparison["gemini-pro"] < comparison["opus"]
 
         # Opus should be most expensive
         assert comparison["opus"] > comparison["sonnet"]
         assert comparison["opus"] > comparison["haiku"]
-        assert comparison["opus"] > comparison["gemini-pro"]
+        assert comparison["opus"] > comparison["gemini-flash"]
 
     def test_zero_tokens_cost(self, registry):
         """Test cost estimation with zero tokens."""
@@ -150,21 +150,21 @@ class TestModelRegistry:
         assert cost == 0.0
 
     def test_flash_cost_optimization(self, registry):
-        """Test that Flash is significantly cheaper for simple tasks."""
+        """Test that Flash is significantly cheaper than Opus for simple tasks."""
         tokens_in = 10_000
         tokens_out = 1_000
 
         flash_cost = registry.estimate_cost(ModelTier.FLASH, tokens_in, tokens_out)
         opus_cost = registry.estimate_cost(ModelTier.OPUS, tokens_in, tokens_out)
 
-        # Flash should be at least 100x cheaper than Opus
-        assert opus_cost > flash_cost * 100
+        # Flash ($0.50/$2.00) should be at least 20x cheaper than Opus ($15/$75)
+        assert opus_cost > flash_cost * 20
 
     def test_model_tier_costs_accurate(self, registry):
         """Test that model costs match documented pricing."""
         flash = registry.get_profile(ModelTier.FLASH)
-        assert flash.cost_per_1m_input == 0.01
-        assert flash.cost_per_1m_output == 0.04
+        assert flash.cost_per_1m_input == 0.50
+        assert flash.cost_per_1m_output == 2.00
 
         haiku = registry.get_profile(ModelTier.HAIKU)
         assert haiku.cost_per_1m_input == 0.80

@@ -38,7 +38,7 @@ def test_tools_manifest(server):
     manifest = get_tools_manifest()
 
     assert "tools" in manifest
-    assert len(manifest["tools"]) == 5  # read, find, dependencies, stats, validate
+    assert len(manifest["tools"]) == 6  # read, find, dependencies, get_calls, stats, validate
 
     # Check auzoom_read tool
     read_tool = next(t for t in manifest["tools"] if t["name"] == "auzoom_read")

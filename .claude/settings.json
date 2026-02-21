@@ -1,5 +1,27 @@
 {
   "enabledPlugins": {
     "get-shit-done@get-shit-done": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$TOOL_INPUT\" | grep -q '\\.py\"'; then echo '💡 Suggestion: Use auzoom_read instead of Read for Python files (progressive disclosure saves ~71% tokens)' >&2; fi; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$TOOL_INPUT\" | grep -qE '(test_|_test\\.py|tests/)' && [ -f .planning/STATE.md ] && grep -q 'In progress' .planning/STATE.md; then echo '🛡️ BLOCKED: Modifying test files during plan execution. Tests should be written first (TDD) or kept stable during implementation.' >&2; exit 2; fi; exit 0"
+          }
+        ]
+      }
+    ]
   }
 }

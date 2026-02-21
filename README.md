@@ -4,7 +4,7 @@
 
 Claude Code is powerful but expensive. This stack routes simple tasks to cheap models and reads files progressively — skeleton first, details only when needed. Your savings come from two validated mechanisms working together.
 
-[![Tests](https://img.shields.io/badge/tests-84%2B%20passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-98%20passing-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
 [![V1](https://img.shields.io/badge/status-V1%20Certified-success)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
@@ -21,7 +21,7 @@ Claude Code is powerful but expensive. This stack routes simple tasks to cheap m
 | **Non-Python metadata** | **91.7%** token reduction | High | Phase 9 — 4.0/5 usefulness |
 | **Quality (simple tasks)** | **100%** maintained | Medium | Phase 4 — simple tasks only |
 
-**How we validated**: 13-phase audit, 37 plans, 84+ automated tests, 60+ evidence records. Self-correcting — caught and fixed 3 methodology errors during audit. See [V1 Certification Report](audit/reports/12-V1-CERTIFICATION.md).
+**How we validated**: 13-phase audit, 37 plans, 98 automated tests, 60+ evidence records. Self-correcting — caught and fixed 3 methodology errors during audit. See [V1 Certification Report](audit/reports/12-V1-CERTIFICATION.md).
 
 **Caveats**: Cost savings use pricing-based Gemini (not real API execution). Quality validated for simple tasks only. Complex task success rate estimated 67-85% (limited sample).
 
@@ -48,7 +48,24 @@ claude mcp add --scope user orchestrator python3 -m orchestrator.mcp.server
 cp -r .claude/skills/* ~/.claude/skills/
 ```
 
-**Requirements**: Python 3.10+ (3.11+ recommended), Claude Code CLI
+**Requirements**: Python 3.11+, Claude Code CLI
+
+### Enable MCP CLI Mode (Recommended)
+
+The stack adds 9 MCP tool schemas to your context window (~2k tokens). MCP CLI mode eliminates this overhead by loading tools on-demand via bash instead of always in context:
+
+```json
+// In ~/.claude/settings.json
+{
+  "env": {
+    "CLAUDE_MCP_CLI": "true"
+  }
+}
+```
+
+**Why it matters**: A token-efficiency stack that adds tokens via schemas is ironic. MCP CLI mode makes the stack truly zero-overhead until tools are actually needed.
+
+**Trade-off**: Slightly slower tool calls (bash invocation) vs cleaner context window. Recommended for all users.
 
 ---
 
@@ -210,6 +227,24 @@ orchestrator_validate(task="Add authentication", output="<implementation>")
 
 ---
 
+## Recommended Companion Tools
+
+### Context7 MCP
+Fetches latest library/framework documentation so Claude uses current APIs instead of outdated ones from training data. Particularly useful when working with tree-sitter APIs (which change across versions) or any rapidly-evolving library.
+
+```bash
+npx -y @anthropic-ai/claude-code mcp add context7 -- npx -y @upstash/context7-mcp@latest
+```
+
+### Claude Code Hooks
+The stack ships with recommended hooks in `.claude/settings.json`:
+- **Read hook**: Suggests `auzoom_read` when you try to `Read` a `.py` file (non-blocking)
+- **Edit hook**: Blocks test file modification during plan execution (TDD protection)
+
+See `.claude/settings.json` to customize or disable hooks.
+
+---
+
 ## Architecture
 
 ```
@@ -234,13 +269,10 @@ Parser + Cache       Model Registry (4 tiers)
 
 ```bash
 # AuZoom tests
-cd auzoom && pytest tests/ -v     # 39 tests
+cd auzoom && pytest tests/ -v     # 30 tests
 
 # Orchestrator tests
-cd orchestrator && pytest tests/ -v  # 65 tests
-
-# Audit integration tests
-cd audit && python -m pytest tests/ -v  # 84+ tests
+cd orchestrator && pytest tests/ -v  # 68 tests
 ```
 
 ---
@@ -257,18 +289,17 @@ token-efficient-coding-stack/
 |   +-- src/auzoom/
 |   |   +-- core/                   # Parser, graph, caching
 |   |   +-- mcp/                    # MCP server (6 tools)
-|   +-- tests/                      # 39 tests
+|   +-- tests/                      # 30 tests
 +-- orchestrator/                   # Intelligent model routing
 |   +-- src/orchestrator/
 |   |   +-- scoring.py              # Complexity scorer
 |   |   +-- registry.py             # Model registry (4 tiers)
 |   |   +-- executor.py             # Task executor
 |   |   +-- mcp/                    # MCP server (3 tools)
-|   +-- tests/                      # 65 tests
+|   +-- tests/                      # 68 tests
 +-- audit/                          # V1 comprehensive audit
 |   +-- reports/                    # Gap analysis, certification, V1.1 roadmap
 |   +-- evidence/                   # Test evidence (JSONL)
-|   +-- tests/                      # 84+ integration tests
 +-- .claude/
 |   +-- skills/                     # Claude Code skills
 |   +-- workflows/                  # Reusable workflow templates
@@ -283,11 +314,14 @@ token-efficient-coding-stack/
 ## Roadmap
 
 ### V1.0 (Shipped 2026-02-21)
-- [x] AuZoom MCP server (6 tools, 39 tests)
-- [x] Orchestrator MCP server (3 tools, 65 tests)
+- [x] AuZoom MCP server (6 tools, 30 tests)
+- [x] Orchestrator MCP server (3 tools, 68 tests)
 - [x] GSD integration (skills, workflows)
-- [x] Comprehensive V1 audit (13 phases, 37 plans, 84+ tests)
+- [x] Comprehensive V1 audit (13 phases, 37 plans, 98 tests)
 - [x] V1 CERTIFIED — zero critical blockers
+- [x] CLAUDE.md project instructions (auto-loaded by Claude Code)
+- [x] Claude Code hooks (auzoom suggestions, TDD protection)
+- [x] MCP CLI mode documentation (zero-overhead tool loading)
 
 ### V1.1 (Planned)
 - [ ] Configuration file for user-customizable models/thresholds
