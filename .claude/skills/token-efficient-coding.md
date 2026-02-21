@@ -1,6 +1,6 @@
 # Token-Efficient Coding with AuZoom & Orchestrator
 
-**Purpose**: Reduce token usage by 50-70% through progressive file reading and intelligent model routing.
+**Purpose**: Reduce token usage ~71% and costs ~51% through progressive file reading and intelligent model routing (V1 audit-validated).
 
 **When to invoke**: This skill is automatically available. Sub-skills provide detailed guidance on specific tools.
 
@@ -126,17 +126,19 @@ skeleton → identify relevant functions → summary for those → full only if 
 
 ---
 
-## Performance Metrics
+## Performance Metrics (V1 Audit-Validated)
 
-**Token Savings** (actual measurements from Phase 1):
+**Token Savings**:
+- Progressive disclosure: 71.3% average savings (Phase 6.5, high confidence)
+- Graph navigation: 71.1% file read reduction (Phase 6.5, high confidence)
+- Combined progressive + graph: 97.6% token savings
 - Skeleton vs Full: 27x reduction (15 vs 400 tokens/node)
-- Summary vs Full: 5x reduction (75 vs 400 tokens/node)
 - Cache hits: 100x+ speedup (5ms → <0.1ms)
 
-**Cost Savings** (projected from Phase 2):
-- Route 60% tasks to Gemini Flash → $0 extra cost
-- Route 30% tasks to Haiku → 10x cheaper than Opus
-- Reserve Opus for <10% critical tasks → 70% cost reduction
+**Cost Savings**:
+- Model routing: 50.7% cost reduction (Phase 5+7, medium confidence)
+- Non-Python metadata: 91.7% token reduction (Phase 9, high confidence)
+- Quality maintained: 100% on simple tasks (Phase 4)
 
 ---
 
