@@ -1,29 +1,95 @@
 # Token-Efficient Coding Stack
 
-**Cut Claude Code costs ~50% with intelligent model routing + progressive code reading**
-
-Claude Code is powerful but expensive. This stack routes simple tasks to cheap models and reads files progressively — skeleton first, details only when needed. Your savings come from two validated mechanisms working together.
+**Reduce token usage as your Python codebase grows — progressive code reading + intelligent model routing for long-horizon development projects.**
 
 [![Tests](https://img.shields.io/badge/tests-98%20passing-brightgreen)]()
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)]()
 [![V1](https://img.shields.io/badge/status-V1%20Certified-success)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
 
 ---
 
+## Who This Is For
+
+This stack is designed for **long-horizon coding tasks** on **growing Python codebases**:
+
+- Projects spanning weeks or months of development
+- Codebases that have grown beyond 50+ Python files
+- Sessions involving exploration of unfamiliar code (not just quick edits)
+- API-billing users who pay per token (not subscription plans)
+
+**When it helps most**: You're building a feature over several weeks. The codebase has grown to 200+ files. You need to understand auth, database, and API layers before making changes. AuZoom reads skeletons of 50 files for the cost of reading 3 files fully.
+
+**When NOT to use this stack**:
+- Quick one-off edits or small scripts
+- Non-Python projects (progressive disclosure is Python-only)
+- Subscription-plan users (token savings don't translate to cost savings)
+- Codebases with monolithic files averaging >400 lines — fix the structure first
+
+---
+
+## The Three Layers
+
+Token efficiency has three layers. You don't need all three to get value.
+
+### Layer 0: Coding Principles (Free, always)
+Good code structure eliminates 89-97% of token waste before any tooling:
+- Modules ≤250 lines — split what grows beyond
+- `DESIGN.md` at root — one file that orients any agent
+- Meaningful `__init__.py` with module-level docstrings
+- Hierarchical Glob → `__init__.py` → Grep → targeted Read
+
+See `/skills python-coding-principles` for the complete pattern.
+
+### Layer 1: Claude Code Built-ins (Free, always)
+`Glob` → `Grep` → targeted `Read` with structured patterns handles most tasks on small-medium codebases efficiently. No tools needed beyond what Claude Code already provides.
+
+### Layer 2: AuZoom (Add for large codebases + exploration-heavy sessions)
+Progressive disclosure reads skeleton first, details only when needed:
+- At 20+ files: ~20% additional savings over the structured baseline
+- At 200+ files: ~50-90% additional savings
+- At 800+ files: ~96% savings vs the baseline
+
+---
+
 ## Validated Results (V1 Audit, 2026-02-21)
 
-| Metric | Validated | Confidence | Evidence |
-|--------|-----------|------------|----------|
-| **Progressive disclosure savings** | **71.3%** token reduction | High | Phase 6.5 — 100% win rate |
-| **Graph navigation savings** | **71.1%** file read reduction | High | Phase 6.5 — 97.6% combined |
-| **Cost savings (model routing)** | **50.7%** cost reduction | Medium | Phase 5+7 — pricing-based Gemini |
-| **Non-Python metadata** | **91.7%** token reduction | High | Phase 9 — 4.0/5 usefulness |
-| **Quality (simple tasks)** | **100%** maintained | Medium | Phase 4 — simple tasks only |
+These numbers apply to exploration-heavy tasks on codebases with 50+ files:
 
-**How we validated**: 13-phase audit, 37 plans, 98 automated tests, 60+ evidence records. Self-correcting — caught and fixed 3 methodology errors during audit. See [V1 Certification Report](audit/reports/12-V1-CERTIFICATION.md).
+| Metric | Validated | Context |
+|--------|-----------|---------|
+| **Progressive disclosure savings** | **71.3%** token reduction | Exploration tasks, 50+ file codebases |
+| **Graph navigation savings** | **71.1%** file read reduction | Multi-file dependency tracing |
+| **Cost savings (model routing)** | **50.7%** cost reduction | API-billing users, mixed task distribution |
+| **Non-Python metadata** | **91.7%** token reduction | Non-Python file navigation |
+| **Quality (simple tasks)** | **100%** maintained | Simple tasks only |
 
-**Caveats**: Cost savings use pricing-based Gemini (not real API execution). Quality validated for simple tasks only. Complex task success rate estimated 67-85% (limited sample).
+**Caveats**: Cost savings use pricing-based Gemini (not real API execution). Quality validated for simple tasks only. Complex task success rate estimated 67-85%.
+
+**How we validated**: 13-phase audit, 37 plans, 98 automated tests. See [V1 Certification Report](audit/reports/12-V1-CERTIFICATION.md).
+
+---
+
+## Benchmark: When Does AuZoom Pay Off?
+
+Empirical token measurements comparing structured baseline (Glob/Grep/Read) vs AuZoom:
+
+| Repo | Files | LOC | Baseline | AuZoom | AuZoom+CLI |
+|------|-------|-----|---------|--------|-----------|
+| AuZoom source | 24 | 3,233 | 2,005 | 2,346 ❌ | 1,296 ✓ |
+| Audit suite | 14 | 2,445 | 2,584 | 2,090 ✓ | 1,040 ✓ |
+| requests lib | 18 | 5,628 | 4,161 | 3,339 ✓ | 2,289 ✓ |
+| FastAPI | 48 | 19,284 | 5,495 | 15,874 ❌† | 14,824 ❌† |
+| Django | 894 | 155,657 | 66,385 | 2,778 ✓ | 1,728 ✓ |
+
+**Legend**: ✓ = AuZoom wins vs baseline, ❌ = baseline is more efficient
+†FastAPI has massive monolithic files (avg 401 lines, some >4,900 lines) — structure violation inflates even AuZoom's skeleton output.
+
+**Key finding**: AuZoom helps when files are well-structured (≤250 lines). It amplifies good architecture; it can't rescue monolithic code.
+
+**With MCP CLI mode enabled** (`CLAUDE_MCP_CLI=true`): eliminates the 1,050-token schema overhead, making AuZoom beneficial at nearly any codebase size.
+
+See `benchmark/RESULTS.md` for full methodology and `benchmark/token_benchmark.py` to measure your own repo.
 
 ---
 
@@ -52,7 +118,7 @@ cp -r .claude/skills/* ~/.claude/skills/
 
 ### Enable MCP CLI Mode (Recommended)
 
-The stack adds 9 MCP tool schemas to your context window (~2k tokens). MCP CLI mode eliminates this overhead by loading tools on-demand via bash instead of always in context:
+The stack adds 9 MCP tool schemas to your context window (~1,050 tokens). MCP CLI mode eliminates this overhead by loading tools on-demand:
 
 ```json
 // In ~/.claude/settings.json
@@ -64,8 +130,6 @@ The stack adds 9 MCP tool schemas to your context window (~2k tokens). MCP CLI m
 ```
 
 **Why it matters**: A token-efficiency stack that adds tokens via schemas is ironic. MCP CLI mode makes the stack truly zero-overhead until tools are actually needed.
-
-**Trade-off**: Slightly slower tool calls (bash invocation) vs cleaner context window. Recommended for all users.
 
 ---
 
@@ -83,7 +147,7 @@ Instead of reading entire files, AuZoom reads at three levels:
 
 Plus dependency graphs that trace relationships without reading every file.
 
-**Validated savings**: 71.3% token reduction on progressive tasks, 71.1% file reduction on graph navigation.
+**Validated savings**: 71.3% token reduction on exploration tasks, 71.1% file reduction on graph navigation (codebases with 50+ files).
 
 ### 2. Orchestrator — Smart Model Routing
 
@@ -96,7 +160,7 @@ Routes each task to the cheapest model that works:
 | Claude Sonnet | $3.00 | Complex tasks (score 5-8) | Baseline |
 | Claude Opus | $15.00 | Critical decisions (score 8-10) | Use when needed |
 
-**Validated savings**: 50.7% cost reduction across task mix.
+**Validated savings**: 50.7% cost reduction across task mix (API-billing users).
 
 ### 3. Get Shit Done (GSD) — Meta-Prompting System
 
@@ -117,8 +181,6 @@ Orchestrator ---- Routes to cheapest capable model
 AuZoom ---------- Reads only what's needed (skeleton/summary/full)
 ```
 
-**Combined effect**: Right model + minimal context = validated 50.7% cost savings.
-
 ---
 
 ## Getting the Most Out of This Stack
@@ -128,13 +190,17 @@ AuZoom ---------- Reads only what's needed (skeleton/summary/full)
 ```
 Task received
 |
++-- <50 files, well structured? --> Use Layer 1 (Glob/Grep/Read). AuZoom optional.
+|
++-- 50+ files or large files? --> Use Layer 2 (AuZoom) progressive disclosure
+|
 +-- Need to find code? --> auzoom_find (instant, ~50 tokens)
 |
-+-- Need to understand structure? --> auzoom_read(level="skeleton")
++-- Need structure? --> auzoom_read(level="skeleton")
 |
 +-- Need function details? --> auzoom_read(level="summary")
 |
-+-- Need to edit code? --> auzoom_read(level="full") for target function
++-- Need to edit code? --> auzoom_read(level="full") for target function only
 |
 +-- Need dependency chain? --> auzoom_get_dependencies (graph query)
 |
@@ -143,11 +209,11 @@ Task received
 
 ### Best Practices
 
-1. **Start with skeleton, escalate as needed**: skeleton -> summary -> full. Most exploration needs only skeleton.
-2. **Route every task**: Even 1 tier difference = significant savings. `orchestrator_route` before execution.
-3. **Use graph queries for multi-file tasks**: `auzoom_get_dependencies` avoids reading 5+ files manually.
-4. **Small files (<300 tokens)**: AuZoom auto-bypasses to raw content (threshold bypass implemented).
-5. **Batch simple operations**: Route typo fixes, constant updates, etc. to Flash/Haiku for 99%+ savings.
+1. **Start with coding principles**: ≤250-line modules + DESIGN.md makes every approach more efficient.
+2. **Start with skeleton, escalate as needed**: skeleton → summary → full. Most exploration needs only skeleton.
+3. **Route every task**: Even 1 tier difference = significant savings. `orchestrator_route` before execution.
+4. **Use graph queries for multi-file tasks**: `auzoom_get_dependencies` avoids reading 5+ files manually.
+5. **Enable MCP CLI mode**: Eliminates 1,050-token schema overhead — always worth doing.
 
 ### Usage Examples
 
@@ -179,8 +245,6 @@ orchestrator_route("Add /users/{id}/profile endpoint with tests",
 # Returns: {model: "haiku", score: 4.5}
 # Haiku: $0.80/1M vs Sonnet: $3.00/1M
 ```
-
-**See more**: [USAGE-EXAMPLES.md](USAGE-EXAMPLES.md) (10 detailed scenarios with before/after comparisons)
 
 ---
 
@@ -230,15 +294,14 @@ orchestrator_validate(task="Add authentication", output="<implementation>")
 ## Recommended Companion Tools
 
 ### Context7 MCP
-Fetches latest library/framework documentation so Claude uses current APIs instead of outdated ones from training data. Particularly useful when working with tree-sitter APIs (which change across versions) or any rapidly-evolving library.
+Fetches latest library/framework documentation so Claude uses current APIs instead of outdated ones from training data.
 
 ```bash
 npx -y @anthropic-ai/claude-code mcp add context7 -- npx -y @upstash/context7-mcp@latest
 ```
 
 ### Claude Code Hooks
-The stack ships with recommended hooks in `.claude/settings.json`:
-- **Read hook**: Suggests `auzoom_read` when you try to `Read` a `.py` file (non-blocking)
+The stack ships with one project-scoped hook in `.claude/settings.json`:
 - **Edit hook**: Blocks test file modification during plan execution (TDD protection)
 
 See `.claude/settings.json` to customize or disable hooks.
@@ -259,9 +322,9 @@ Parser + Cache       Model Registry (4 tiers)
                      Task Executor
 ```
 
-**AuZoom**: Tree-sitter Python parser -> Lazy graph -> Content-based cache (SHA256) -> MCP tools (6 tools)
-**Orchestrator**: Complexity scorer -> Model registry -> Task executor -> Quality validator -> MCP tools (3 tools)
-**GSD**: Meta-prompts -> Planning workflows -> Execution templates -> Context management
+**AuZoom**: Tree-sitter Python parser → Lazy graph → Content-based cache (SHA256) → MCP tools (6 tools)
+**Orchestrator**: Complexity scorer → Model registry → Task executor → Quality validator → MCP tools (3 tools)
+**GSD**: Meta-prompts → Planning workflows → Execution templates → Context management
 
 ---
 
@@ -285,6 +348,9 @@ token-efficient-coding-stack/
 +-- VALIDATION-SUMMARY.md           # Detailed validation with audit findings
 +-- USAGE-EXAMPLES.md               # 10 usage scenarios
 +-- quick-install.sh                # One-command installer
++-- benchmark/                      # Empirical token measurements
+|   +-- token_benchmark.py          # Run on any repo
+|   +-- RESULTS.md                  # Results across 5 repo sizes
 +-- auzoom/                         # Progressive code navigation
 |   +-- src/auzoom/
 |   |   +-- core/                   # Parser, graph, caching
@@ -320,19 +386,19 @@ token-efficient-coding-stack/
 - [x] Comprehensive V1 audit (13 phases, 37 plans, 98 tests)
 - [x] V1 CERTIFIED — zero critical blockers
 - [x] CLAUDE.md project instructions (auto-loaded by Claude Code)
-- [x] Claude Code hooks (auzoom suggestions, TDD protection)
 - [x] MCP CLI mode documentation (zero-overhead tool loading)
 
 ### V1.1 (Planned)
+- [ ] Empirical benchmark suite (this refactoring)
+- [ ] Coding principles skill (Layer 0 baseline)
 - [ ] Configuration file for user-customizable models/thresholds
 - [ ] JS/TS tree-sitter support (doubles target audience)
 - [ ] Feedback logging for routing visibility
-- [ ] Basic escalation matrix (retry -> escalate)
 - [ ] Real Gemini API execution validation
 
 ### V2 (Future)
 - [ ] Multi-language support (Go, Rust, Java)
-- [ ] Multi-level non-Python disclosure (metadata -> outline -> full)
+- [ ] Multi-level non-Python disclosure (metadata → outline → full)
 - [ ] Incremental parsing for large repos
 - [ ] Advanced compression techniques
 
@@ -346,15 +412,20 @@ token-efficient-coding-stack/
 - Python-only for progressive disclosure (non-Python gets structural metadata)
 - Complexity scorer has systematic under-scoring tendency (conservative routing)
 
+**AuZoom does NOT help with**:
+- Monolithic files (avg >400 lines) — fix the code structure first
+- Edit-heavy sessions touching only 1-2 known files
+- Codebases under ~20 files without MCP CLI mode enabled
+
 **Use with caution for**:
 - Security-critical code (0% success on sanitization tasks in audit)
 - Complex concurrency (race conditions, deadlocks)
 - Large-scale refactorings (>10 files) without review
 
 **Best for**:
-- Simple edits, code exploration, standard features
-- Test writing, documentation updates, refactoring
-- Dependency analysis, code review
+- Exploration of unfamiliar large codebases
+- Feature development over weeks/months
+- Standard features, test writing, dependency analysis
 
 ---
 
@@ -371,9 +442,9 @@ token-efficient-coding-stack/
 ## Contributing
 
 Follow AuZoom's structural standards:
-- Functions <= 50 lines
-- Modules <= 250 lines
-- Directories <= 7 files
+- Functions ≤ 50 lines
+- Modules ≤ 250 lines
+- Directories ≤ 7 files
 
 Validate with: `auzoom_validate(path=".", scope="project")`
 
@@ -389,9 +460,9 @@ Validate with: `auzoom_validate(path=".", scope="project")`
 ---
 
 **Validated results** (V1 audit, 13 phases, 84+ tests):
-- **71.3% token savings** via progressive disclosure (high confidence)
-- **50.7% cost savings** via model routing (medium confidence)
+- **71.3% token savings** via progressive disclosure (high confidence, 50+ file codebases)
+- **50.7% cost savings** via model routing (medium confidence, API-billing users)
 - **71.1% file read reduction** via graph navigation (high confidence)
 - **100% quality maintained** on simple tasks (medium confidence)
 
-See [VALIDATION-SUMMARY.md](VALIDATION-SUMMARY.md) for detailed methodology and audit findings.
+See [VALIDATION-SUMMARY.md](VALIDATION-SUMMARY.md) for detailed methodology and [benchmark/RESULTS.md](benchmark/RESULTS.md) for breakeven analysis.

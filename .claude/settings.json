@@ -5,15 +5,6 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Read",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if echo \"$TOOL_INPUT\" | grep -q '\\.py\"'; then echo '💡 Suggestion: Use auzoom_read instead of Read for Python files (progressive disclosure saves ~71% tokens)' >&2; fi; exit 0"
-          }
-        ]
-      },
-      {
         "matcher": "Edit",
         "hooks": [
           {
